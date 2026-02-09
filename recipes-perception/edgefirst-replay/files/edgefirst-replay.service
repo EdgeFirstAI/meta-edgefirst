@@ -1,0 +1,13 @@
+[Unit]
+Description=EdgeFirst MCAP Replay Service
+Wants=network.target
+After=network.target
+
+[Service]
+Type=simple
+ExecStart=/usr/bin/edgefirst-replay --system
+EnvironmentFile=/etc/default/edgefirst-replay
+Restart=always
+
+[Install]
+WantedBy=multi-user.target

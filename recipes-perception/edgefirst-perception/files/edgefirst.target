@@ -1,0 +1,5 @@
+[Unit]
+Description=EdgeFirst Perception Services
+After=multi-user.target
+AllowIsolate=yes
+Requires=multi-user.target

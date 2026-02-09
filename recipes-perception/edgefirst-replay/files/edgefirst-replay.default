@@ -1,0 +1,12 @@
+# EdgeFirst MCAP Replay Configuration
+
+RUST_LOG = "info"
+
+# MCAP file to replay
+MCAP = ""
+
+# Select topics to replay, leave empty to replay all topics.
+TOPICS = ""
+
+# Ignore these topics from replay.
+IGNORE_TOPICS = ""

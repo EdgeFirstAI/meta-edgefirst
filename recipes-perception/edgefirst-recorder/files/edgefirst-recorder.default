@@ -1,0 +1,13 @@
+# EdgeFirst MCAP Recorder Configuration
+
+# Controls the storage location for the MCAP recordings.
+STORAGE = "/home/root/recordings"
+
+# MCAP compression mode. Options: none, lz4, zstd.
+COMPRESSION = "lz4"
+
+# Record the following topics. Missing topics are logged as warnings.
+TOPICS = "/tf_static /imu /gps /camera/info /camera/h264 /model/info /model/mask_compressed"
+
+# Limit the radar cube framerate to reduce recording size.
+CUBE_FPS = "1"

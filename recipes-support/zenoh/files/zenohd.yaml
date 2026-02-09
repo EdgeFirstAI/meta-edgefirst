@@ -1,0 +1,20 @@
+# Zenoh router configuration for EdgeFirst.  The zenohd service is setup to run
+# as a router and listen on the localhost interface on port 7447.  EdgeFirst
+# services connect to the zenohd service on the localhost interface in
+# client-only mode.
+#
+# To allow remote connections update the listen endpoint to tcp/0.0.0.0:7447.
+#
+# To forward services to another device configure the connect endpoint, e.g.
+# "tcp/1.2.3.4:7447".
+mode: "router"
+listen:
+  endpoints:
+    - "udp/127.0.0.1:7446"
+    - "tcp/[::]:7447"
+scouting:
+  multicast:
+   enabled: true
+  gossip:
+   enabled: true
+   multihop: false

@@ -1,0 +1,27 @@
+# EdgeFirst Camera Configuration
+
+# Camera Device
+CAMERA = "/dev/video3"
+
+# Camera Resolution is used for the camera capture and separate from the
+# streaming resolution. The camera resolution can be set to any resolution
+# supported by the camera.
+CAMERA_SIZE = "1920 1080"
+
+# Streaming Resolution is used for the H.264 and JPEG streaming.
+# The H.264 stream supports up to HD resolution (1920x1080).
+STREAM_SIZE = "1920 1080"
+
+# Camera mirror setting can flip the camera image to match the orientation of
+# the camera.  Accepted values are "none", "horizontal", "vertical", and "both".
+MIRROR = "both"
+
+# Controls the H.264 streaming mode.
+H264 = "true"
+
+# Controls the H.264 streaming compression level.
+# Possible values: auto, mbps5, mbps25, mbps50, mbps100
+H264_BITRATE = "auto"
+
+# Controls the JPEG streaming mode.
+JPEG = "false"

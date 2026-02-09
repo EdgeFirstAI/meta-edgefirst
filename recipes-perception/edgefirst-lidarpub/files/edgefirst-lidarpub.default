@@ -1,0 +1,25 @@
+# EdgeFirst LiDAR Publisher Configuration
+
+# Log level for the application.
+RUST_LOG = "info"
+
+# Hostname or IP address of the LiDAR target device.
+TARGET = ""
+
+# Azimuth field of view start and stop angles in degrees.
+AZIMUTH = "0 360"
+
+# LiDAR column and refresh rate mode (COLxHZ).
+# Supported values: 512x10 1024x10 2048x10 512x20 1024x20
+MODE = "1024x10"
+
+# Timestamp mode controls how the LiDAR configures its clock.
+# internal: uses the internal oscillator and reports time from boot.
+# ptp1588: synchronize to a PTP-1588 master.
+TIMESTAMP_MODE = "internal"
+
+# LiDAR frame transformation vector from the base_link (X Y Z).
+TF_VEC = "0 0 -0.19"
+
+# LiDAR frame rotation quaternion from the base_link (X Y Z W).
+TF_QUAT = "0 0 -0.9998157 0.0191974"

@@ -1,0 +1,15 @@
+[Unit]
+Description=EdgeFirst Camera Service
+After=network.target
+Wants=network.target
+Before=edgefirst-recorder.service
+
+[Service]
+Type=simple
+User=root
+ExecStart=/usr/bin/edgefirst-camera
+EnvironmentFile=/etc/default/edgefirst-camera
+Restart=always
+
+[Install]
+WantedBy=edgefirst.target

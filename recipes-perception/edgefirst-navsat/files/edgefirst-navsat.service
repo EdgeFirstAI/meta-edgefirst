@@ -1,0 +1,14 @@
+[Unit]
+Description=EdgeFirst NavSat Service
+After=gpsd.service network.target
+Wants=gpsd.service network.target
+Before=edgefirst-recorder.service
+
+[Service]
+Type=simple
+User=root
+ExecStart=/usr/bin/edgefirst-navsat
+Restart=always
+
+[Install]
+WantedBy=edgefirst.target

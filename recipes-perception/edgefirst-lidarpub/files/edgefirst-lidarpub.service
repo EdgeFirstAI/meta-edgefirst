@@ -1,0 +1,14 @@
+[Unit]
+Description=EdgeFirst LiDAR Publisher Service
+Wants=network.target
+After=network.target
+Before=edgefirst-recorder.service
+
+[Service]
+Type=simple
+ExecStart=/usr/bin/edgefirst-lidarpub
+EnvironmentFile=/etc/default/edgefirst-lidarpub
+Restart=always
+
+[Install]
+WantedBy=edgefirst.target

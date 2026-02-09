@@ -1,0 +1,46 @@
+# EdgeFirst Radar Publisher Configuration
+
+# Log level for the application, relevant sub-filters are radarpub and drvegrd
+# refer to RUST_LOG documentation for details.
+RUST_LOG = "info"
+
+# Radar center frequency band.  The low option is required when using the
+# ultra-short FREQUENCY_SWEEP option.
+#
+# Options: low, medium, high
+CENTER_FREQUENCY = "low"
+
+# The frequency sweep controls the detection range of the radar.
+#
+# ultra-short:  9m (requires CENTER_FREQUENCY="low")
+# short:       19m
+# medium:      56m
+# long:       130m
+FREQUENCY_SWEEP = "ultra-short"
+
+# The range-toggle mode allows the radar to alternate between various frequency
+# sweep configurations.
+#
+# Options: off, short-medium, short-long, medium-long, long-ultra-short, medium-ultra-short, short-ultra-short
+RANGE_TOGGLE = "off"
+
+# The detection sensitivity controls the sensitivity to recognize a target.
+DETECTION_SENSITIVITY = "high"
+
+# Enable clustering the radar targets into the /radar/clusters topic.
+CLUSTERING = "true"
+
+# Temporal clustering window size (number of frames, each ~55ms).
+WINDOW_SIZE = "6"
+
+# DBSCAN clustering eps value.
+CLUSTERING_EPS = "0.3"
+
+# DBSCAN parameter scaling (x, y, z, speed). Set to 0 to ignore an axis.
+CLUSTERING_PARAM_SCALE = "0.5 1.0 0.0 0.0"
+
+# Minimum number of points per cluster for DBSCAN. Minimum 3.
+CLUSTERING_POINT_LIMIT = 3
+
+# Enable streaming the low-level radar cube data.
+CUBE = "true"

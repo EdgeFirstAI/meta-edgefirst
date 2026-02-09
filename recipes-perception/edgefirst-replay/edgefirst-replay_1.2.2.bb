@@ -1,11 +1,11 @@
 DESCRIPTION = "EdgeFirst MCAP Replay"
 LICENSE = "Apache-2.0"
-LIC_FILES_CHKSUM = "file://${PN}-LICENSE;md5=3929fde384c07d35ed0d6f0c925f2a12"
+LIC_FILES_CHKSUM = "file://${BPN}-LICENSE;md5=3929fde384c07d35ed0d6f0c925f2a12"
 
 FILESEXTRAPATHS:prepend := "${THISDIR}/files:"
 SRC_URI = "\
     https://github.com/EdgeFirstAI/replay/releases/download/v${PV}/edgefirst-replay-linux-${TARGET_ARCH};downloadfilename=edgefirst-replay;name=binary \
-    https://raw.githubusercontent.com/EdgeFirstAI/replay/v${PV}/LICENSE;downloadfilename=${PN}-LICENSE;name=license \
+    https://raw.githubusercontent.com/EdgeFirstAI/replay/v${PV}/LICENSE;downloadfilename=${BPN}-LICENSE;name=license \
     file://edgefirst-replay.service \
     file://edgefirst-replay.default \
 "

@@ -1,11 +1,11 @@
 DESCRIPTION = "EdgeFirst Web UI Server"
 LICENSE = "Apache-2.0"
-LIC_FILES_CHKSUM = "file://${PN}-LICENSE;md5=2c3ca8524a356ce12f8ec8ea10d087cd"
+LIC_FILES_CHKSUM = "file://${BPN}-LICENSE;md5=2c3ca8524a356ce12f8ec8ea10d087cd"
 
 FILESEXTRAPATHS:prepend := "${THISDIR}/files:"
 SRC_URI = "\
     https://github.com/EdgeFirstAI/websrv/releases/download/v${PV}/edgefirst-websrv-${PV}-linux-${TARGET_ARCH};downloadfilename=edgefirst-websrv;name=binary \
-    https://raw.githubusercontent.com/EdgeFirstAI/websrv/v${PV}/LICENSE;downloadfilename=${PN}-LICENSE;name=license \
+    https://raw.githubusercontent.com/EdgeFirstAI/websrv/v${PV}/LICENSE;downloadfilename=${BPN}-LICENSE;name=license \
     file://edgefirst-websrv.service \
     file://edgefirst-websrv.default \
 "

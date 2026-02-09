@@ -1,10 +1,10 @@
 DESCRIPTION = "EdgeFirst MCAP Publisher"
 LICENSE = "Apache-2.0"
-LIC_FILES_CHKSUM = "file://${PN}-LICENSE;md5=3929fde384c07d35ed0d6f0c925f2a12"
+LIC_FILES_CHKSUM = "file://${BPN}-LICENSE;md5=3929fde384c07d35ed0d6f0c925f2a12"
 
 SRC_URI = "\
     https://github.com/EdgeFirstAI/publisher/releases/download/v${PV}/edgefirst-publisher-linux-${TARGET_ARCH};downloadfilename=edgefirst-publisher;name=binary \
-    https://raw.githubusercontent.com/EdgeFirstAI/publisher/v${PV}/LICENSE;downloadfilename=${PN}-LICENSE;name=license \
+    https://raw.githubusercontent.com/EdgeFirstAI/publisher/v${PV}/LICENSE;downloadfilename=${BPN}-LICENSE;name=license \
 "
 SRC_URI[license.sha256sum] = "acbbda305958ff27afe43eeef4a77d48ef9d99364e772ba319d1d38ae759ae43"
 

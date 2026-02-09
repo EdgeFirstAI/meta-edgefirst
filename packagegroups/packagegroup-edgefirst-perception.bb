@@ -16,9 +16,8 @@ RDEPENDS:${PN} = " \
     edgefirst-navsat \
     edgefirst-radarpub \
     edgefirst-lidarpub \
-    edgefirst-publisher \
-    edgefirst-recorder \
-    edgefirst-replay \
     edgefirst-websrv \
     edgefirst-webui \
 "
+# TODO: Add once GitHub releases are published:
+# edgefirst-publisher, edgefirst-recorder, edgefirst-replay

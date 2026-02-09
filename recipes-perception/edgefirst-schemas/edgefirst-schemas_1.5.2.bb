@@ -2,12 +2,12 @@ SUMMARY = "EdgeFirst Schemas C Library and Python Bindings"
 HOMEPAGE = "https://github.com/EdgeFirstAI/schemas"
 
 LICENSE = "Apache-2.0"
-LIC_FILES_CHKSUM = "file://${PN}-LICENSE;md5=3929fde384c07d35ed0d6f0c925f2a12"
+LIC_FILES_CHKSUM = "file://${BPN}-LICENSE;md5=3929fde384c07d35ed0d6f0c925f2a12"
 
 SRC_URI = "\
     https://github.com/EdgeFirstAI/schemas/releases/download/v${PV}/edgefirst-schemas-linux_${TARGET_ARCH}-${PV}.zip;name=clib \
     https://files.pythonhosted.org/packages/29/ca/c97d66c12564b826eb4dc1d58de0b1a256b76588932bc87363202fb69b70/edgefirst_schemas-${PV}-py3-none-any.whl;name=python \
-    https://raw.githubusercontent.com/EdgeFirstAI/schemas/v${PV}/LICENSE;downloadfilename=${PN}-LICENSE;name=license \
+    https://raw.githubusercontent.com/EdgeFirstAI/schemas/v${PV}/LICENSE;downloadfilename=${BPN}-LICENSE;name=license \
 "
 SRC_URI[license.sha256sum] = "acbbda305958ff27afe43eeef4a77d48ef9d99364e772ba319d1d38ae759ae43"
 SRC_URI[python.sha256sum] = "0cc9cc3fb22f10e5d9b475b19a0a274ba32026819a28d609966db64d6889fc76"

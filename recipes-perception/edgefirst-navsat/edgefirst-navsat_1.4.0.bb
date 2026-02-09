@@ -1,11 +1,11 @@
 DESCRIPTION = "EdgeFirst NavSat Service"
 LICENSE = "Apache-2.0"
-LIC_FILES_CHKSUM = "file://${PN}-LICENSE;md5=700c2516a940487339707f533f4dd382"
+LIC_FILES_CHKSUM = "file://${BPN}-LICENSE;md5=700c2516a940487339707f533f4dd382"
 
 FILESEXTRAPATHS:prepend := "${THISDIR}/files:"
 SRC_URI = "\
     https://github.com/EdgeFirstAI/navsat/releases/download/v${PV}/edgefirst-navsat-linux-${TARGET_ARCH};downloadfilename=edgefirst-navsat;name=binary \
-    https://raw.githubusercontent.com/EdgeFirstAI/navsat/v${PV}/LICENSE;downloadfilename=${PN}-LICENSE;name=license \
+    https://raw.githubusercontent.com/EdgeFirstAI/navsat/v${PV}/LICENSE;downloadfilename=${BPN}-LICENSE;name=license \
     file://edgefirst-navsat.service \
 "
 SRC_URI[license.sha256sum] = "8bb5c73a6c6f5b301c0397fdbe9353ce856ca122dc603051b2cdbe8b24380380"

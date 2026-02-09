@@ -1,11 +1,11 @@
 DESCRIPTION = "EdgeFirst IMU Service"
 LICENSE = "Apache-2.0"
-LIC_FILES_CHKSUM = "file://${PN}-LICENSE;md5=20f602f9b9b48d7f30f28541298ef146"
+LIC_FILES_CHKSUM = "file://${BPN}-LICENSE;md5=20f602f9b9b48d7f30f28541298ef146"
 
 FILESEXTRAPATHS:prepend := "${THISDIR}/files:"
 SRC_URI = "\
     https://github.com/EdgeFirstAI/imu/releases/download/v${PV}/edgefirst-imu-linux-${TARGET_ARCH};downloadfilename=edgefirst-imu;name=binary \
-    https://raw.githubusercontent.com/EdgeFirstAI/imu/v${PV}/LICENSE;downloadfilename=${PN}-LICENSE;name=license \
+    https://raw.githubusercontent.com/EdgeFirstAI/imu/v${PV}/LICENSE;downloadfilename=${BPN}-LICENSE;name=license \
     file://edgefirst-imu.service \
 "
 SRC_URI[license.sha256sum] = "b075434d900a00caf30566e8efc74b1a0ce26e0f400c5323287f97f1931ee2a9"

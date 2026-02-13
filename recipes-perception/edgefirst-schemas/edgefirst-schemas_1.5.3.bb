@@ -6,14 +6,14 @@ LIC_FILES_CHKSUM = "file://${BPN}-LICENSE;md5=3929fde384c07d35ed0d6f0c925f2a12"
 
 SRC_URI = "\
     https://github.com/EdgeFirstAI/schemas/releases/download/v${PV}/edgefirst-schemas-linux_${TARGET_ARCH}-${PV}.zip;name=clib \
-    https://files.pythonhosted.org/packages/29/ca/c97d66c12564b826eb4dc1d58de0b1a256b76588932bc87363202fb69b70/edgefirst_schemas-${PV}-py3-none-any.whl;name=python \
+    https://files.pythonhosted.org/packages/dc/3d/1a8db4cb0ddcd8cc21834b5a2ad6bededf6b5031acd4513b487133566eb4/edgefirst_schemas-${PV}-py3-none-any.whl;name=python \
     https://raw.githubusercontent.com/EdgeFirstAI/schemas/v${PV}/LICENSE;downloadfilename=${BPN}-LICENSE;name=license \
 "
 SRC_URI[license.sha256sum] = "acbbda305958ff27afe43eeef4a77d48ef9d99364e772ba319d1d38ae759ae43"
-SRC_URI[python.sha256sum] = "0cc9cc3fb22f10e5d9b475b19a0a274ba32026819a28d609966db64d6889fc76"
+SRC_URI[python.sha256sum] = "2b3c1be71fc4d04b2d873d063373f10162602036e7645a1de16c80e6c02ed5cd"
 
-CLIB_SHA256SUM[aarch64] = "cd0c3fa39b6f451c7f6fdaee41e30b836669bfb3abb7afe5f38d8fa13607f063"
-CLIB_SHA256SUM[x86_64] = "977dc4da35da7382cf79471b2f1b39209063593938e764f54ca8b01d5dab75e3"
+CLIB_SHA256SUM[aarch64] = "4e7be9233eb724eb2d4eca55a307fcdb45ecf369a69fd35482e6d721c8afc184"
+CLIB_SHA256SUM[x86_64] = "28951fd19f65351dd211415de8472a5a6f853fb6d4d68f82aeab81163cc0aea5"
 
 python () {
     arch = d.getVar('TARGET_ARCH')

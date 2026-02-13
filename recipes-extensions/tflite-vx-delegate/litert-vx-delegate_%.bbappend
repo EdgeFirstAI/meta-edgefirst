@@ -3,7 +3,7 @@
 
 TENSORFLOW_LITE_VX_DELEGATE_SRC = "git://github.com/EdgeFirstAI/tflite-vx-delegate-imx.git;protocol=https"
 SRCBRANCH_vx = "edgefirst-cameraadaptor"
-SRCREV_vx = "a638a0fcbdb15b3914cf117e58321e9c5de9326b"
+SRCREV_vx = "dac33abb3a49efcb7067b6c90cd13d4944b4ecf3"
 
 # G2D is needed by the camera_adaptor_test example for hardware-accelerated
 # image resize. Provided by imx-gpu-g2d on i.MX8MP via virtual/libg2d.

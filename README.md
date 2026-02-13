@@ -2,56 +2,48 @@
 
 Yocto layer for the **EdgeFirst Perception Platform** targeting NXP i.MX processors.
 
-meta-edgefirst provides the complete EdgeFirst ecosystem for embedded perception: Zenoh-based
-sensor services, NNStreamer/GStreamer ML inference pipelines, NPU-accelerated model execution,
-and supporting infrastructure. It is designed to work with the NXP i.MX Yocto BSP (walnascar
-release) and brings multi-sensor AI perception to i.MX8M Plus and i.MX93 platforms.
+meta-edgefirst provides the complete EdgeFirst ecosystem for embedded perception: Zenoh-based sensor services, NNStreamer/GStreamer ML inference pipelines, NPU-accelerated model execution, and supporting infrastructure. It is designed to work with the NXP i.MX Yocto BSP (walnascar release) and brings multi-sensor AI perception to i.MX8M Plus and i.MX93 platforms.
 
 ## Architecture
 
-```
-┌─────────────────────────────────────────────────────────────────────┐
-│                     EdgeFirst Perception Platform                   │
-├─────────────────────────────────┬───────────────────────────────────┤
-│   EdgeFirst Perception          │   EdgeFirst Perception            │
-│   (Zenoh Services)              │   for GStreamer                   │
-│                                 │                                   │
-│  ┌───────────┐ ┌────────────┐  │  ┌────────────┐ ┌─────────────┐  │
-│  │  camera    │ │  radarpub  │  │  │ nnstreamer │ │gst-edgefirst│  │
-│  │  imu       │ │  lidarpub  │  │  │ (EdgeFirst │ │  (3D Spatial│  │
-│  │  navsat    │ │  publisher │  │  │   fork)    │ │  PointCloud │  │
-│  │  recorder  │ │  replay    │  │  │            │ │  RadarCube  │  │
-│  │  webui     │ │            │  │  │            │ │  Fusion     │  │
-│  └─────┬──────┘ └─────┬──────┘  │  └──────┬─────┘ └──────┬──────┘  │
-│        │              │         │         │              │          │
-│        └──────┬───────┘         │         └──────┬───────┘          │
-│               │                 │                │                  │
-├───────────────┼─────────────────┼────────────────┼──────────────────┤
-│               ▼                 │                ▼                  │
-│  ┌────────────────────────┐     │  ┌──────────────────────────┐     │
-│  │   edgefirst-schemas    │     │  │   tflite-vx-delegate     │     │
-│  │   (C lib + Python)     │     │  │   tim-vx                 │     │
-│  └────────────────────────┘     │  │   (NPU acceleration)     │     │
-│                                 │  └──────────────────────────┘     │
-├─────────────────────────────────┴───────────────────────────────────┤
-│                     Supporting Infrastructure                       │
-│  ┌──────────────────────┐  ┌────────────────────────────────────┐   │
-│  │  zenohd / libzenohc  │  │  videostream (V4L2/ISP capture)   │   │
-│  │  python3-zenoh       │  │                                    │   │
-│  └──────────────────────┘  └────────────────────────────────────┘   │
-├─────────────────────────────────────────────────────────────────────┤
-│                     NXP i.MX Yocto BSP (walnascar)                  │
-│          meta-imx  ·  meta-freescale  ·  meta-openembedded          │
-└─────────────────────────────────────────────────────────────────────┘
+```mermaid
+block-beta
+  columns 2
+
+  block:perception:1["EdgeFirst Perception\n(Zenoh Services)"]
+    columns 1
+    p1["camera · imu · navsat\nradarpub · lidarpub\npublisher · recorder · replay\nwebui"]
+  end
+
+  block:gstreamer:1["EdgeFirst Perception\nfor GStreamer"]
+    columns 1
+    g1["nnstreamer (EdgeFirst fork)\ngst-edgefirst\n(3D Spatial · PointCloud\nRadarCube · Fusion)"]
+  end
+
+  block:schemas:1["edgefirst-schemas\n(C lib + Python)"]
+  end
+
+  block:npu:1["tflite-vx-delegate · tim-vx\n(NPU acceleration)"]
+  end
+
+  block:infra:2["Supporting Infrastructure"]
+    columns 2
+    z1["zenohd · libzenohc\npython3-zenoh"]
+    v1["videostream\n(V4L2/ISP capture)"]
+  end
+
+  block:bsp:2["NXP i.MX Yocto BSP (walnascar)\nmeta-imx · meta-freescale · meta-openembedded"]
+  end
+
+  p1 --> schemas
+  g1 --> npu
 ```
 
 ## Recipe Groups
 
 ### recipes-perception — Zenoh-Based Sensor Services
 
-Standalone Zenoh-native services that publish, record, and replay sensor data. Each service
-runs as a systemd unit and communicates over the Zenoh protocol using EdgeFirst Schemas for
-message serialization.
+Standalone Zenoh-native services that publish, record, and replay sensor data. Each service runs as a systemd unit and communicates over the Zenoh protocol using EdgeFirst Schemas for message serialization.
 
 | Recipe | GitHub Repository | Description |
 |--------|-------------------|-------------|
@@ -77,8 +69,7 @@ GStreamer/NNStreamer plugins for real-time ML inference on video and sensor stre
 
 ### recipes-extensions — NPU Acceleration Libraries
 
-Bbappend files for NXP ML libraries, pulling EdgeFirstAI forks with optimizations and fixes
-for the i.MX NPU (Neural Processing Unit).
+Bbappend files for NXP ML libraries, pulling EdgeFirstAI forks with optimizations and fixes for the i.MX NPU (Neural Processing Unit).
 
 | Recipe | GitHub Repository | Description |
 |--------|-------------------|-------------|
@@ -98,12 +89,9 @@ Core infrastructure services and libraries required by the perception and GStrea
 
 ### packagegroup-edgefirst-perception
 
-Installs the full EdgeFirst Perception stack — all Zenoh-based sensor services, the schemas
-library, and the Zenoh router daemon.
+Installs the full EdgeFirst Perception stack — all Zenoh-based sensor services, the schemas library, and the Zenoh router daemon.
 
-**Includes:** zenohd, edgefirst-schemas, edgefirst-camera, edgefirst-imu, edgefirst-navsat,
-edgefirst-radarpub, edgefirst-lidarpub, edgefirst-publisher, edgefirst-recorder,
-edgefirst-replay, edgefirst-webui
+**Includes:** zenohd, edgefirst-schemas, edgefirst-camera, edgefirst-imu, edgefirst-navsat, edgefirst-radarpub, edgefirst-lidarpub, edgefirst-publisher, edgefirst-recorder, edgefirst-replay, edgefirst-webui
 
 ### packagegroup-edgefirst-gstreamer
 
@@ -171,8 +159,7 @@ IMAGE_INSTALL:append = " edgefirst-camera edgefirst-schemas zenohd"
 
 ## Development Roadmap
 
-meta-edgefirst is being developed incrementally as EdgeFirst repositories are published as
-open source. The layer will be built out in phases:
+meta-edgefirst is being developed incrementally as EdgeFirst repositories are published as open source. The layer will be built out in phases:
 
 **Phase 1 — Foundation** (current)
 - Layer structure, configuration, packagegroup skeletons
@@ -199,5 +186,4 @@ open source. The layer will be built out in phases:
 
 This layer is licensed under the [Apache License 2.0](LICENSE).
 
-Individual recipe packages may have their own licenses — see each recipe's `LICENSE` variable
-for details.
+Individual recipe packages may have their own licenses — see each recipe's `LICENSE` variable for details.

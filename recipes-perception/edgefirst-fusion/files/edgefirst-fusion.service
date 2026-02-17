@@ -1,0 +1,13 @@
+[Unit]
+Description=EdgeFirst Sensor Fusion Service
+Wants=edgefirst-radarpub.service edgefirst-model.service network.target
+After=edgefirst-radarpub.service edgefirst-model.service network.target
+
+[Service]
+Type=simple
+ExecStart=/usr/bin/edgefirst-fusion
+EnvironmentFile=/etc/default/edgefirst-fusion
+Restart=always
+
+[Install]
+WantedBy=multi-user.target

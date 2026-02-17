@@ -4,15 +4,15 @@ LIC_FILES_CHKSUM = "file://${BPN}-LICENSE;md5=3929fde384c07d35ed0d6f0c925f2a12"
 
 FILESEXTRAPATHS:prepend := "${THISDIR}/files:"
 SRC_URI = "\
-    https://github.com/EdgeFirstAI/replay/releases/download/v${PV}/edgefirst-replay-linux-${TARGET_ARCH};downloadfilename=edgefirst-replay;name=binary \
+    https://github.com/EdgeFirstAI/replay/releases/download/v${PV}/edgefirst-replay-${PV}-linux-${TARGET_ARCH};downloadfilename=edgefirst-replay;name=binary \
     https://raw.githubusercontent.com/EdgeFirstAI/replay/v${PV}/LICENSE;downloadfilename=${BPN}-LICENSE;name=license \
     file://edgefirst-replay.service \
     file://edgefirst-replay.default \
 "
 SRC_URI[license.sha256sum] = "acbbda305958ff27afe43eeef4a77d48ef9d99364e772ba319d1d38ae759ae43"
 
-BINARY_SHA256SUM[aarch64] = ""
-BINARY_SHA256SUM[x86_64] = ""
+BINARY_SHA256SUM[aarch64] = "f5683f645f2560a8ee50d5924a80dadc5cf4dcc71d0c7b065337e58ef5869ac4"
+BINARY_SHA256SUM[x86_64] = "5809f6b1b720e5503c10cee558ad3fb124f3acb07bdc2423db25f9cd7524d261"
 
 python () {
     arch = d.getVar('TARGET_ARCH')

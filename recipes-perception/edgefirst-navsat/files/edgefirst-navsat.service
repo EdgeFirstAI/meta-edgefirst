@@ -11,4 +11,4 @@ ExecStart=/usr/bin/edgefirst-navsat
 Restart=always
 
 [Install]
-WantedBy=edgefirst.target
+WantedBy=multi-user.target

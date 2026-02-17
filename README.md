@@ -10,33 +10,38 @@ meta-edgefirst provides the complete EdgeFirst ecosystem for embedded perception
 block-beta
   columns 2
 
-  block:perception:1["EdgeFirst Perception\n(Zenoh Services)"]
+  block:perception
     columns 1
-    p1["camera · imu · navsat\nradarpub · lidarpub\npublisher · recorder · replay\nwebui"]
+    p0["EdgeFirst Perception\n(Zenoh Services)"]
+    p1["camera · model · fusion\nimu · navsat\nradarpub · lidarpub\nrecorder · replay\nwebsrv · webui"]
   end
 
-  block:gstreamer:1["EdgeFirst Perception\nfor GStreamer"]
+  block:gstreamer
     columns 1
-    g1["nnstreamer (EdgeFirst fork)\ngst-edgefirst\n(3D Spatial · PointCloud\nRadarCube · Fusion)"]
+    g0["EdgeFirst Perception\nfor GStreamer"]
+    g1["edgefirst-gstreamer\nnnstreamer (EdgeFirst fork)"]
   end
 
-  block:schemas:1["edgefirst-schemas\n(C lib + Python)"]
+  block:schemas
+    s0["edgefirst-schemas\n(C lib + Python)"]
   end
 
-  block:npu:1["tflite-vx-delegate · tim-vx\n(NPU acceleration)"]
+  block:npu
+    n0["tflite-vx-delegate · tim-vx\n(NPU acceleration)"]
   end
 
-  block:infra:2["Supporting Infrastructure"]
+  block:infra:2
     columns 2
     z1["zenohd · libzenohc\npython3-zenoh"]
     v1["videostream\n(V4L2/ISP capture)"]
   end
 
-  block:bsp:2["NXP i.MX Yocto BSP (walnascar)\nmeta-imx · meta-freescale · meta-openembedded"]
+  block:bsp:2
+    b0["NXP i.MX Yocto BSP (walnascar)\nmeta-imx · meta-freescale · meta-openembedded"]
   end
 
-  p1 --> schemas
-  g1 --> npu
+  p1 --> s0
+  g1 --> n0
 ```
 
 ## Recipe Groups
@@ -48,14 +53,17 @@ Standalone Zenoh-native services that publish, record, and replay sensor data. E
 | Recipe | GitHub Repository | Description |
 |--------|-------------------|-------------|
 | `edgefirst-camera` | [EdgeFirstAI/camera](https://github.com/EdgeFirstAI/camera) | Camera capture service — V4L2/ISP acquisition, Zenoh image publishing |
+| `edgefirst-model` | [EdgeFirstAI/model](https://github.com/EdgeFirstAI/model) | Model inference service — NPU-accelerated object detection and classification |
+| `edgefirst-fusion` | [EdgeFirstAI/fusion](https://github.com/EdgeFirstAI/fusion) | Sensor fusion service — radar-camera BEV fusion and occupancy grid |
 | `edgefirst-imu` | [EdgeFirstAI/imu](https://github.com/EdgeFirstAI/imu) | IMU service — accelerometer/gyroscope data from I2C/SPI sensors |
 | `edgefirst-navsat` | [EdgeFirstAI/navsat](https://github.com/EdgeFirstAI/navsat) | GNSS/GPS navigation satellite receiver service |
 | `edgefirst-radarpub` | [EdgeFirstAI/radarpub](https://github.com/EdgeFirstAI/radarpub) | Radar publisher — automotive radar sensor data over Zenoh |
 | `edgefirst-lidarpub` | [EdgeFirstAI/lidarpub](https://github.com/EdgeFirstAI/lidarpub) | LiDAR publisher — point cloud data from LiDAR sensors |
-| `edgefirst-publisher` | [EdgeFirstAI/publisher](https://github.com/EdgeFirstAI/publisher) | Generic Zenoh topic publisher and bridge service |
 | `edgefirst-recorder` | [EdgeFirstAI/recorder](https://github.com/EdgeFirstAI/recorder) | Session recorder — captures Zenoh streams to disk for replay |
 | `edgefirst-replay` | [EdgeFirstAI/replay](https://github.com/EdgeFirstAI/replay) | Session replay — replays recorded Zenoh sessions |
+| `edgefirst-websrv` | [EdgeFirstAI/websrv](https://github.com/EdgeFirstAI/websrv) | Web UI backend server for EdgeFirst services |
 | `edgefirst-webui` | [EdgeFirstAI/webui](https://github.com/EdgeFirstAI/webui) | Web dashboard for monitoring and configuring EdgeFirst services |
+| `edgefirst-hal` | [EdgeFirstAI/hal](https://github.com/EdgeFirstAI/hal) | Hardware abstraction layer (C library + Python bindings) |
 | `edgefirst-schemas` | [EdgeFirstAI/schemas](https://github.com/EdgeFirstAI/schemas) | Shared schema library (C + Python) for EdgeFirst message types |
 
 ### recipes-nnstreamer — ML Inference Pipelines
@@ -64,8 +72,8 @@ GStreamer/NNStreamer plugins for real-time ML inference on video and sensor stre
 
 | Recipe | GitHub Repository | Description |
 |--------|-------------------|-------------|
+| `edgefirst-gstreamer` | [EdgeFirstAI/gstreamer](https://github.com/EdgeFirstAI/gstreamer) | EdgeFirst Perception for GStreamer — Zenoh bridge elements, sensor fusion processing, HAL camera adaptor |
 | `nnstreamer` | [EdgeFirstAI/nnstreamer](https://github.com/EdgeFirstAI/nnstreamer) | EdgeFirst fork of NNStreamer — adds dmabuf zero-copy, TFLite-VX CameraAdaptor, Ara-2 sub-filter support |
-| `gst-edgefirst` | [EdgeFirstAI/gst-edgefirst](https://github.com/EdgeFirstAI/gst-edgefirst) | EdgeFirst GStreamer plugins — 3D Spatial Perception, PointCloud processing, RadarCube decoding, sensor fusion elements, visualization overlays, Zenoh bridge elements |
 
 ### recipes-extensions — NPU Acceleration Libraries
 
@@ -87,17 +95,20 @@ Core infrastructure services and libraries required by the perception and GStrea
 
 ## Packagegroups
 
-### packagegroup-edgefirst-perception
+All EdgeFirst packages are managed by a single `packagegroup-edgefirst` recipe with sub-packages:
 
-Installs the full EdgeFirst Perception stack — all Zenoh-based sensor services, the schemas library, and the Zenoh router daemon.
+| Package | Description |
+|---------|-------------|
+| `packagegroup-edgefirst` | Shared infrastructure — zenoh-c, edgefirst-schemas, edgefirst-hal, videostream |
+| `packagegroup-edgefirst-zenoh` | Zenoh sensor services — zenohd, camera, model, fusion, imu, navsat, radarpub, lidarpub, recorder, replay, websrv, webui |
+| `packagegroup-edgefirst-gstreamer` | GStreamer/NNStreamer ML inference pipelines — edgefirst-gstreamer |
+| `packagegroup-edgefirst-python` | Python bindings — python3-zenoh, edgefirst-schemas-python, edgefirst-hal-python |
 
-**Includes:** zenohd, edgefirst-schemas, edgefirst-camera, edgefirst-imu, edgefirst-navsat, edgefirst-radarpub, edgefirst-lidarpub, edgefirst-publisher, edgefirst-recorder, edgefirst-replay, edgefirst-webui
+### packagegroup-edgefirst-sdk
 
-### packagegroup-edgefirst-gstreamer
+SDK toolchain sysroot packages for cross-compilation (separate recipe).
 
-Installs the EdgeFirst GStreamer/NNStreamer inference pipeline stack with NPU acceleration.
-
-**Includes:** nnstreamer, gst-edgefirst
+**Includes:** videostream-dev, zenoh-c-dev, zenoh-c-staticdev, edgefirst-schemas-dev, edgefirst-schemas-staticdev, edgefirst-hal-dev, edgefirst-hal-staticdev
 
 ## Dependencies
 
@@ -144,10 +155,13 @@ bitbake-layers show-layers
 Add a packagegroup to your image recipe or `local.conf`:
 
 ```
-# Full perception stack
-IMAGE_INSTALL:append = " packagegroup-edgefirst-perception"
+# Zenoh perception services (includes shared infrastructure)
+IMAGE_INSTALL:append = " packagegroup-edgefirst-zenoh"
 
-# GStreamer ML inference pipelines
+# Python bindings (optional)
+IMAGE_INSTALL:append = " packagegroup-edgefirst-python"
+
+# GStreamer ML inference pipelines (planned)
 IMAGE_INSTALL:append = " packagegroup-edgefirst-gstreamer"
 ```
 
@@ -173,9 +187,9 @@ meta-edgefirst is being developed incrementally as EdgeFirst repositories are pu
 **Phase 3 — Perception Services**
 - edgefirst-camera, edgefirst-imu, edgefirst-navsat
 - edgefirst-radarpub, edgefirst-lidarpub
-- edgefirst-publisher, edgefirst-recorder, edgefirst-replay
-- edgefirst-webui
-- systemd target integration
+- edgefirst-model, edgefirst-fusion
+- edgefirst-recorder, edgefirst-replay
+- edgefirst-websrv, edgefirst-webui
 
 **Phase 4 — ML/GStreamer Pipeline**
 - NNStreamer EdgeFirst fork (dmabuf, TFLite-VX CameraAdaptor, Ara-2 sub-filter)

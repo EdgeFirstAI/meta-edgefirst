@@ -4,13 +4,21 @@ LIC_FILES_CHKSUM = "file://${COMMON_LICENSE_DIR}/Apache-2.0;md5=89aea4e17d99a7ca
 
 FILESEXTRAPATHS:prepend := "${THISDIR}/files:"
 SRC_URI = "\
-    https://github.com/eclipse-zenoh/zenoh/releases/download/${PV}/zenoh-${PV}-${TARGET_ARCH}-unknown-linux-gnu-standalone.zip \
+    https://github.com/eclipse-zenoh/zenoh/releases/download/${PV}/zenoh-${PV}-${TARGET_ARCH}-unknown-linux-gnu-standalone.zip;name=standalone \
     file://zenohd.service \
     file://zenohd.default \
     file://zenohd.yaml \
 "
 
-SRC_URI[sha256sum] = "e782ecb1f96ea1ee58724fbdc1aaac7ec2c6dc9422a643af499da37f73189a32"
+STANDALONE_SHA256SUM[aarch64] = "2fcf8415b59a3cb6b529676b789aac7cd442aa850b94e2dcc548be5a4fc3b0b6"
+STANDALONE_SHA256SUM[x86_64] = "d59cb50835078bfe3e49e7a3b3041c3dbb48e243a1e853f6012565ac91f1305a"
+
+python () {
+    arch = d.getVar('TARGET_ARCH')
+    sha256 = d.getVarFlag('STANDALONE_SHA256SUM', arch)
+    if sha256:
+        d.setVarFlag('SRC_URI', 'standalone.sha256sum', sha256)
+}
 
 S = "${WORKDIR}/sources"
 UNPACKDIR = "${S}"

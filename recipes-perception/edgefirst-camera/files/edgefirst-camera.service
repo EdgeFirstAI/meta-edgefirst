@@ -12,4 +12,4 @@ EnvironmentFile=/etc/default/edgefirst-camera
 Restart=always
 
 [Install]
-WantedBy=edgefirst.target
+WantedBy=multi-user.target

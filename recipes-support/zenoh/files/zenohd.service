@@ -9,4 +9,4 @@ Restart=on-failure
 ExecStart=/usr/bin/zenohd --config /etc/zenohd.yaml
 
 [Install]
-WantedBy=edgefirst.target
+WantedBy=multi-user.target

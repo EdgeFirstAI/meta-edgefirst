@@ -1,0 +1,15 @@
+[Unit]
+Description=EdgeFirst Model Service
+After=edgefirst-camera.service network.target
+Wants=edgefirst-camera.service network.target
+Before=edgefirst-recorder.service
+
+[Service]
+Type=simple
+User=root
+ExecStart=/usr/bin/edgefirst-model
+EnvironmentFile=/etc/default/edgefirst-model
+Restart=always
+
+[Install]
+WantedBy=multi-user.target

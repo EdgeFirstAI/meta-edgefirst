@@ -1,0 +1,83 @@
+# EdgeFirst Model Configuration
+
+# A model is required for the model application. This can be a segmentation model
+# and/or a detection model.
+MODEL = "/usr/share/edgefirst-model/modelpack-people.tflite"
+
+# An optional decoder model can be used for two-stage models.  Leave commented
+# out unless required, cannot be empty if defined.
+# DECODER_MODEL = ""
+
+# Enables publishing the legacy visualization message for detection models.  It
+# is false by default which means only the primary model box and mask topics
+# will be available.  If using Foxglove Studio make sure you install the
+# EdgeFirst for Foxglove Plug-in, refer to the documentation for details.
+VISUALIZATION = "false"
+
+# Annotation labels can display various information.  This controls the string
+# annotation published to the visualization topic.  The following values are supported.
+#
+#    index - Label index integer as a string.
+#    score - Floating-point score (0..1) as a string.
+#    label - Label string, fallback to index if model does not contain labels.
+#    label-score - The string will be the the combination of Label and Score
+#                  from above using the following format: "Label Score".
+#    track - The UUID of the tracked object. This is only available when tracking
+#            is enabled. Otherwise will show the score.
+LABELS = "label"
+
+# Score threshold sets the minimum detection score before a bounding box is
+# generated for the inferred object for detection.
+THRESHOLD = "0.2"
+
+# Detection IOU controls the minimum overlap for merging boxes during NMS.  A
+# larger number will produce more boxes with some overlap while a smaller number
+# will generate fewer boxes.
+IOU = "0.2"
+
+# Maximum number of boxes which can be generated.
+MAX_BOXES = "50"
+
+# The label offset is required for certain models to account for differences
+# in background class handling relative to the labels.txt.  It should usually
+# be zero but some odd configurations will sometimes require 1 or -1 for offset.
+LABEL_OFFSET = "0"
+
+# The model can be run using different computation engines.  The default engine
+# is the i.MX 8M Plus NPU.  Other options are the CPU or the GPU.
+ENGINE = "NPU"
+
+# Turn on the ByteTrack tracker. This is useful for smoothing bounding boxes
+# across frames, and for associating multiple detections over time to a single
+# object
+TRACK = "true"
+
+# The number of seconds a tracked object can be missing for before being removed
+# from tracking.
+TRACK_EXTRA_LIFESPAN = "0.5"
+
+# The high confidence threshold for the ByteTrack algorithm
+TRACK_HIGH_CONF = "0.4"
+
+# The tracking iou threshold for box association. Higher values will require
+# boxes to have higher IOU to the predicted track location to be associated
+TRACK_IOU = "0.25"
+
+# The tracking update factor. Higher update factor will mean less smoothing
+# but more rapid response to change. Use values from 0.0 to 1.0. Values outside this
+# range will cause unexpected behaviour
+TRACK_UPDATE = "0.25"
+
+# Enable compression for segmentation masks.  When enabled both the /model/mask
+# and /model/mask_compressed topics will be available.  The compressed mask
+# should be used from remote connections while the un-compressed topic should be
+# used from local connections to avoid redundant compress/decompress steps.
+MASK_COMPRESSION = "true"
+
+# The NPU is very slow loading initial models because of graph creation times.
+# This option will enable the graph caching which significantly speeds up load
+# times for models.  If you encounter issues set to 0 to disable.
+VIV_VX_ENABLE_CACHE_GRAPH_BINARY = "0"
+
+# Control the NPU graph cache storage location.
+VIV_VX_CACHE_BINARY_GRAPH_DIR = "/var/cache"

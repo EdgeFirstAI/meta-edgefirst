@@ -12,12 +12,12 @@ SRC_URI[license.sha256sum] = "acbbda305958ff27afe43eeef4a77d48ef9d99364e772ba319
 
 # Python wheel only available for x86_64 (native cpython-311 extension)
 SRC_URI:append:x86-64 = " \
-    https://files.pythonhosted.org/packages/f8/50/303a02f70e5ddd0960c8429f7a9d6144e5d00d17604dd590da477871b121/edgefirst_hal-${PV}-cp311-cp311-manylinux_2_17_x86_64.manylinux2014_x86_64.whl;name=python \
+    https://files.pythonhosted.org/packages/6e/c8/46ca9863f0fb0e0e45113b112d864d8579da49ca0a844c4d2f0d5d901e6b/edgefirst_hal-${PV}-cp311-abi3-manylinux_2_17_x86_64.manylinux2014_x86_64.whl;name=python \
 "
-SRC_URI[python.sha256sum] = "14d36dc71b1e6edfe7ff68441b11131c65c8632528d70cb276129285190c50bb"
+SRC_URI[python.sha256sum] = "fd19ff3e35fcc3f54fa08aeb5fdc57b39199fee5d090ce902e0a34e1d783006e"
 
-CLIB_SHA256SUM[aarch64] = "7170e9f509bfbd13042c81b71d1570413a1b126830a0ccf90165cc2eacc52318"
-CLIB_SHA256SUM[x86_64] = "958ab1368a8ea3debbb35ad61ff4cca438fb75d6f930a8c1702c906ce9d01e0e"
+CLIB_SHA256SUM[aarch64] = "9804e068ec0aaecd68ca7f9227f6a23f63fea07adfbaea0cd7770ba0a4353be9"
+CLIB_SHA256SUM[x86_64] = "96c2b917c7c826613d79aa48831fa79b9f7d8fd4cf48cdbb6456f055ccf5a841"
 
 python () {
     arch = d.getVar('TARGET_ARCH')
@@ -48,9 +48,9 @@ do_install() {
     install -m 0644 ${UNPACKDIR}/edgefirst-hal-capi-${PV}-${TARGET_ARCH}-linux/include/edgefirst/hal.h ${D}${includedir}/edgefirst/
 
     # Install Python wheel (x86_64 only)
-    if [ -f ${UNPACKDIR}/edgefirst_hal-${PV}-cp311-cp311-manylinux_2_17_x86_64.manylinux2014_x86_64.whl ]; then
+    if [ -f ${UNPACKDIR}/edgefirst_hal-${PV}-cp311-abi3-manylinux_2_17_x86_64.manylinux2014_x86_64.whl ]; then
         install -d ${D}${PYTHON_SITEPACKAGES_DIR}
-        unzip ${UNPACKDIR}/edgefirst_hal-${PV}-cp311-cp311-manylinux_2_17_x86_64.manylinux2014_x86_64.whl -d ${D}${PYTHON_SITEPACKAGES_DIR}
+        unzip ${UNPACKDIR}/edgefirst_hal-${PV}-cp311-abi3-manylinux_2_17_x86_64.manylinux2014_x86_64.whl -d ${D}${PYTHON_SITEPACKAGES_DIR}
     fi
 }
 

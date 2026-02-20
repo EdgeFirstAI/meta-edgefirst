@@ -26,11 +26,15 @@ do_compile:append() {
     cmake --build ${B}/yolov8n -- ${PARALLEL_MAKE}
 }
 
+EDGEFIRST_DIR = "/opt/edgefirst"
+
 do_install:append() {
-    install -d ${D}${IMX_NNSTREANER_DIR}/yolov8n
-    install -m 0755 ${B}/yolov8n/yolov8n_reference ${D}${IMX_NNSTREANER_DIR}/yolov8n/
-    install -m 0755 ${B}/yolov8n/yolov8n_imx8mp ${D}${IMX_NNSTREANER_DIR}/yolov8n/
-    install -m 0755 ${B}/yolov8n/yolov8n_imx95 ${D}${IMX_NNSTREANER_DIR}/yolov8n/
-    install -m 0755 ${B}/yolov8n/yolov8n_ara2 ${D}${IMX_NNSTREANER_DIR}/yolov8n/
-    install -m 0755 ${B}/yolov8n/yolov8n_ara2_reference ${D}${IMX_NNSTREANER_DIR}/yolov8n/
+    install -d ${D}${EDGEFIRST_DIR}
+    install -m 0755 ${B}/yolov8n/yolov8n_reference ${D}${EDGEFIRST_DIR}/
+    install -m 0755 ${B}/yolov8n/yolov8n_imx8mp ${D}${EDGEFIRST_DIR}/
+    install -m 0755 ${B}/yolov8n/yolov8n_imx95 ${D}${EDGEFIRST_DIR}/
+    install -m 0755 ${B}/yolov8n/yolov8n_ara2 ${D}${EDGEFIRST_DIR}/
+    install -m 0755 ${B}/yolov8n/yolov8n_ara2_reference ${D}${EDGEFIRST_DIR}/
 }
+
+FILES:${PN} += "${EDGEFIRST_DIR}"

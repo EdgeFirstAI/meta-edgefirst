@@ -17,7 +17,7 @@
 # - default delegates fix
 
 SRC_URI = "git://github.com/EdgeFirstAI/nnstreamer.git;branch=edgefirst-ara2;protocol=https"
-SRCREV = "b253f08a6297ecd96b257577bed40f5c6cbfa6ec"
+SRCREV = "38cf83985e3d9a3b769f58e6671469b955fe30cf"
 
 # Kinara Ara-2 NPU tensor_filter sub-plugin
 # Build: requires dvapi.h from ara2-dev

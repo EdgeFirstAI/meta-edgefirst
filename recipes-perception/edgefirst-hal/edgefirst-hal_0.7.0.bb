@@ -35,9 +35,10 @@ DEPENDS = "python3 unzip-native"
 RDEPENDS:${PN}-python = "python3"
 
 do_install() {
-    # Install shared library
+    # Install shared library with proper SONAME symlinks
     install -d ${D}${libdir}
     install -m 0755 ${UNPACKDIR}/edgefirst-hal-capi-${PV}-${TARGET_ARCH}-linux/lib/libedgefirst_hal.so ${D}${libdir}/libedgefirst_hal.so.${PV}
+    ln -sf libedgefirst_hal.so.${PV} ${D}${libdir}/libedgefirst_hal.so.0
     ln -sf libedgefirst_hal.so.${PV} ${D}${libdir}/libedgefirst_hal.so
 
     # Install static library
@@ -46,6 +47,21 @@ do_install() {
     # Install headers
     install -d ${D}${includedir}/edgefirst
     install -m 0644 ${UNPACKDIR}/edgefirst-hal-capi-${PV}-${TARGET_ARCH}-linux/include/edgefirst/hal.h ${D}${includedir}/edgefirst/
+
+    # Install pkg-config file
+    install -d ${D}${libdir}/pkgconfig
+    cat > ${D}${libdir}/pkgconfig/edgefirst-hal.pc <<PKGEOF
+prefix=${prefix}
+exec_prefix=\${prefix}
+libdir=\${prefix}/lib
+includedir=\${prefix}/include
+
+Name: edgefirst-hal
+Description: EdgeFirst HAL C Library
+Version: ${PV}
+Libs: -L\${libdir} -ledgefirst_hal
+Cflags: -I\${includedir}
+PKGEOF
 
     # Install Python wheel (x86_64 only)
     if [ -f ${UNPACKDIR}/edgefirst_hal-${PV}-cp311-abi3-manylinux_2_17_x86_64.manylinux2014_x86_64.whl ]; then
@@ -60,7 +76,7 @@ INSANE_SKIP:${PN} += "ldflags already-stripped"
 INSANE_SKIP:${PN}-python += "ldflags"
 
 FILES:${PN} = "${libdir}/libedgefirst_hal.so.*"
-FILES:${PN}-dev = "${includedir} ${libdir}/libedgefirst_hal.so"
+FILES:${PN}-dev = "${includedir} ${libdir}/libedgefirst_hal.so ${libdir}/pkgconfig"
 FILES:${PN}-staticdev = "${libdir}/libedgefirst_hal.a"
 FILES:${PN}-python = "${PYTHON_SITEPACKAGES_DIR}"
 

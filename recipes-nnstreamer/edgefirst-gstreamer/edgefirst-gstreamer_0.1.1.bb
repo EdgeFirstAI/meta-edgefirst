@@ -24,12 +24,13 @@ DEPENDS = " \
 "
 
 EXTRA_OEMESON = " \
-    -Dtests=disabled \
+    -Dtests=enabled \
     -Ddocs=disabled \
 "
 
 FILES:${PN} += " \
     ${libdir}/gstreamer-1.0 \
+    ${libexecdir}/${BPN} \
 "
 
 INSANE_SKIP:${PN} += "ldflags"

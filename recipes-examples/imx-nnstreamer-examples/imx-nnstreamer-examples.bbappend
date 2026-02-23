@@ -5,7 +5,7 @@
 # and Kinara Ara-2 NPU platforms, plus reference baselines.
 
 NXP_NNSTREAMER_EXAMPLES_SRC = "git://github.com/EdgeFirstAI/nxp-nnstreamer-examples.git;protocol=https"
-SRCBRANCH = "edgefirst-gstmetaquant"
+SRCBRANCH = "edgefirst-yolov8"
 SRCREV = "ad7911ab15898024d6cd9366a0693bbe4aedf849"
 
 DEPENDS += "edgefirst-hal gstreamer1.0-plugins-base"

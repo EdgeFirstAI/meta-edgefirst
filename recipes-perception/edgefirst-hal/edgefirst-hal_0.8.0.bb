@@ -10,14 +10,14 @@ SRC_URI = "\
 "
 SRC_URI[license.sha256sum] = "acbbda305958ff27afe43eeef4a77d48ef9d99364e772ba319d1d38ae759ae43"
 
-# Python wheel only available for x86_64 (native cpython-311 extension)
-SRC_URI:append:x86-64 = " \
-    https://files.pythonhosted.org/packages/6e/c8/46ca9863f0fb0e0e45113b112d864d8579da49ca0a844c4d2f0d5d901e6b/edgefirst_hal-${PV}-cp311-abi3-manylinux_2_17_x86_64.manylinux2014_x86_64.whl;name=python \
+# Python wheel available for aarch64 (target) from PyPI
+SRC_URI:append:aarch64 = " \
+    https://files.pythonhosted.org/packages/7b/a7/3116d388d8f5b0d1184cba8df1b5f33b321a878c55b3a645cd146cd978c8/edgefirst_hal-${PV}-cp311-abi3-manylinux_2_17_aarch64.manylinux2014_aarch64.whl;name=python \
 "
-SRC_URI[python.sha256sum] = "fd19ff3e35fcc3f54fa08aeb5fdc57b39199fee5d090ce902e0a34e1d783006e"
+SRC_URI[python.sha256sum] = "741181d0ffc3303bb97aa73d1a3efb24f56bc038301592d0c2269960d4136276"
 
-CLIB_SHA256SUM[aarch64] = "9804e068ec0aaecd68ca7f9227f6a23f63fea07adfbaea0cd7770ba0a4353be9"
-CLIB_SHA256SUM[x86_64] = "96c2b917c7c826613d79aa48831fa79b9f7d8fd4cf48cdbb6456f055ccf5a841"
+CLIB_SHA256SUM[aarch64] = "b706825712f9e2a5fa879fa4ad532bc8d532fcfac21f621e0cf1a3b017196bce"
+CLIB_SHA256SUM[x86_64] = "af9fa45636bc5e9108a131f719cb771f3bcad90f9cc8cbc316d7a1c868a678c6"
 
 python () {
     arch = d.getVar('TARGET_ARCH')
@@ -63,10 +63,10 @@ Libs: -L\${libdir} -ledgefirst_hal
 Cflags: -I\${includedir}
 PKGEOF
 
-    # Install Python wheel (x86_64 only)
-    if [ -f ${UNPACKDIR}/edgefirst_hal-${PV}-cp311-abi3-manylinux_2_17_x86_64.manylinux2014_x86_64.whl ]; then
+    # Install Python wheel (aarch64 from PyPI)
+    if [ -f ${UNPACKDIR}/edgefirst_hal-${PV}-cp311-abi3-manylinux_2_17_aarch64.manylinux2014_aarch64.whl ]; then
         install -d ${D}${PYTHON_SITEPACKAGES_DIR}
-        unzip ${UNPACKDIR}/edgefirst_hal-${PV}-cp311-abi3-manylinux_2_17_x86_64.manylinux2014_x86_64.whl -d ${D}${PYTHON_SITEPACKAGES_DIR}
+        unzip ${UNPACKDIR}/edgefirst_hal-${PV}-cp311-abi3-manylinux_2_17_aarch64.manylinux2014_aarch64.whl -d ${D}${PYTHON_SITEPACKAGES_DIR}
     fi
 }
 

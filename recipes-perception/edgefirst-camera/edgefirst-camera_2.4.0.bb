@@ -23,20 +23,24 @@ python () {
 
 DEPENDS = "videostream"
 
-S = "${WORKDIR}/sources"
-UNPACKDIR = "${S}"
+S = "${WORKDIR}"
 
 inherit features_check systemd
 
 do_install:append () {
     install -d ${D}${systemd_system_unitdir}
-    install -m 0644 ${UNPACKDIR}/edgefirst-camera.service ${D}${systemd_system_unitdir}
-
     install -d ${D}${sysconfdir}/default
-    install -m 0644 ${UNPACKDIR}/edgefirst-camera.default ${D}${sysconfdir}/default/edgefirst-camera
-
     install -d ${D}${bindir}
-    install -m 0755 ${UNPACKDIR}/edgefirst-camera ${D}${bindir}/edgefirst-camera
+
+    if [ "${UNPACKDIR}" != "" ]; then
+        install -m 0644 ${UNPACKDIR}/edgefirst-camera.service ${D}${systemd_system_unitdir}
+        install -m 0644 ${UNPACKDIR}/edgefirst-camera.default ${D}${sysconfdir}/default/edgefirst-camera
+        install -m 0755 ${UNPACKDIR}/edgefirst-camera ${D}${bindir}/edgefirst-camera
+    else
+        install -m 0644 ${WORKDIR}/edgefirst-camera.service ${D}${systemd_system_unitdir}
+        install -m 0644 ${WORKDIR}/edgefirst-camera.default ${D}${sysconfdir}/default/edgefirst-camera
+        install -m 0755 ${WORKDIR}/edgefirst-camera ${D}${bindir}/edgefirst-camera
+    fi
 }
 
 REQUIRED_DISTRO_FEATURES = "systemd"

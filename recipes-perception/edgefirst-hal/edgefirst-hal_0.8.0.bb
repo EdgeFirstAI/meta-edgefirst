@@ -26,8 +26,7 @@ python () {
         d.setVarFlag('SRC_URI', 'clib.sha256sum', sha256)
 }
 
-S = "${WORKDIR}/sources"
-UNPACKDIR = "${S}"
+S = "${WORKDIR}"
 
 inherit python3-dir
 
@@ -35,18 +34,24 @@ DEPENDS = "python3 unzip-native"
 RDEPENDS:${PN}-python = "python3"
 
 do_install() {
+    if [ "${UNPACKDIR}" != "" ]; then
+        SRCDIR="${UNPACKDIR}"
+    else
+        SRCDIR="${WORKDIR}"
+    fi
+
     # Install shared library with proper SONAME symlinks
     install -d ${D}${libdir}
-    install -m 0755 ${UNPACKDIR}/edgefirst-hal-capi-${PV}-${TARGET_ARCH}-linux/lib/libedgefirst_hal.so ${D}${libdir}/libedgefirst_hal.so.${PV}
+    install -m 0755 ${SRCDIR}/edgefirst-hal-capi-${PV}-${TARGET_ARCH}-linux/lib/libedgefirst_hal.so ${D}${libdir}/libedgefirst_hal.so.${PV}
     ln -sf libedgefirst_hal.so.${PV} ${D}${libdir}/libedgefirst_hal.so.0
     ln -sf libedgefirst_hal.so.${PV} ${D}${libdir}/libedgefirst_hal.so
 
     # Install static library
-    install -m 0644 ${UNPACKDIR}/edgefirst-hal-capi-${PV}-${TARGET_ARCH}-linux/lib/libedgefirst_hal.a ${D}${libdir}/
+    install -m 0644 ${SRCDIR}/edgefirst-hal-capi-${PV}-${TARGET_ARCH}-linux/lib/libedgefirst_hal.a ${D}${libdir}/
 
     # Install headers
     install -d ${D}${includedir}/edgefirst
-    install -m 0644 ${UNPACKDIR}/edgefirst-hal-capi-${PV}-${TARGET_ARCH}-linux/include/edgefirst/hal.h ${D}${includedir}/edgefirst/
+    install -m 0644 ${SRCDIR}/edgefirst-hal-capi-${PV}-${TARGET_ARCH}-linux/include/edgefirst/hal.h ${D}${includedir}/edgefirst/
 
     # Install pkg-config file
     install -d ${D}${libdir}/pkgconfig
@@ -64,9 +69,9 @@ Cflags: -I\${includedir}
 PKGEOF
 
     # Install Python wheel (aarch64 from PyPI)
-    if [ -f ${UNPACKDIR}/edgefirst_hal-${PV}-cp311-abi3-manylinux_2_17_aarch64.manylinux2014_aarch64.whl ]; then
+    if [ -f ${SRCDIR}/edgefirst_hal-${PV}-cp311-abi3-manylinux_2_17_aarch64.manylinux2014_aarch64.whl ]; then
         install -d ${D}${PYTHON_SITEPACKAGES_DIR}
-        unzip ${UNPACKDIR}/edgefirst_hal-${PV}-cp311-abi3-manylinux_2_17_aarch64.manylinux2014_aarch64.whl -d ${D}${PYTHON_SITEPACKAGES_DIR}
+        unzip ${SRCDIR}/edgefirst_hal-${PV}-cp311-abi3-manylinux_2_17_aarch64.manylinux2014_aarch64.whl -d ${D}${PYTHON_SITEPACKAGES_DIR}
     fi
 }
 

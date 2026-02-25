@@ -21,20 +21,24 @@ python () {
         d.setVarFlag('SRC_URI', 'binary.sha256sum', sha256)
 }
 
-S = "${WORKDIR}/sources"
-UNPACKDIR = "${S}"
+S = "${WORKDIR}"
 
 inherit features_check systemd
 
 do_install:append () {
     install -d ${D}${systemd_system_unitdir}
-    install -m 0644 ${UNPACKDIR}/edgefirst-recorder.service ${D}${systemd_system_unitdir}
-
     install -d ${D}${sysconfdir}/default
-    install -m 0644 ${UNPACKDIR}/edgefirst-recorder.default ${D}${sysconfdir}/default/edgefirst-recorder
-
     install -d ${D}${bindir}
-    install -m 0755 ${UNPACKDIR}/edgefirst-recorder ${D}${bindir}/edgefirst-recorder
+
+    if [ "${UNPACKDIR}" != "" ]; then
+        install -m 0644 ${UNPACKDIR}/edgefirst-recorder.service ${D}${systemd_system_unitdir}
+        install -m 0644 ${UNPACKDIR}/edgefirst-recorder.default ${D}${sysconfdir}/default/edgefirst-recorder
+        install -m 0755 ${UNPACKDIR}/edgefirst-recorder ${D}${bindir}/edgefirst-recorder
+    else
+        install -m 0644 ${WORKDIR}/edgefirst-recorder.service ${D}${systemd_system_unitdir}
+        install -m 0644 ${WORKDIR}/edgefirst-recorder.default ${D}${sysconfdir}/default/edgefirst-recorder
+        install -m 0755 ${WORKDIR}/edgefirst-recorder ${D}${bindir}/edgefirst-recorder
+    fi
 }
 
 REQUIRED_DISTRO_FEATURES = "systemd"

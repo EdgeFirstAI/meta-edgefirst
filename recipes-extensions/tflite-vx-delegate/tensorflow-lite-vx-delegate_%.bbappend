@@ -18,6 +18,9 @@ TENSORFLOW_LITE_VX_DELEGATE_SRC = "git://github.com/EdgeFirstAI/tflite-vx-delega
 SRCBRANCH_vx = "edgefirst-cameraadaptor"
 SRCREV_vx = "61cb96d640552a7b504bca4d62d6ae5c15ee6148"
 
+# The EdgeFirst fork already includes this fix; remove to avoid double-apply
+SRC_URI:remove = "file://0001-Findtim-vx.cmake-Fix-LIBDIR-for-multilib-environment.patch"
+
 # G2D is needed by the camera_adaptor_test example for hardware-accelerated
 # image resize. Provided by imx-gpu-g2d on i.MX8MP via virtual/libg2d.
 DEPENDS:append = " virtual/libg2d"

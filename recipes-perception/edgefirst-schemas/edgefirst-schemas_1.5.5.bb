@@ -22,8 +22,7 @@ python () {
         d.setVarFlag('SRC_URI', 'clib.sha256sum', sha256)
 }
 
-S = "${WORKDIR}/sources"
-UNPACKDIR = "${S}"
+S = "${WORKDIR}"
 
 inherit python3-dir
 
@@ -31,26 +30,32 @@ DEPENDS = "python3 python3-pip-native unzip-native"
 RDEPENDS:${PN}-python = "python3"
 
 do_install() {
+    if [ "${UNPACKDIR}" != "" ]; then
+        SRCDIR="${UNPACKDIR}"
+    else
+        SRCDIR="${WORKDIR}"
+    fi
+
     # Install shared library (versioned)
     install -d ${D}${libdir}
-    install -m 0755 ${UNPACKDIR}/edgefirst-schemas-linux_${TARGET_ARCH}-${PV}/lib/libedgefirst_schemas.so.${PV} ${D}${libdir}/
+    install -m 0755 ${SRCDIR}/edgefirst-schemas-linux_${TARGET_ARCH}-${PV}/lib/libedgefirst_schemas.so.${PV} ${D}${libdir}/
     ln -sf libedgefirst_schemas.so.${PV} ${D}${libdir}/libedgefirst_schemas.so.1
     ln -sf libedgefirst_schemas.so.${PV} ${D}${libdir}/libedgefirst_schemas.so
 
     # Install static library
-    install -m 0644 ${UNPACKDIR}/edgefirst-schemas-linux_${TARGET_ARCH}-${PV}/lib/libedgefirst_schemas.a ${D}${libdir}/
+    install -m 0644 ${SRCDIR}/edgefirst-schemas-linux_${TARGET_ARCH}-${PV}/lib/libedgefirst_schemas.a ${D}${libdir}/
 
     # Install pkg-config file
     install -d ${D}${libdir}/pkgconfig
-    install -m 0644 ${UNPACKDIR}/edgefirst-schemas-linux_${TARGET_ARCH}-${PV}/lib/pkgconfig/edgefirst-schemas.pc ${D}${libdir}/pkgconfig/
+    install -m 0644 ${SRCDIR}/edgefirst-schemas-linux_${TARGET_ARCH}-${PV}/lib/pkgconfig/edgefirst-schemas.pc ${D}${libdir}/pkgconfig/
 
     # Install headers
     install -d ${D}${includedir}/edgefirst
-    install -m 0644 ${UNPACKDIR}/edgefirst-schemas-linux_${TARGET_ARCH}-${PV}/include/edgefirst/schemas.h ${D}${includedir}/edgefirst/
+    install -m 0644 ${SRCDIR}/edgefirst-schemas-linux_${TARGET_ARCH}-${PV}/include/edgefirst/schemas.h ${D}${includedir}/edgefirst/
 
     # Install Python wheel
     install -d ${D}${PYTHON_SITEPACKAGES_DIR}
-    unzip ${UNPACKDIR}/edgefirst_schemas-${PV}-py3-none-any.whl -d ${D}${PYTHON_SITEPACKAGES_DIR}
+    unzip ${SRCDIR}/edgefirst_schemas-${PV}-py3-none-any.whl -d ${D}${PYTHON_SITEPACKAGES_DIR}
 }
 
 PACKAGES = "${PN} ${PN}-dev ${PN}-staticdev ${PN}-python"

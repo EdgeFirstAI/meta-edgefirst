@@ -16,8 +16,7 @@ python () {
         d.setVarFlag('SRC_URI', 'sha256sum', sha256)
 }
 
-S = "${WORKDIR}/sources"
-UNPACKDIR = "${S}"
+S = "${WORKDIR}"
 
 PACKAGES = "${PN}-dev ${PN}-staticdev ${PN}"
 

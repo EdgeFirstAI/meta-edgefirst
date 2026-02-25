@@ -11,8 +11,8 @@ SRC_URI = "\
 "
 SRC_URI[license.sha256sum] = "acbbda305958ff27afe43eeef4a77d48ef9d99364e772ba319d1d38ae759ae43"
 
-BINARY_SHA256SUM[aarch64] = "ec1fd4dd6ded7fdccfe4569a02d8cca65fbfdb0d9c3f11743632bc51fc2f76ac"
-BINARY_SHA256SUM[x86_64] = "8dfaf6f713c37ae371c9c6f9f251cfca50af6a21ce55636f2c380e542dfccaf4"
+BINARY_SHA256SUM[aarch64] = "f96df0f29be27bdc3241e5f833aa2b1e344812e99affc759443f388dae97fff0"
+BINARY_SHA256SUM[x86_64] = "6a172475cf80fc42d8fdaaee60db8d4520571c58512bd9cbda49290e3b77ff8b"
 
 python () {
     arch = d.getVar('TARGET_ARCH')

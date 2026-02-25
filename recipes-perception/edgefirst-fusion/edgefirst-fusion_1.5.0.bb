@@ -23,8 +23,7 @@ python () {
 
 RDEPENDS:${PN} = "tensorflow-lite"
 
-S = "${WORKDIR}/sources"
-UNPACKDIR = "${S}"
+S = "${WORKDIR}"
 
 inherit features_check systemd
 

@@ -23,8 +23,7 @@ python () {
 
 DEPENDS = "videostream"
 
-S = "${WORKDIR}/sources"
-UNPACKDIR = "${S}"
+S = "${WORKDIR}"
 
 inherit features_check systemd
 

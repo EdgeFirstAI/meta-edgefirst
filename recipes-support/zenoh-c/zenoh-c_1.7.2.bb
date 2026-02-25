@@ -15,13 +15,13 @@ python () {
     if sha256:
         d.setVarFlag('SRC_URI', 'sha256sum', sha256)
 
-    # Scarthgap has no UNPACKDIR; files unpack directly to WORKDIR
-    if d.getVar('UNPACKDIR') is None:
-        d.setVar('S', d.getVar('WORKDIR'))
+    # Walnascar unpacks to UNPACKDIR (WORKDIR/sources); Scarthgap to WORKDIR
+    unpackdir = d.getVar('UNPACKDIR')
+    if unpackdir:
+        d.setVar('S', unpackdir)
 }
 
-S = "${WORKDIR}/sources"
-UNPACKDIR = "${S}"
+S = "${WORKDIR}"
 
 PACKAGES = "${PN}-dev ${PN}-staticdev ${PN}"
 

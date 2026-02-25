@@ -26,8 +26,7 @@ python () {
         d.setVarFlag('SRC_URI', 'clib.sha256sum', sha256)
 }
 
-S = "${WORKDIR}/sources"
-UNPACKDIR = "${S}"
+S = "${WORKDIR}"
 
 inherit python3-dir
 

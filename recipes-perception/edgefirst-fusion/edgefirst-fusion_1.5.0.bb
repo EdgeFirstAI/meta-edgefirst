@@ -30,13 +30,18 @@ inherit features_check systemd
 
 do_install:append () {
     install -d ${D}${systemd_system_unitdir}
-    install -m 0644 ${UNPACKDIR}/edgefirst-fusion.service ${D}${systemd_system_unitdir}
-
     install -d ${D}${sysconfdir}/default
-    install -m 0644 ${UNPACKDIR}/edgefirst-fusion.default ${D}${sysconfdir}/default/edgefirst-fusion
-
     install -d ${D}${bindir}
-    install -m 0755 ${UNPACKDIR}/edgefirst-fusion ${D}${bindir}/edgefirst-fusion
+
+    if [ "${UNPACKDIR}" != "" ]; then
+        install -m 0644 ${UNPACKDIR}/edgefirst-fusion.service ${D}${systemd_system_unitdir}
+        install -m 0644 ${UNPACKDIR}/edgefirst-fusion.default ${D}${sysconfdir}/default/edgefirst-fusion
+        install -m 0755 ${UNPACKDIR}/edgefirst-fusion ${D}${bindir}/edgefirst-fusion
+    else
+        install -m 0644 ${WORKDIR}/edgefirst-fusion.service ${D}${systemd_system_unitdir}
+        install -m 0644 ${WORKDIR}/edgefirst-fusion.default ${D}${sysconfdir}/default/edgefirst-fusion
+        install -m 0755 ${WORKDIR}/edgefirst-fusion ${D}${bindir}/edgefirst-fusion
+    fi
 }
 
 REQUIRED_DISTRO_FEATURES = "systemd"

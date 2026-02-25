@@ -28,13 +28,18 @@ inherit features_check systemd
 
 do_install:append () {
     install -d ${D}${systemd_system_unitdir}
-    install -m 0644 ${UNPACKDIR}/edgefirst-websrv.service ${D}${systemd_system_unitdir}
-
     install -d ${D}${sysconfdir}/default
-    install -m 0644 ${UNPACKDIR}/edgefirst-websrv.default ${D}${sysconfdir}/default/edgefirst-websrv
-
     install -d ${D}${bindir}
-    install -m 0755 ${UNPACKDIR}/edgefirst-websrv ${D}${bindir}/edgefirst-websrv
+
+    if [ "${UNPACKDIR}" != "" ]; then
+        install -m 0644 ${UNPACKDIR}/edgefirst-websrv.service ${D}${systemd_system_unitdir}
+        install -m 0644 ${UNPACKDIR}/edgefirst-websrv.default ${D}${sysconfdir}/default/edgefirst-websrv
+        install -m 0755 ${UNPACKDIR}/edgefirst-websrv ${D}${bindir}/edgefirst-websrv
+    else
+        install -m 0644 ${WORKDIR}/edgefirst-websrv.service ${D}${systemd_system_unitdir}
+        install -m 0644 ${WORKDIR}/edgefirst-websrv.default ${D}${sysconfdir}/default/edgefirst-websrv
+        install -m 0755 ${WORKDIR}/edgefirst-websrv ${D}${bindir}/edgefirst-websrv
+    fi
 }
 
 REQUIRED_DISTRO_FEATURES = "systemd"

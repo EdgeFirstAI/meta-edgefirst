@@ -13,9 +13,14 @@ python () {
     sha256 = d.getVarFlag('SRC_URI_SHA256SUM', arch)
     if sha256:
         d.setVarFlag('SRC_URI', 'sha256sum', sha256)
+
+    # Scarthgap has no UNPACKDIR; files unpack directly to WORKDIR
+    if d.getVar('UNPACKDIR') is None:
+        d.setVar('S', d.getVar('WORKDIR'))
 }
 
-S = "${WORKDIR}"
+S = "${WORKDIR}/sources"
+UNPACKDIR = "${S}"
 
 inherit python3-dir
 

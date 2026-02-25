@@ -17,7 +17,12 @@ RDEPENDS:${PN} = "python3"
 
 do_install() {
     mkdir -p ${D}${PYTHON_SITEPACKAGES_DIR}
-    unzip ${UNPACKDIR}/eclipse_zenoh-${PV}-cp39-abi3-manylinux_2_28_aarch64.whl -d ${D}${PYTHON_SITEPACKAGES_DIR}
+
+    if [ "${UNPACKDIR}" != "" ]; then
+        unzip ${UNPACKDIR}/eclipse_zenoh-${PV}-cp39-abi3-manylinux_2_28_aarch64.whl -d ${D}${PYTHON_SITEPACKAGES_DIR}
+    else
+        unzip ${WORKDIR}/eclipse_zenoh-${PV}-cp39-abi3-manylinux_2_28_aarch64.whl -d ${D}${PYTHON_SITEPACKAGES_DIR}
+    fi
 }
 
 do_install[depends] += "unzip-native:do_populate_sysroot"

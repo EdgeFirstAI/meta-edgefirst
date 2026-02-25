@@ -35,14 +35,20 @@ inherit features_check systemd
 
 do_install:append () {
     install -d ${D}${systemd_system_unitdir}
-    install -m 0644 ${UNPACKDIR}/edgefirst-radarpub.service ${D}${systemd_system_unitdir}
-
     install -d ${D}${sysconfdir}/default
-    install -m 0644 ${UNPACKDIR}/edgefirst-radarpub.default ${D}${sysconfdir}/default/edgefirst-radarpub
-
     install -d ${D}${bindir}
-    install -m 0755 ${UNPACKDIR}/edgefirst-radarpub ${D}${bindir}/edgefirst-radarpub
-    install -m 0755 ${UNPACKDIR}/drvegrdctl ${D}${bindir}/drvegrdctl
+
+    if [ "${UNPACKDIR}" != "" ]; then
+        install -m 0644 ${UNPACKDIR}/edgefirst-radarpub.service ${D}${systemd_system_unitdir}
+        install -m 0644 ${UNPACKDIR}/edgefirst-radarpub.default ${D}${sysconfdir}/default/edgefirst-radarpub
+        install -m 0755 ${UNPACKDIR}/edgefirst-radarpub ${D}${bindir}/edgefirst-radarpub
+        install -m 0755 ${UNPACKDIR}/drvegrdctl ${D}${bindir}/drvegrdctl
+    else
+        install -m 0644 ${WORKDIR}/edgefirst-radarpub.service ${D}${systemd_system_unitdir}
+        install -m 0644 ${WORKDIR}/edgefirst-radarpub.default ${D}${sysconfdir}/default/edgefirst-radarpub
+        install -m 0755 ${WORKDIR}/edgefirst-radarpub ${D}${bindir}/edgefirst-radarpub
+        install -m 0755 ${WORKDIR}/drvegrdctl ${D}${bindir}/drvegrdctl
+    fi
 }
 
 REQUIRED_DISTRO_FEATURES = "systemd"

@@ -27,10 +27,15 @@ inherit features_check systemd
 
 do_install:append () {
     install -d ${D}${systemd_system_unitdir}
-    install -m 0644 ${UNPACKDIR}/edgefirst-imu.service ${D}${systemd_system_unitdir}
-
     install -d ${D}${bindir}
-    install -m 0755 ${UNPACKDIR}/edgefirst-imu ${D}${bindir}/edgefirst-imu
+
+    if [ "${UNPACKDIR}" != "" ]; then
+        install -m 0644 ${UNPACKDIR}/edgefirst-imu.service ${D}${systemd_system_unitdir}
+        install -m 0755 ${UNPACKDIR}/edgefirst-imu ${D}${bindir}/edgefirst-imu
+    else
+        install -m 0644 ${WORKDIR}/edgefirst-imu.service ${D}${systemd_system_unitdir}
+        install -m 0755 ${WORKDIR}/edgefirst-imu ${D}${bindir}/edgefirst-imu
+    fi
 }
 
 REQUIRED_DISTRO_FEATURES = "systemd"

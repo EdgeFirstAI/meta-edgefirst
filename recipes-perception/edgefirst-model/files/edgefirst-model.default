@@ -2,7 +2,7 @@
 
 # A model is required for the model application. This can be a segmentation model
 # and/or a detection model.
-MODEL = "/usr/share/edgefirst-model/modelpack-people.tflite"
+MODEL = "/usr/share/edgefirst/model/modelpack-people.tflite"
 
 # An optional decoder model can be used for two-stage models.  Leave commented
 # out unless required, cannot be empty if defined.

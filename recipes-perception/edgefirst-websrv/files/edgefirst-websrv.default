@@ -1,7 +1,7 @@
 # EdgeFirst Web UI Configuration
 
 # Document root directory for HTML, Javascript, and other static assets.
-DOCROOT = "/usr/share/edgefirst-webui"
+DOCROOT = "/usr/share/edgefirst/webui"
 
 MIRROR = "false"
 

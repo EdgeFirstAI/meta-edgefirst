@@ -8,8 +8,8 @@ SRCREV = "c64236e52bfb3181caa9ba81f8588951450067aa"
 S = "${WORKDIR}/git"
 
 do_install () {
-    install -d ${D}${datadir}
-    cp -r ${S}/src ${D}${datadir}/edgefirst-webui
+    install -d ${D}${datadir}/edgefirst
+    cp -r ${S}/src ${D}${datadir}/edgefirst/webui
 }
 
 FILES:${PN} += "${datadir}"

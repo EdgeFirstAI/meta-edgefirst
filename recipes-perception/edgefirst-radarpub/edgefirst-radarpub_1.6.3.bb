@@ -6,17 +6,18 @@ FILESEXTRAPATHS:prepend := "${THISDIR}/files:"
 SRC_URI = "\
     https://github.com/EdgeFirstAI/radarpub/releases/download/v${PV}/edgefirst-radarpub-linux-${TARGET_ARCH};downloadfilename=edgefirst-radarpub;name=radarpub \
     https://github.com/EdgeFirstAI/radarpub/releases/download/v${PV}/drvegrdctl-linux-${TARGET_ARCH};downloadfilename=drvegrdctl;name=drvegrdctl \
+    https://github.com/EdgeFirstAI/radarpub/releases/download/v${PV}/radarpub.default;downloadfilename=edgefirst-radarpub.default;name=default \
     https://raw.githubusercontent.com/EdgeFirstAI/radarpub/v${PV}/LICENSE;downloadfilename=${BPN}-LICENSE;name=license \
     file://edgefirst-radarpub.service \
-    file://edgefirst-radarpub.default \
 "
 SRC_URI[license.sha256sum] = "acbbda305958ff27afe43eeef4a77d48ef9d99364e772ba319d1d38ae759ae43"
+SRC_URI[default.sha256sum] = "6699cc763a26dc003b7a3c2e48cc1b70d39d3d3fa365ad9c6482c1519967a9cc"
 
-RADARPUB_SHA256SUM[aarch64] = "5a0cba65d34bbb1562dbe0e1ae7180f9b80f3bdae2bded4198090121d7418f52"
-RADARPUB_SHA256SUM[x86_64] = "d323c6a18539cf5492bb31b7df1d5f9cafc96ec6004693d19704636865ff6291"
+RADARPUB_SHA256SUM[aarch64] = "e0028c6a0e363b6d858037ff6383ecdc563ed7cea2a90f648e0b53b3c340d272"
+RADARPUB_SHA256SUM[x86_64] = "3f8457c9384ac236b21cede42693b3abb75d120ecae1d42b2cc6878f74ab0ef7"
 
-DRVEGRDCTL_SHA256SUM[aarch64] = "c0be0145f191a6e05730830f4aefedcb51a26c9dac49138b3aaad9831a833ea6"
-DRVEGRDCTL_SHA256SUM[x86_64] = "06ab727ce73b6716e97f688f6bf8edf76e44ba08f1ea028ecd829b338ad41ee2"
+DRVEGRDCTL_SHA256SUM[aarch64] = "6f7435300655ed13b2b85bd3199b6ec6bf9b183dc6bb066272a2e2e3fe857396"
+DRVEGRDCTL_SHA256SUM[x86_64] = "1eb97ce2a4b9c83e0547aac3a5100a431c9ef922ebd8dab56f9304fc82538648"
 
 python () {
     arch = d.getVar('TARGET_ARCH')

@@ -21,7 +21,7 @@ python () {
         d.setVarFlag('SRC_URI', 'binary.sha256sum', sha256)
 }
 
-S = "${WORKDIR}"
+S = "${@d.getVar('UNPACKDIR') or d.getVar('WORKDIR')}"
 
 inherit features_check systemd
 
@@ -30,15 +30,9 @@ do_install:append () {
     install -d ${D}${sysconfdir}/default
     install -d ${D}${bindir}
 
-    if [ "${UNPACKDIR}" != "" ]; then
-        install -m 0644 ${UNPACKDIR}/edgefirst-lidarpub.service ${D}${systemd_system_unitdir}
-        install -m 0644 ${UNPACKDIR}/edgefirst-lidarpub.default ${D}${sysconfdir}/default/edgefirst-lidarpub
-        install -m 0755 ${UNPACKDIR}/edgefirst-lidarpub ${D}${bindir}/edgefirst-lidarpub
-    else
-        install -m 0644 ${WORKDIR}/edgefirst-lidarpub.service ${D}${systemd_system_unitdir}
-        install -m 0644 ${WORKDIR}/edgefirst-lidarpub.default ${D}${sysconfdir}/default/edgefirst-lidarpub
-        install -m 0755 ${WORKDIR}/edgefirst-lidarpub ${D}${bindir}/edgefirst-lidarpub
-    fi
+    install -m 0644 ${S}/edgefirst-lidarpub.service ${D}${systemd_system_unitdir}
+    install -m 0644 ${S}/edgefirst-lidarpub.default ${D}${sysconfdir}/default/edgefirst-lidarpub
+    install -m 0755 ${S}/edgefirst-lidarpub ${D}${bindir}/edgefirst-lidarpub
 }
 
 REQUIRED_DISTRO_FEATURES = "systemd"

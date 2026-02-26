@@ -13,14 +13,9 @@ python () {
     sha256 = d.getVarFlag('SRC_URI_SHA256SUM', arch)
     if sha256:
         d.setVarFlag('SRC_URI', 'sha256sum', sha256)
-
-    # Walnascar unpacks to UNPACKDIR (WORKDIR/sources); Scarthgap to WORKDIR
-    unpackdir = d.getVar('UNPACKDIR')
-    if unpackdir:
-        d.setVar('S', unpackdir)
 }
 
-S = "${WORKDIR}"
+S = "${@d.getVar('UNPACKDIR') or d.getVar('WORKDIR')}"
 
 inherit python3-dir
 

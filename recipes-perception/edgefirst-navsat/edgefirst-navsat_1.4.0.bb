@@ -20,7 +20,7 @@ python () {
         d.setVarFlag('SRC_URI', 'binary.sha256sum', sha256)
 }
 
-S = "${WORKDIR}"
+S = "${@d.getVar('UNPACKDIR') or d.getVar('WORKDIR')}"
 
 inherit features_check systemd
 
@@ -28,13 +28,8 @@ do_install:append () {
     install -d ${D}${systemd_system_unitdir}
     install -d ${D}${bindir}
 
-    if [ "${UNPACKDIR}" != "" ]; then
-        install -m 0644 ${UNPACKDIR}/edgefirst-navsat.service ${D}${systemd_system_unitdir}
-        install -m 0755 ${UNPACKDIR}/edgefirst-navsat ${D}${bindir}/edgefirst-navsat
-    else
-        install -m 0644 ${WORKDIR}/edgefirst-navsat.service ${D}${systemd_system_unitdir}
-        install -m 0755 ${WORKDIR}/edgefirst-navsat ${D}${bindir}/edgefirst-navsat
-    fi
+    install -m 0644 ${S}/edgefirst-navsat.service ${D}${systemd_system_unitdir}
+    install -m 0755 ${S}/edgefirst-navsat ${D}${bindir}/edgefirst-navsat
 }
 
 REQUIRED_DISTRO_FEATURES = "systemd"

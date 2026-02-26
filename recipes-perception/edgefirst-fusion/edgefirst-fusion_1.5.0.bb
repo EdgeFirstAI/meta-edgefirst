@@ -23,7 +23,7 @@ python () {
 
 RDEPENDS:${PN} = "tensorflow-lite"
 
-S = "${WORKDIR}"
+S = "${@d.getVar('UNPACKDIR') or d.getVar('WORKDIR')}"
 
 inherit features_check systemd
 
@@ -32,15 +32,9 @@ do_install:append () {
     install -d ${D}${sysconfdir}/default
     install -d ${D}${bindir}
 
-    if [ "${UNPACKDIR}" != "" ]; then
-        install -m 0644 ${UNPACKDIR}/edgefirst-fusion.service ${D}${systemd_system_unitdir}
-        install -m 0644 ${UNPACKDIR}/edgefirst-fusion.default ${D}${sysconfdir}/default/edgefirst-fusion
-        install -m 0755 ${UNPACKDIR}/edgefirst-fusion ${D}${bindir}/edgefirst-fusion
-    else
-        install -m 0644 ${WORKDIR}/edgefirst-fusion.service ${D}${systemd_system_unitdir}
-        install -m 0644 ${WORKDIR}/edgefirst-fusion.default ${D}${sysconfdir}/default/edgefirst-fusion
-        install -m 0755 ${WORKDIR}/edgefirst-fusion ${D}${bindir}/edgefirst-fusion
-    fi
+    install -m 0644 ${S}/edgefirst-fusion.service ${D}${systemd_system_unitdir}
+    install -m 0644 ${S}/edgefirst-fusion.default ${D}${sysconfdir}/default/edgefirst-fusion
+    install -m 0755 ${S}/edgefirst-fusion ${D}${bindir}/edgefirst-fusion
 }
 
 REQUIRED_DISTRO_FEATURES = "systemd"

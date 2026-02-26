@@ -23,7 +23,7 @@ python () {
 
 DEPENDS = "videostream"
 
-S = "${WORKDIR}"
+S = "${@d.getVar('UNPACKDIR') or d.getVar('WORKDIR')}"
 
 inherit features_check systemd
 
@@ -32,15 +32,9 @@ do_install:append () {
     install -d ${D}${sysconfdir}/default
     install -d ${D}${bindir}
 
-    if [ "${UNPACKDIR}" != "" ]; then
-        install -m 0644 ${UNPACKDIR}/edgefirst-replay.service ${D}${systemd_system_unitdir}
-        install -m 0644 ${UNPACKDIR}/edgefirst-replay.default ${D}${sysconfdir}/default/edgefirst-replay
-        install -m 0755 ${UNPACKDIR}/edgefirst-replay ${D}${bindir}/edgefirst-replay
-    else
-        install -m 0644 ${WORKDIR}/edgefirst-replay.service ${D}${systemd_system_unitdir}
-        install -m 0644 ${WORKDIR}/edgefirst-replay.default ${D}${sysconfdir}/default/edgefirst-replay
-        install -m 0755 ${WORKDIR}/edgefirst-replay ${D}${bindir}/edgefirst-replay
-    fi
+    install -m 0644 ${S}/edgefirst-replay.service ${D}${systemd_system_unitdir}
+    install -m 0644 ${S}/edgefirst-replay.default ${D}${sysconfdir}/default/edgefirst-replay
+    install -m 0755 ${S}/edgefirst-replay ${D}${bindir}/edgefirst-replay
 }
 
 REQUIRED_DISTRO_FEATURES = "systemd"

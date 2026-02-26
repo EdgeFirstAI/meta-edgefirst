@@ -20,7 +20,7 @@ python () {
         d.setVarFlag('SRC_URI', 'standalone.sha256sum', sha256)
 }
 
-S = "${WORKDIR}"
+S = "${@d.getVar('UNPACKDIR') or d.getVar('WORKDIR')}"
 
 inherit features_check systemd
 
@@ -32,15 +32,9 @@ do_install () {
     install -d ${D}${sysconfdir}/default
     install -d ${D}${systemd_system_unitdir}
 
-    if [ "${UNPACKDIR}" != "" ]; then
-        install -m 0644 ${UNPACKDIR}/zenohd.default ${D}${sysconfdir}/default/zenohd
-        install -m 0644 ${UNPACKDIR}/zenohd.yaml ${D}${sysconfdir}
-        install -m 0644 ${UNPACKDIR}/zenohd.service ${D}${systemd_system_unitdir}
-    else
-        install -m 0644 ${WORKDIR}/zenohd.default ${D}${sysconfdir}/default/zenohd
-        install -m 0644 ${WORKDIR}/zenohd.yaml ${D}${sysconfdir}
-        install -m 0644 ${WORKDIR}/zenohd.service ${D}${systemd_system_unitdir}
-    fi
+    install -m 0644 ${S}/zenohd.default ${D}${sysconfdir}/default/zenohd
+    install -m 0644 ${S}/zenohd.yaml ${D}${sysconfdir}
+    install -m 0644 ${S}/zenohd.service ${D}${systemd_system_unitdir}
 
     ${bindir}/env unzip -q -o ${DL_DIR}/zenoh-${PV}-${TARGET_ARCH}-unknown-linux-gnu-standalone.zip -d ${D}${libdir}
     mv ${D}${libdir}/zenohd ${D}${bindir}

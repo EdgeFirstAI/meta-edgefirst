@@ -20,7 +20,7 @@ python () {
         d.setVarFlag('SRC_URI', 'binary.sha256sum', sha256)
 }
 
-S = "${WORKDIR}"
+S = "${@d.getVar('UNPACKDIR') or d.getVar('WORKDIR')}"
 
 inherit features_check systemd
 
@@ -28,13 +28,8 @@ do_install:append () {
     install -d ${D}${systemd_system_unitdir}
     install -d ${D}${bindir}
 
-    if [ "${UNPACKDIR}" != "" ]; then
-        install -m 0644 ${UNPACKDIR}/edgefirst-imu.service ${D}${systemd_system_unitdir}
-        install -m 0755 ${UNPACKDIR}/edgefirst-imu ${D}${bindir}/edgefirst-imu
-    else
-        install -m 0644 ${WORKDIR}/edgefirst-imu.service ${D}${systemd_system_unitdir}
-        install -m 0755 ${WORKDIR}/edgefirst-imu ${D}${bindir}/edgefirst-imu
-    fi
+    install -m 0644 ${S}/edgefirst-imu.service ${D}${systemd_system_unitdir}
+    install -m 0755 ${S}/edgefirst-imu ${D}${bindir}/edgefirst-imu
 }
 
 REQUIRED_DISTRO_FEATURES = "systemd"

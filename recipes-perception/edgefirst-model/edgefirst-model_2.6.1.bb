@@ -23,7 +23,7 @@ python () {
 
 RDEPENDS:${PN} = "tensorflow-lite"
 
-S = "${WORKDIR}"
+S = "${@d.getVar('UNPACKDIR') or d.getVar('WORKDIR')}"
 
 inherit features_check systemd
 
@@ -32,15 +32,9 @@ do_install:append () {
     install -d ${D}${sysconfdir}/default
     install -d ${D}${bindir}
 
-    if [ "${UNPACKDIR}" != "" ]; then
-        install -m 0644 ${UNPACKDIR}/edgefirst-model.service ${D}${systemd_system_unitdir}
-        install -m 0644 ${UNPACKDIR}/edgefirst-model.default ${D}${sysconfdir}/default/edgefirst-model
-        install -m 0755 ${UNPACKDIR}/edgefirst-model ${D}${bindir}/edgefirst-model
-    else
-        install -m 0644 ${WORKDIR}/edgefirst-model.service ${D}${systemd_system_unitdir}
-        install -m 0644 ${WORKDIR}/edgefirst-model.default ${D}${sysconfdir}/default/edgefirst-model
-        install -m 0755 ${WORKDIR}/edgefirst-model ${D}${bindir}/edgefirst-model
-    fi
+    install -m 0644 ${S}/edgefirst-model.service ${D}${systemd_system_unitdir}
+    install -m 0644 ${S}/edgefirst-model.default ${D}${sysconfdir}/default/edgefirst-model
+    install -m 0755 ${S}/edgefirst-model ${D}${bindir}/edgefirst-model
 }
 
 REQUIRED_DISTRO_FEATURES = "systemd"

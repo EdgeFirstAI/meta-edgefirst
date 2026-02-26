@@ -21,7 +21,7 @@ python () {
         d.setVarFlag('SRC_URI', 'binary.sha256sum', sha256)
 }
 
-S = "${WORKDIR}"
+S = "${@d.getVar('UNPACKDIR') or d.getVar('WORKDIR')}"
 
 inherit features_check systemd
 
@@ -30,15 +30,9 @@ do_install:append () {
     install -d ${D}${sysconfdir}/default
     install -d ${D}${bindir}
 
-    if [ "${UNPACKDIR}" != "" ]; then
-        install -m 0644 ${UNPACKDIR}/edgefirst-websrv.service ${D}${systemd_system_unitdir}
-        install -m 0644 ${UNPACKDIR}/edgefirst-websrv.default ${D}${sysconfdir}/default/edgefirst-websrv
-        install -m 0755 ${UNPACKDIR}/edgefirst-websrv ${D}${bindir}/edgefirst-websrv
-    else
-        install -m 0644 ${WORKDIR}/edgefirst-websrv.service ${D}${systemd_system_unitdir}
-        install -m 0644 ${WORKDIR}/edgefirst-websrv.default ${D}${sysconfdir}/default/edgefirst-websrv
-        install -m 0755 ${WORKDIR}/edgefirst-websrv ${D}${bindir}/edgefirst-websrv
-    fi
+    install -m 0644 ${S}/edgefirst-websrv.service ${D}${systemd_system_unitdir}
+    install -m 0644 ${S}/edgefirst-websrv.default ${D}${sysconfdir}/default/edgefirst-websrv
+    install -m 0755 ${S}/edgefirst-websrv ${D}${bindir}/edgefirst-websrv
 }
 
 REQUIRED_DISTRO_FEATURES = "systemd"

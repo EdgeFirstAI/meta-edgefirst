@@ -28,7 +28,7 @@ python () {
         d.setVarFlag('SRC_URI', 'drvegrdctl.sha256sum', drvegrdctl_sha256)
 }
 
-S = "${WORKDIR}"
+S = "${@d.getVar('UNPACKDIR') or d.getVar('WORKDIR')}"
 
 inherit features_check systemd
 
@@ -37,17 +37,10 @@ do_install:append () {
     install -d ${D}${sysconfdir}/default
     install -d ${D}${bindir}
 
-    if [ "${UNPACKDIR}" != "" ]; then
-        install -m 0644 ${UNPACKDIR}/edgefirst-radarpub.service ${D}${systemd_system_unitdir}
-        install -m 0644 ${UNPACKDIR}/edgefirst-radarpub.default ${D}${sysconfdir}/default/edgefirst-radarpub
-        install -m 0755 ${UNPACKDIR}/edgefirst-radarpub ${D}${bindir}/edgefirst-radarpub
-        install -m 0755 ${UNPACKDIR}/drvegrdctl ${D}${bindir}/drvegrdctl
-    else
-        install -m 0644 ${WORKDIR}/edgefirst-radarpub.service ${D}${systemd_system_unitdir}
-        install -m 0644 ${WORKDIR}/edgefirst-radarpub.default ${D}${sysconfdir}/default/edgefirst-radarpub
-        install -m 0755 ${WORKDIR}/edgefirst-radarpub ${D}${bindir}/edgefirst-radarpub
-        install -m 0755 ${WORKDIR}/drvegrdctl ${D}${bindir}/drvegrdctl
-    fi
+    install -m 0644 ${S}/edgefirst-radarpub.service ${D}${systemd_system_unitdir}
+    install -m 0644 ${S}/edgefirst-radarpub.default ${D}${sysconfdir}/default/edgefirst-radarpub
+    install -m 0755 ${S}/edgefirst-radarpub ${D}${bindir}/edgefirst-radarpub
+    install -m 0755 ${S}/drvegrdctl ${D}${bindir}/drvegrdctl
 }
 
 REQUIRED_DISTRO_FEATURES = "systemd"

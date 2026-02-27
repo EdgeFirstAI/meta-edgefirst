@@ -5,14 +5,15 @@ LIC_FILES_CHKSUM = "file://${BPN}-LICENSE;md5=3929fde384c07d35ed0d6f0c925f2a12"
 FILESEXTRAPATHS:prepend := "${THISDIR}/files:"
 SRC_URI = "\
     https://github.com/EdgeFirstAI/camera/releases/download/v${PV}/edgefirst-camera-linux-${TARGET_ARCH};downloadfilename=edgefirst-camera;name=binary \
+    https://github.com/EdgeFirstAI/camera/releases/download/v${PV}/camera.default;downloadfilename=edgefirst-camera.default;name=default \
     https://raw.githubusercontent.com/EdgeFirstAI/camera/v${PV}/LICENSE;downloadfilename=${BPN}-LICENSE;name=license \
     file://edgefirst-camera.service \
-    file://edgefirst-camera.default \
 "
 SRC_URI[license.sha256sum] = "acbbda305958ff27afe43eeef4a77d48ef9d99364e772ba319d1d38ae759ae43"
+SRC_URI[default.sha256sum] = "9d82f762c5260e2a720af5de136372dd207086b9f25030a49611edfe044c7e35"
 
-BINARY_SHA256SUM[aarch64] = "49fa0e58d04a93ddefc02b06bdf34ae239adda34e0f3f36c699e03c5e74a1961"
-BINARY_SHA256SUM[x86_64] = "c4bb4a65b4b6e824c9f6df5c2739d27b98a780307277c0937f374f8d32eaec9c"
+BINARY_SHA256SUM[aarch64] = "bac031f12b314c4b3b82791806435389ce7e335823c9badd298164a22c409257"
+BINARY_SHA256SUM[x86_64] = "cc77a8ff4c6269eeb78f11e2f840bdb96f847972891e505acf40e406f3fae19f"
 
 python () {
     arch = d.getVar('TARGET_ARCH')

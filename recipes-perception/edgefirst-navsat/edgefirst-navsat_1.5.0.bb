@@ -5,13 +5,15 @@ LIC_FILES_CHKSUM = "file://${BPN}-LICENSE;md5=700c2516a940487339707f533f4dd382"
 FILESEXTRAPATHS:prepend := "${THISDIR}/files:"
 SRC_URI = "\
     https://github.com/EdgeFirstAI/navsat/releases/download/v${PV}/edgefirst-navsat-linux-${TARGET_ARCH};downloadfilename=edgefirst-navsat;name=binary \
+    https://github.com/EdgeFirstAI/navsat/releases/download/v${PV}/navsat.default;downloadfilename=edgefirst-navsat.default;name=default \
     https://raw.githubusercontent.com/EdgeFirstAI/navsat/v${PV}/LICENSE;downloadfilename=${BPN}-LICENSE;name=license \
     file://edgefirst-navsat.service \
 "
 SRC_URI[license.sha256sum] = "8bb5c73a6c6f5b301c0397fdbe9353ce856ca122dc603051b2cdbe8b24380380"
+SRC_URI[default.sha256sum] = "4657c7442ac9db233e222e6b461d92846d20084784d0e009545d33fe05fbdcf3"
 
-BINARY_SHA256SUM[aarch64] = "a12202b5826bbe7091e10dce8905f68d0e10f0e858cb368f7f855c822bb4bc96"
-BINARY_SHA256SUM[x86_64] = "28e4f4e348d5c44383a488661f0c7306dbdcebbfec49f967e664ef6a31be9074"
+BINARY_SHA256SUM[aarch64] = "66950be024e52259622ed454d91754b53f84e868e3d38d3b19c04ab87aa589e8"
+BINARY_SHA256SUM[x86_64] = "f56409d53c8d2ee6f5fb6ff26504aae00f52802f6b7c2f464ebe1a2bd13613b5"
 
 python () {
     arch = d.getVar('TARGET_ARCH')
@@ -26,9 +28,11 @@ inherit features_check systemd
 
 do_install:append () {
     install -d ${D}${systemd_system_unitdir}
+    install -d ${D}${sysconfdir}/default
     install -d ${D}${bindir}
 
     install -m 0644 ${S}/edgefirst-navsat.service ${D}${systemd_system_unitdir}
+    install -m 0644 ${S}/edgefirst-navsat.default ${D}${sysconfdir}/default/edgefirst-navsat
     install -m 0755 ${S}/edgefirst-navsat ${D}${bindir}/edgefirst-navsat
 }
 
@@ -39,4 +43,5 @@ SYSTEMD_AUTO_ENABLE = "disable"
 INSANE_SKIP:${PN} += "already-stripped"
 
 FILES:${PN} += "${systemd_system_unitdir}"
+FILES:${PN} += "${sysconfdir}"
 FILES:${PN} += "${bindir}"

@@ -7,6 +7,7 @@ Before=edgefirst-recorder.service
 [Service]
 Type=simple
 User=root
+EnvironmentFile=/etc/default/edgefirst-navsat
 ExecStart=/usr/bin/edgefirst-navsat
 Restart=always
 

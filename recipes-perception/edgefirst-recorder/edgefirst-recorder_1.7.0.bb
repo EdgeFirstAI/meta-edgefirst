@@ -5,14 +5,15 @@ LIC_FILES_CHKSUM = "file://${BPN}-LICENSE;md5=dd1425eba06ca7b09230155041834ed7"
 FILESEXTRAPATHS:prepend := "${THISDIR}/files:"
 SRC_URI = "\
     https://github.com/EdgeFirstAI/recorder/releases/download/v${PV}/edgefirst-recorder-v${PV}-linux-${TARGET_ARCH};downloadfilename=edgefirst-recorder;name=binary \
+    https://github.com/EdgeFirstAI/recorder/releases/download/v${PV}/recorder.default;downloadfilename=edgefirst-recorder.default;name=default \
     https://raw.githubusercontent.com/EdgeFirstAI/recorder/v${PV}/LICENSE;downloadfilename=${BPN}-LICENSE;name=license \
     file://edgefirst-recorder.service \
-    file://edgefirst-recorder.default \
 "
 SRC_URI[license.sha256sum] = "9d16bcb298eb6c97e272522a37cbd3b07bec66d77c0e829fdec9fb98185a2876"
+SRC_URI[default.sha256sum] = "c3184a984bece1cb4bd91523511787e0e3eaefafa7368273392db3bee98e7ef3"
 
-BINARY_SHA256SUM[aarch64] = "0f3a6f4d3d3c3a2c236f6109b9bb171babd6bdd442b841cba4376072c75f2b1e"
-BINARY_SHA256SUM[x86_64] = "d428e10d1fbea2cbbfa59f2181823481a3e8248b5042b718d15e217b74045807"
+BINARY_SHA256SUM[aarch64] = "d456764733a00d10b7e65a5a2860ab8e39f338c1ea4f07150fb475c0320afeba"
+BINARY_SHA256SUM[x86_64] = "833fd7d58af68ca08fa6c8d173724c31ce60e322eac0881ec00eb979172764a0"
 
 python () {
     arch = d.getVar('TARGET_ARCH')

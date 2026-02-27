@@ -6,6 +6,7 @@
 # Changes over upstream NXP:
 # - DMA-BUF zero-copy tensor passing through GStreamer pipeline
 # - tensor_filter: Ara-2 sub-plugin (dlopen's libaraclient.so.1 at runtime)
+# - tensor_filter V2: flexible tensor input support (header-stripping fallback)
 # - TFLite-VX CameraAdaptor integration for NPU color space conversion
 #
 # Replaces NXP patches (already integrated in the EdgeFirst fork):
@@ -17,7 +18,7 @@
 # - default delegates fix
 
 SRC_URI = "git://github.com/EdgeFirstAI/nnstreamer.git;branch=edgefirst-ara2;protocol=https"
-SRCREV = "38cf83985e3d9a3b769f58e6671469b955fe30cf"
+SRCREV = "e354b1057a346fa6955c8f2c3b164ed444496a69"
 
 # Kinara Ara-2 NPU tensor_filter sub-plugin
 # Build: requires dvapi.h from ara2-dev

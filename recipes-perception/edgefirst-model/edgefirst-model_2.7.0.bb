@@ -5,14 +5,15 @@ LIC_FILES_CHKSUM = "file://${BPN}-LICENSE;md5=3929fde384c07d35ed0d6f0c925f2a12"
 FILESEXTRAPATHS:prepend := "${THISDIR}/files:"
 SRC_URI = "\
     https://github.com/EdgeFirstAI/model/releases/download/v${PV}/edgefirst-model-linux-${TARGET_ARCH};downloadfilename=edgefirst-model;name=binary \
+    https://github.com/EdgeFirstAI/model/releases/download/v${PV}/model.default;downloadfilename=edgefirst-model.default;name=default \
     https://raw.githubusercontent.com/EdgeFirstAI/model/v${PV}/LICENSE;downloadfilename=${BPN}-LICENSE;name=license \
     file://edgefirst-model.service \
-    file://edgefirst-model.default \
 "
 SRC_URI[license.sha256sum] = "acbbda305958ff27afe43eeef4a77d48ef9d99364e772ba319d1d38ae759ae43"
+SRC_URI[default.sha256sum] = "6221e0d4a951dcc7edd53576779014832c99ccc45c239aca79826e04fce2981f"
 
-BINARY_SHA256SUM[aarch64] = "3ef978684476b1cd94bea86a5bee50384f404e9942bbaddf704584bb1ffdda95"
-BINARY_SHA256SUM[x86_64] = "fd0ff9dc47eb86c716ad3ff6bfd8f0f5939e4fece7c845f2c96b09061985e2ab"
+BINARY_SHA256SUM[aarch64] = "ac1bf3a0d7a8cf2e2696fc8481e4376f81fe75eb2c33c953c141ca5580d2a51e"
+BINARY_SHA256SUM[x86_64] = "dc067d0c4c37ff68c17808be604dd8d0dc8c88cb0f4fb6f9f763394334760a7f"
 
 python () {
     arch = d.getVar('TARGET_ARCH')

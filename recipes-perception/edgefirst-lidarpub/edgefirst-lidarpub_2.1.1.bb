@@ -5,14 +5,15 @@ LIC_FILES_CHKSUM = "file://${BPN}-LICENSE;md5=3929fde384c07d35ed0d6f0c925f2a12"
 FILESEXTRAPATHS:prepend := "${THISDIR}/files:"
 SRC_URI = "\
     https://github.com/EdgeFirstAI/lidarpub/releases/download/v${PV}/edgefirst-lidarpub-linux-${TARGET_ARCH};downloadfilename=edgefirst-lidarpub;name=binary \
+    https://github.com/EdgeFirstAI/lidarpub/releases/download/v${PV}/lidarpub.default;downloadfilename=edgefirst-lidarpub.default;name=default \
     https://raw.githubusercontent.com/EdgeFirstAI/lidarpub/v${PV}/LICENSE;downloadfilename=${BPN}-LICENSE;name=license \
     file://edgefirst-lidarpub.service \
-    file://edgefirst-lidarpub.default \
 "
 SRC_URI[license.sha256sum] = "acbbda305958ff27afe43eeef4a77d48ef9d99364e772ba319d1d38ae759ae43"
+SRC_URI[default.sha256sum] = "5fa6d858f1d9243b892a95a953fced6c9de73226ffb1f90dc30586078e31d8d7"
 
-BINARY_SHA256SUM[aarch64] = "1148b94d25056016ca4501b9ca9db3b47a0ae1c454120d0ebdd8923e84c2060c"
-BINARY_SHA256SUM[x86_64] = "26326f1e6aef465a4d47dd69050cf6ec2f9d63b44da5aa6c395045e414237ae3"
+BINARY_SHA256SUM[aarch64] = "62b67a32bc419f767fd3f29bfa0d5d4a58391475c561ef95139ecc83a942e24f"
+BINARY_SHA256SUM[x86_64] = "0369a1fbbe74fe946299da0294e22f6eec8660fe03807bba9a57c076161b1905"
 
 python () {
     arch = d.getVar('TARGET_ARCH')

@@ -1,13 +1,14 @@
-# EdgeFirst NNStreamer fork with DMA-BUF zero-copy and Ara-2 NPU support
+# EdgeFirst NNStreamer fork with DMA-BUF zero-copy, Ara-2 NPU, and HAL delegate support
 #
-# Adds dmabuf-enabled invoke_v2 API to tensor_filter and Kinara Ara-2
-# NPU support as a tensor_filter sub-plugin.
+# Adds dmabuf-enabled invoke_v2 API to tensor_filter, Kinara Ara-2
+# NPU support, and HAL delegate DMA-BUF probing for Neutron NPU.
 #
 # Changes over upstream NXP:
 # - DMA-BUF zero-copy tensor passing through GStreamer pipeline
 # - tensor_filter: Ara-2 sub-plugin (dlopen's libaraclient.so.1 at runtime)
 # - tensor_filter V2: flexible tensor input support (header-stripping fallback)
-# - TFLite-VX CameraAdaptor integration for NPU color space conversion
+# - TFLite VX delegate CameraAdaptor integration (i.MX 8M Plus)
+# - TFLite HAL delegate DMA-BUF probing for Neutron NPU (i.MX 95, EDGEAI-1189)
 #
 # Replaces NXP patches (already integrated in the EdgeFirst fork):
 # - AIR-11938 tensor-filter memcpy ethosu delegate
@@ -17,8 +18,12 @@
 # - gray8 padding removal
 # - default delegates fix
 
-SRC_URI = "git://github.com/EdgeFirstAI/nnstreamer.git;branch=edgefirst-ara2;protocol=https"
-SRCREV = "e354b1057a346fa6955c8f2c3b164ed444496a69"
+SRC_URI = "git://github.com/EdgeFirstAI/nnstreamer.git;branch=edgefirst-tflite;protocol=https"
+SRCREV = "9e8e61d5e9aa485315a6f17eaa665e8c97b9aa0d"
+
+# EdgeFirst HAL delegate DMA-BUF support (EDGEAI-1189)
+# Enables tensor_filter to probe for hal_dmabuf_* symbols from Neutron delegate
+DEPENDS:append = " edgefirst-hal"
 
 # Kinara Ara-2 NPU tensor_filter sub-plugin
 # Build: requires dvapi.h from ara2-dev

@@ -19,7 +19,7 @@
 # - default delegates fix
 
 SRC_URI = "git://github.com/EdgeFirstAI/nnstreamer.git;branch=edgefirst;protocol=https"
-SRCREV = "9e8e61d5e9aa485315a6f17eaa665e8c97b9aa0d"
+SRCREV = "06a16aada772689d6cf1b8af8e9adaa6e601dadf"
 
 # EdgeFirst HAL delegate DMA-BUF support (EDGEAI-1189)
 # Enables tensor_filter to probe for hal_dmabuf_* symbols from Neutron delegate

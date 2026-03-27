@@ -10,14 +10,14 @@ SRC_URI = "\
 "
 SRC_URI[license.sha256sum] = "acbbda305958ff27afe43eeef4a77d48ef9d99364e772ba319d1d38ae759ae43"
 
-# Python wheel available for aarch64 (target) from PyPI
+# Python wheel available for aarch64 (target) from GitHub releases
 SRC_URI:append:aarch64 = " \
-    https://files.pythonhosted.org/packages/dc/14/4519a73d5615ebca243cb13e3f7879dfaad94dcf717173bfef50bb8eccde/edgefirst_hal-${PV}-cp311-abi3-manylinux_2_17_aarch64.manylinux2014_aarch64.whl;name=python \
+    https://github.com/EdgeFirstAI/hal/releases/download/v${PV}/edgefirst_hal-${PV}-cp311-abi3-manylinux_2_17_aarch64.manylinux2014_aarch64.whl;name=python \
 "
-SRC_URI[python.sha256sum] = "400b0cbe126ff55ff910147add90cc5caecd14b5263310e76e9107f683401649"
+SRC_URI[python.sha256sum] = "e914160f4279a059ab5d454b76d82c09050ef7c9040c2b64efcfe40fdde1580a"
 
-CLIB_SHA256SUM[aarch64] = "9d935d4830023adffdf61b51d10faf428b8d8526ba508a0dce5fc6f2e260b526"
-CLIB_SHA256SUM[x86_64] = "8c1f1bc83bb840b6bca2956a47ff7cc1e44bf76a82dc97a0e07379b8b2f22537"
+CLIB_SHA256SUM[aarch64] = "716a30f8fe550635b5701927607b6c821954b8e618d4acc271eebe5b63cb98c4"
+CLIB_SHA256SUM[x86_64] = "8dd0a2efe5cce8840700772f47ad9d58af37ebc810468e13e756bf2567fb7037"
 
 python () {
     arch = d.getVar('TARGET_ARCH')

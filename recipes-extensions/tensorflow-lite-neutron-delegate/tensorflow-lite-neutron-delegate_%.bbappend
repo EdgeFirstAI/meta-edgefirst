@@ -6,7 +6,7 @@
 
 NEUTRON_DELEGATE_SRC = "git://github.com/EdgeFirstAI/tflite-neutron-delegate.git;protocol=https"
 SRCBRANCH_neutron = "edgefirst"
-SRCREV_neutron = "07f0aecfb5f19deeed3e4a8c2357c299c0a25d69"
+SRCREV_neutron = "3c0e03e8ebbdb6eab1d8ab78756bf9277d278055"
 
-# HAL 0.13.1 provides hal_dmabuf_tensor_info struct definition
+# HAL 0.13.2 provides hal_dmabuf_tensor_info struct definition
 DEPENDS:append = " edgefirst-hal"

@@ -15,8 +15,8 @@
 # Supported conversions: RGBA/BGRA/RGBX/BGRX/ARGB/ABGR/XRGB/XBGR -> RGB/BGR
 
 TENSORFLOW_LITE_VX_DELEGATE_SRC = "git://github.com/EdgeFirstAI/tflite-vx-delegate-imx.git;protocol=https"
-SRCBRANCH_vx = "edgefirst-cameraadaptor"
-SRCREV_vx = "61cb96d640552a7b504bca4d62d6ae5c15ee6148"
+SRCBRANCH_vx = "edgefirst"
+SRCREV_vx = "33f9152ab2a28d1a3ee83509e28ca95b704f5409"
 
 # G2D is needed by the camera_adaptor_test example for hardware-accelerated
 # image resize. Provided by imx-gpu-g2d on i.MX8MP via virtual/libg2d.

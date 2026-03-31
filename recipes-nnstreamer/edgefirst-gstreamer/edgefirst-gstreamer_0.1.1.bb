@@ -8,7 +8,7 @@ LICENSE = "Apache-2.0"
 LIC_FILES_CHKSUM = "file://LICENSE;md5=3257033d1fff3bf8edd31697b409f14d"
 
 SRC_URI = "git://github.com/EdgeFirstAI/gstreamer.git;branch=main;protocol=https"
-SRCREV = "8944688f10895c2168df4a537d3dd961e860320e"
+SRCREV = "617eefef46c5f7ecef353476260d9ec1a3d1e385"
 
 S = "${WORKDIR}/git"
 

@@ -8,8 +8,8 @@ NXP_NNSTREAMER_EXAMPLES_SRC = "git://github.com/EdgeFirstAI/nxp-nnstreamer-examp
 SRCBRANCH = "edgefirst-yolov8"
 SRCREV = "4f1387241be2679f353dd49277ad654c1f278649"
 
-DEPENDS += "edgefirst-hal gstreamer1.0-plugins-base"
-RDEPENDS:${PN} += "edgefirst-hal"
+DEPENDS += "edgefirst-hal edgefirst-gstreamer gstreamer1.0-plugins-base"
+RDEPENDS:${PN} += "edgefirst-hal edgefirst-gstreamer"
 
 # edgefirst-hal ships libedgefirst_hal.so without a versioned SONAME so the
 # unversioned .so ends up in the -dev package; QA cannot map it automatically
@@ -35,6 +35,8 @@ do_install:append() {
     install -m 0755 ${B}/yolov8n/yolov8n_imx95 ${D}${EDGEFIRST_DIR}/
     install -m 0755 ${B}/yolov8n/yolov8n_ara2 ${D}${EDGEFIRST_DIR}/
     install -m 0755 ${B}/yolov8n/yolov8n_ara2_reference ${D}${EDGEFIRST_DIR}/
+    install -m 0755 ${B}/yolov8n/yolov8n_seg ${D}${EDGEFIRST_DIR}/
+    install -m 0755 ${S}/yolov8n/yolov8n_seg.sh ${D}${EDGEFIRST_DIR}/
 }
 
 FILES:${PN} += "${EDGEFIRST_DIR}"

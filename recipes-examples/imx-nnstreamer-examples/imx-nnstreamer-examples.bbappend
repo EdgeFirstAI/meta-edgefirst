@@ -1,12 +1,12 @@
 # EdgeFirst YOLOv8n 640x640 INT8 object detection examples
 #
-# Adds five yolov8n binaries demonstrating EdgeFirst HAL optimizations
-# (DMA-BUF zero-copy, quantized NMS) across i.MX 8M Plus, i.MX 95,
-# and Kinara Ara-2 NPU platforms, plus reference baselines.
+# Adds yolov8n detection and segmentation binaries demonstrating
+# EdgeFirst HAL optimizations (DMA-BUF zero-copy, quantized NMS)
+# across i.MX 8M Plus, i.MX 95, and Kinara Ara-2 NPU platforms.
 
 NXP_NNSTREAMER_EXAMPLES_SRC = "git://github.com/EdgeFirstAI/nxp-nnstreamer-examples.git;protocol=https"
 SRCBRANCH = "edgefirst-yolov8"
-SRCREV = "4f1387241be2679f353dd49277ad654c1f278649"
+SRCREV = "6a046786a7fe94cb8d63eb3d37b59bcde1c3201a"
 
 DEPENDS += "edgefirst-hal edgefirst-gstreamer gstreamer1.0-plugins-base"
 RDEPENDS:${PN} += "edgefirst-hal edgefirst-gstreamer"
@@ -36,6 +36,7 @@ do_install:append() {
     install -m 0755 ${B}/yolov8n/yolov8n_ara2 ${D}${EDGEFIRST_DIR}/
     install -m 0755 ${B}/yolov8n/yolov8n_ara2_reference ${D}${EDGEFIRST_DIR}/
     install -m 0755 ${B}/yolov8n/yolov8n_seg ${D}${EDGEFIRST_DIR}/
+    install -m 0755 ${B}/yolov8n/yolov8n_seg_ara2 ${D}${EDGEFIRST_DIR}/
     install -m 0755 ${S}/yolov8n/yolov8n_seg.sh ${D}${EDGEFIRST_DIR}/
 }
 

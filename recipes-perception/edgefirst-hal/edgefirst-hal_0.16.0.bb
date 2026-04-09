@@ -14,10 +14,10 @@ SRC_URI[license.sha256sum] = "acbbda305958ff27afe43eeef4a77d48ef9d99364e772ba319
 SRC_URI:append:aarch64 = " \
     https://github.com/EdgeFirstAI/hal/releases/download/v${PV}/edgefirst_hal-${PV}-cp311-abi3-manylinux_2_17_aarch64.manylinux2014_aarch64.whl;name=python \
 "
-SRC_URI[python.sha256sum] = "50e31115f9453ddfe5dccd8c650cc741c1b8d37ff745c1cb89dd3f3bdd6bd076"
+SRC_URI[python.sha256sum] = "c67d6b5e6a7fcc8b402728374e50ff6ab360f518a93b5a0aeb8969a0adb5c2cc"
 
-CLIB_SHA256SUM[aarch64] = "1a1d353c7ffa47e7b25ba0431f8fc49d8b0284cbe31cff2a457bee05a9b0b5bc"
-CLIB_SHA256SUM[x86_64] = "7d020190e37204a1fa5d0444361cdc21d540f52d534193f10a37480d9b8dc5fb"
+CLIB_SHA256SUM[aarch64] = "a5568683ac1c0693c1b5667f5daa39b038a2c7868a878ea4b46451bc63985c5e"
+CLIB_SHA256SUM[x86_64] = "c88ed9b6130b8e3f1971e1363147f311ee76962e91ec56f791fddc0a5079f176"
 
 python () {
     arch = d.getVar('TARGET_ARCH')

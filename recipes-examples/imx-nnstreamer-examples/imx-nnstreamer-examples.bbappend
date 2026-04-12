@@ -11,10 +11,6 @@ SRCREV = "987ef6d5177570142097a69e14872c98964b7eb7"
 DEPENDS += "edgefirst-hal edgefirst-gstreamer gstreamer1.0-plugins-base"
 RDEPENDS:${PN} += "edgefirst-hal edgefirst-gstreamer"
 
-# edgefirst-hal ships libedgefirst_hal.so without a versioned SONAME so the
-# unversioned .so ends up in the -dev package; QA cannot map it automatically
-INSANE_SKIP:${PN} += "file-rdeps"
-
 # yolov8n is a standalone CMake project within the repo
 do_configure:append() {
     cmake -S ${S}/yolov8n -B ${B}/yolov8n \

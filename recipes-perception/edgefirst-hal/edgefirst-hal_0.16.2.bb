@@ -14,10 +14,10 @@ SRC_URI[license.sha256sum] = "acbbda305958ff27afe43eeef4a77d48ef9d99364e772ba319
 SRC_URI:append:aarch64 = " \
     https://github.com/EdgeFirstAI/hal/releases/download/v${PV}/edgefirst_hal-${PV}-cp311-abi3-manylinux_2_17_aarch64.manylinux2014_aarch64.whl;name=python \
 "
-SRC_URI[python.sha256sum] = "3e2e426521e39a865dff882eae405296b603f501cfd55740cf5e28862a495510"
+SRC_URI[python.sha256sum] = "b204867666c2a0e3454c13077b55632593039c805616200d7af32fe08fdea485"
 
-CLIB_SHA256SUM[aarch64] = "9476d7be11c31e5045bc93d7bb2d4bcc1aa93b5cf526c9a4efc68fc39e470d2b"
-CLIB_SHA256SUM[x86_64] = "d7c15f6ca95d5901b487e768617b44b23d75f7adf9f299e6bf5cbd29e883ca6f"
+CLIB_SHA256SUM[aarch64] = "9da101772e7f928990036720c61bc654d79c549943896b6d354465bb7c927a4c"
+CLIB_SHA256SUM[x86_64] = "3208b55651fdb792369ddce1d090203ed4fa278a4d0b94b67ca62ecb6c2ae9c8"
 
 python () {
     arch = d.getVar('TARGET_ARCH')
@@ -34,35 +34,21 @@ DEPENDS = "python3 unzip-native"
 RDEPENDS:${PN}-python = "python3"
 
 do_install() {
-    # Install shared library with proper SONAME symlinks
+    # The upstream tarball ships a correct SONAME symlink chain
+    # (libedgefirst_hal.so → .so.0 → .so.0.16 → .so.0.16.2) plus the
+    # static library and pkg-config file. Copy the lib/ tree verbatim
+    # with `cp -a` to preserve the symlinks, then reset ownership to
+    # root:root since `cp -a` also preserves the host-build uid/gid
+    # which the Yocto package-QA rejects.
     install -d ${D}${libdir}
-    install -m 0755 ${S}/edgefirst-hal-capi-${PV}-${TARGET_ARCH}-linux/lib/libedgefirst_hal.so ${D}${libdir}/libedgefirst_hal.so.${PV}
-    ln -sf libedgefirst_hal.so.${PV} ${D}${libdir}/libedgefirst_hal.so.0
-    ln -sf libedgefirst_hal.so.${PV} ${D}${libdir}/libedgefirst_hal.so
-
-    # Install static library
-    install -m 0644 ${S}/edgefirst-hal-capi-${PV}-${TARGET_ARCH}-linux/lib/libedgefirst_hal.a ${D}${libdir}/
+    cp -a ${S}/edgefirst-hal-capi-${PV}-${TARGET_ARCH}-linux/lib/. ${D}${libdir}/
+    chown -R 0:0 ${D}${libdir}
 
     # Install headers
     install -d ${D}${includedir}/edgefirst
     install -m 0644 ${S}/edgefirst-hal-capi-${PV}-${TARGET_ARCH}-linux/include/edgefirst/hal.h ${D}${includedir}/edgefirst/
 
-    # Install pkg-config file
-    install -d ${D}${libdir}/pkgconfig
-    cat > ${D}${libdir}/pkgconfig/edgefirst-hal.pc <<PKGEOF
-prefix=${prefix}
-exec_prefix=\${prefix}
-libdir=\${prefix}/lib
-includedir=\${prefix}/include
-
-Name: edgefirst-hal
-Description: EdgeFirst HAL C Library
-Version: ${PV}
-Libs: -L\${libdir} -ledgefirst_hal
-Cflags: -I\${includedir}
-PKGEOF
-
-    # Install Python wheel (aarch64 from PyPI)
+    # Install Python wheel (aarch64 from GitHub releases)
     if [ -f ${S}/edgefirst_hal-${PV}-cp311-abi3-manylinux_2_17_aarch64.manylinux2014_aarch64.whl ]; then
         install -d ${D}${PYTHON_SITEPACKAGES_DIR}
         unzip ${S}/edgefirst_hal-${PV}-cp311-abi3-manylinux_2_17_aarch64.manylinux2014_aarch64.whl -d ${D}${PYTHON_SITEPACKAGES_DIR}

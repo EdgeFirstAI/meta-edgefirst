@@ -1,8 +1,8 @@
 SUMMARY = "EdgeFirst Perception Platform"
 DESCRIPTION = "Packagegroup for the EdgeFirst Perception Platform. The base \
-package installs shared infrastructure (zenoh-c, schemas, HAL, videostream). \
-Sub-packages add Zenoh sensor services and router (-zenoh), GStreamer ML \
-pipelines (-gstreamer), and Python bindings (-python)."
+package installs foundation libraries (HAL, videostream). Sub-packages add \
+Zenoh infrastructure and sensor services (-zenoh), GStreamer ML pipelines \
+(-gstreamer), and Python bindings (-python)."
 
 LICENSE = "Apache-2.0"
 LIC_FILES_CHKSUM = "file://${COMMON_LICENSE_DIR}/Apache-2.0;md5=89aea4e17d99a7cacdbeed46a0096b10"
@@ -13,19 +13,19 @@ inherit packagegroup
 
 PACKAGES = "${PN} ${PN}-zenoh ${PN}-gstreamer ${PN}-python"
 
-# Shared infrastructure
+# Foundation — core AI vision pipeline libraries
 RDEPENDS:${PN} = " \
-    zenoh-c \
-    edgefirst-schemas \
     edgefirst-hal \
     videostream \
     videostream-cli \
 "
 
-# Zenoh-based sensor services
+# Zenoh — infrastructure, schemas, and sensor services
 RDEPENDS:${PN}-zenoh = " \
     ${PN} \
+    zenoh-c \
     zenohd \
+    edgefirst-schemas \
     edgefirst-camera \
     edgefirst-model \
     edgefirst-fusion \
@@ -39,15 +39,17 @@ RDEPENDS:${PN}-zenoh = " \
     edgefirst-webui \
 "
 
-# GStreamer/NNStreamer ML inference pipelines
+# GStreamer — EdgeFirst GStreamer/NNStreamer ML inference pipelines
 RDEPENDS:${PN}-gstreamer = " \
     ${PN} \
     edgefirst-gstreamer \
 "
 
-# Python bindings
+# Python — bindings for foundation and Zenoh libraries
 RDEPENDS:${PN}-python = " \
     python3-zenoh \
+    edgefirst-tflite \
     edgefirst-schemas-python \
     edgefirst-hal-python \
+    videostream-python \
 "

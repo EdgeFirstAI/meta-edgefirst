@@ -26,4 +26,4 @@ do_install() {
 
 FILES:${PN} = "${PYTHON_SITEPACKAGES_DIR}"
 
-INSANE_SKIP:${PN} += "ldflags"
+INSANE_SKIP:${PN} += "ldflags already-stripped"

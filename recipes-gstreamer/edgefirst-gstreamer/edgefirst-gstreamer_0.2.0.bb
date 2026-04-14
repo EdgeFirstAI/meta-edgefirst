@@ -22,6 +22,7 @@ DEPENDS = " \
     zenoh-c \
     edgefirst-schemas \
     edgefirst-hal \
+    nnstreamer \
 "
 
 EXTRA_OEMESON = " \

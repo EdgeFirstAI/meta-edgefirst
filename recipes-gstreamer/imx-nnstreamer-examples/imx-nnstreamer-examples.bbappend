@@ -23,8 +23,46 @@ do_compile:append() {
 }
 
 EDGEFIRST_DIR = "/opt/edgefirst"
+IMX_NNSTREANER_DIR = "${GPNT_APPS_FOLDER}/scripts/machine_learning/nnstreamer"
 
-do_install:append() {
+# Override do_install entirely — the base recipe hardcodes ${WORKDIR}/git and
+# ${WORKDIR}/build which breaks with devtool (externalsrc) and Walnascar's
+# UNPACKDIR.  Use ${S} and ${B} throughout instead.
+do_install() {
+    # --- NXP base examples (replaces upstream do_install) ---
+    install -d ${D}${IMX_NNSTREANER_DIR}
+
+    cp ${S}/LICENSE ${D}${IMX_NNSTREANER_DIR}
+    cp ${S}/SCR*.txt ${D}${IMX_NNSTREANER_DIR}
+
+    install -d ${D}${IMX_NNSTREANER_DIR}/classification
+    install -m 0755 ${B}/classification/example_classification_mobilenet_v1_tflite ${D}${IMX_NNSTREANER_DIR}/classification
+
+    install -d ${D}${IMX_NNSTREANER_DIR}/classification_detection
+    install -m 0755 ${B}/mixed-demos/example_classification_and_detection_tflite ${D}${IMX_NNSTREANER_DIR}/classification_detection
+
+    install -d ${D}${IMX_NNSTREANER_DIR}/dual_classification
+    install -m 0755 ${B}/mixed-demos/example_double_classification_tflite ${D}${IMX_NNSTREANER_DIR}/dual_classification
+
+    install -d ${D}${IMX_NNSTREANER_DIR}/emotion_detection
+    install -m 0755 ${B}/face-processing/example_emotion_classification_tflite ${D}${IMX_NNSTREANER_DIR}/emotion_detection
+
+    install -d ${D}${IMX_NNSTREANER_DIR}/face_detection
+    install -m 0755 ${B}/face-processing/example_face_detection_tflite ${D}${IMX_NNSTREANER_DIR}/face_detection
+
+    install -d ${D}${IMX_NNSTREANER_DIR}/object_detection
+    install -m 0755 ${B}/object-detection/example_detection_mobilenet_ssd_v2_tflite ${D}${IMX_NNSTREANER_DIR}/object_detection
+
+    install -d ${D}${IMX_NNSTREANER_DIR}/pose_estimation
+    install -m 0755 ${B}/pose-estimation/example_pose_movenet_tflite ${D}${IMX_NNSTREANER_DIR}/pose_estimation
+
+    install -d ${D}${IMX_NNSTREANER_DIR}/pose_face
+    install -m 0755 ${B}/mixed-demos/example_face_and_pose_detection_tflite ${D}${IMX_NNSTREANER_DIR}/pose_face
+
+    install -d ${D}${IMX_NNSTREANER_DIR}/semantic_segmentation
+    install -m 0755 ${B}/semantic-segmentation/example_segmentation_deeplab_v3_tflite ${D}${IMX_NNSTREANER_DIR}/semantic_segmentation
+
+    # --- EdgeFirst YOLOv8n examples ---
     install -d ${D}${EDGEFIRST_DIR}
     install -m 0755 ${B}/yolov8n/yolov8n_reference ${D}${EDGEFIRST_DIR}/
     install -m 0755 ${B}/yolov8n/yolov8n_imx8mp ${D}${EDGEFIRST_DIR}/

@@ -5,6 +5,22 @@ All notable changes to the `meta-edgefirst` Yocto layer are documented here.
 Each entry lists package version changes with links to the upstream
 CHANGELOG. For full per-package details, follow the links.
 
+## v1.2.1 — 2026-04-20
+
+### Package Updates
+
+| Package | v1.2.0 | v1.2.1 | Changelog |
+|---------|--------|--------|-----------|
+| edgefirst-hal | 0.16.3 | 0.16.4 | [CHANGELOG](https://github.com/EdgeFirstAI/hal/blob/v0.16.4/CHANGELOG.md) |
+
+### Layer Changes
+
+- **imx-nnstreamer-examples do\_install fix**: Replaced `do_install:append`
+  with a full `do_install` override that uses `${S}` and `${B}` throughout.
+  The upstream recipe in `meta-nxp-demo-experience` hardcodes
+  `${WORKDIR}/git` and `${WORKDIR}/build` which breaks with `devtool`
+  (externalsrc) and Walnascar's `UNPACKDIR`.
+
 ## v1.2.0 — 2026-04-16
 
 ### Package Updates

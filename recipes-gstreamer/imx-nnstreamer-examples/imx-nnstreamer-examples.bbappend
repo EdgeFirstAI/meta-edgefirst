@@ -1,8 +1,8 @@
-# EdgeFirst YOLOv8n 640x640 INT8 object detection examples
+# EdgeFirst YOLOv8n 640x640 INT8 object detection and segmentation examples
 #
-# Adds yolov8n detection and segmentation binaries demonstrating
-# EdgeFirst HAL optimizations (DMA-BUF zero-copy, quantized NMS)
-# across i.MX 8M Plus, i.MX 95, and Kinara Ara-2 NPU platforms.
+# Installs the unified yolov8n binary (detection + segmentation via
+# edgefirstoverlay, supporting TFLite VX/Neutron and Ara-2 backends)
+# plus reference baseline binaries for benchmarking.
 
 NXP_NNSTREAMER_EXAMPLES_SRC = "git://github.com/EdgeFirstAI/nxp-nnstreamer-examples.git;protocol=https"
 SRCBRANCH = "edgefirst-yolov8"
@@ -64,14 +64,9 @@ do_install() {
 
     # --- EdgeFirst YOLOv8n examples ---
     install -d ${D}${EDGEFIRST_DIR}
+    install -m 0755 ${B}/yolov8n/yolov8n ${D}${EDGEFIRST_DIR}/
     install -m 0755 ${B}/yolov8n/yolov8n_reference ${D}${EDGEFIRST_DIR}/
-    install -m 0755 ${B}/yolov8n/yolov8n_imx8mp ${D}${EDGEFIRST_DIR}/
-    install -m 0755 ${B}/yolov8n/yolov8n_imx95 ${D}${EDGEFIRST_DIR}/
-    install -m 0755 ${B}/yolov8n/yolov8n_ara2 ${D}${EDGEFIRST_DIR}/
     install -m 0755 ${B}/yolov8n/yolov8n_ara2_reference ${D}${EDGEFIRST_DIR}/
-    install -m 0755 ${B}/yolov8n/yolov8n_seg ${D}${EDGEFIRST_DIR}/
-    install -m 0755 ${B}/yolov8n/yolov8n_seg_ara2 ${D}${EDGEFIRST_DIR}/
-    install -m 0755 ${S}/yolov8n/yolov8n_seg.sh ${D}${EDGEFIRST_DIR}/
 }
 
 FILES:${PN} += "${EDGEFIRST_DIR}"

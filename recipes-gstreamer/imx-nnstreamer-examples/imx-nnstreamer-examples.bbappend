@@ -6,7 +6,7 @@
 
 NXP_NNSTREAMER_EXAMPLES_SRC = "git://github.com/EdgeFirstAI/nxp-nnstreamer-examples.git;protocol=https"
 SRCBRANCH = "edgefirst-yolov8"
-SRCREV = "c9133e368ba1af891aa1a63d86251878b1bd9fa0"
+SRCREV = "6d15fa93318c5dd8cafd3480044352fc7d4a7e57"
 
 DEPENDS += "edgefirst-hal edgefirst-gstreamer gstreamer1.0-plugins-base"
 RDEPENDS:${PN} += "edgefirst-hal edgefirst-gstreamer"

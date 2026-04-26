@@ -6,14 +6,14 @@ LIC_FILES_CHKSUM = "file://${BPN}-LICENSE;md5=3929fde384c07d35ed0d6f0c925f2a12"
 
 SRC_URI = "\
     https://github.com/EdgeFirstAI/schemas/releases/download/v${PV}/edgefirst-schemas-linux_${TARGET_ARCH}-${PV}.zip;name=clib \
-    https://files.pythonhosted.org/packages/5a/0f/cdf6bfe343d83c7e7249383b2d2b7537686ca8ac9ebc76d8732a1dbefc93/edgefirst_schemas-${PV}-py3-none-any.whl;name=python \
+    https://files.pythonhosted.org/packages/03/4d/2386f0fbdaa3a8979a2e8d9e109a93cc4d94f134b31c0b6551fcb440ebef/edgefirst_schemas-${PV}-py3-none-any.whl;name=python \
     https://raw.githubusercontent.com/EdgeFirstAI/schemas/v${PV}/LICENSE;downloadfilename=${BPN}-LICENSE;name=license \
 "
 SRC_URI[license.sha256sum] = "acbbda305958ff27afe43eeef4a77d48ef9d99364e772ba319d1d38ae759ae43"
-SRC_URI[python.sha256sum] = "4b8f3fcb00bfd8c7a5228dd848e3a1a217f3dcb7ebc97b28300d867b42eebd15"
+SRC_URI[python.sha256sum] = "2ab1eb1a6308843d8bd383ac3c0458bee052612f0189976d36b91474a86609af"
 
-CLIB_SHA256SUM[aarch64] = "6e3304aec8b9d2a800ded6ae30d6c5531861eba4774874a950ae431f217d5c37"
-CLIB_SHA256SUM[x86_64] = "bce967f7c09f3f1730bfe7bc9ccf68684291b9460804df43e5e4e57b288fee2b"
+CLIB_SHA256SUM[aarch64] = "0436b07c861400b074b3b164f5e9017d9647491cf9d629eab7097169e9069393"
+CLIB_SHA256SUM[x86_64] = "ecbbbd7f2a340fa4898a51a5df8d51131cc7cf53ae38ac0a3c063d011d741167"
 
 python () {
     arch = d.getVar('TARGET_ARCH')
@@ -31,7 +31,7 @@ RDEPENDS:${PN}-python = "python3"
 
 do_install() {
     # The upstream tarball ships a correct SONAME symlink chain
-    # (libedgefirst_schemas.so → .so.2 → .so.2.2 → .so.2.2.1) plus the
+    # (libedgefirst_schemas.so → .so.3 → .so.3.1 → .so.3.1.0) plus the
     # static library and pkg-config file. Copy the lib/ tree verbatim
     # with `cp -a` to preserve the symlinks, then reset ownership to
     # root:root since `cp -a` also preserves the host-build uid/gid

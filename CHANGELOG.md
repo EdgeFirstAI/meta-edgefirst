@@ -5,6 +5,41 @@ All notable changes to the `meta-edgefirst` Yocto layer are documented here.
 Each entry lists package version changes with links to the upstream
 CHANGELOG. For full per-package details, follow the links.
 
+## v1.2.2 — 2026-04-26
+
+### Package Updates
+
+| Package | v1.2.1 | v1.2.2 | Changelog |
+|---------|--------|--------|-----------|
+| edgefirst-hal | 0.16.4 | 0.18.0 | [CHANGELOG](https://github.com/EdgeFirstAI/hal/blob/v0.18.0/CHANGELOG.md) |
+| edgefirst-gstreamer | 0.3.0 | 0.4.0 | [CHANGELOG](https://github.com/EdgeFirstAI/gstreamer/blob/v0.4.0/CHANGELOG.md) |
+| edgefirst-schemas | 2.2.1 | 3.1.0 | [CHANGELOG](https://github.com/EdgeFirstAI/schemas/blob/v3.1.0/CHANGELOG.md) |
+| videostream | 2.2.2 | 2.5.1 | [CHANGELOG](https://github.com/EdgeFirstAI/videostream/blob/v2.5.1/CHANGELOG.md) |
+| edgefirst-tflite | 0.4.0 | 0.5.0 | [CHANGELOG](https://github.com/EdgeFirstAI/tflite-rs/blob/v0.5.0/CHANGELOG.md) |
+
+### Layer Changes
+
+- **Unified `yolov8n` binary**: Replaced 6 separate detection/segmentation
+  binaries (`yolov8n_imx8mp`, `yolov8n_imx95`, `yolov8n_ara2`,
+  `yolov8n_seg_ara2`, etc.) with a single `yolov8n` binary that
+  auto-detects platform, NPU backend, and model type (detection vs.
+  segmentation) from model metadata. Supports `-p`, `-m`, `-c`, `-v`,
+  `-H`, `-I`, `-D`, `-n` flags. Reference baselines remain as separate
+  `yolov8n_reference` and `yolov8n_ara2_reference` binaries.
+- **edgefirst-gstreamer 0.4.0**: Fixed Vivante GC7000 proto mask regression
+  (>2200 ms/frame → ~25 ms using CPU-materialized decoded masks path).
+  Added model-metadata decoder path for automatic HAL configuration from
+  edgefirst.json v2 schema. Removed Ara-2 dimension correction workarounds
+  (fixed upstream in NNStreamer).
+- **NNStreamer Ara-2 dimension fix**: Corrected Ara-2 tensor_filter output
+  dimension ordering from native C-contiguous (outermost-first) to
+  NNStreamer's innermost-first convention, enabling uniform handling of
+  both TFLite and Ara-2 tensors without overlay workarounds.
+- **edgefirst-schemas SONAME bump**: Major version change from `.so.2` to
+  `.so.3`. Dependent packages must be rebuilt against schemas 3.1.0.
+- **imx-nnstreamer-examples**: Updated for unified binary, VX DmaBuf
+  uint8 dtype fix, color-mode flag, and save-frame support.
+
 ## v1.2.1 — 2026-04-20
 
 ### Package Updates

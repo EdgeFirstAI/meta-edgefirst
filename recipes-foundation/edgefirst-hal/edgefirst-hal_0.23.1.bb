@@ -14,10 +14,10 @@ SRC_URI[license.sha256sum] = "acbbda305958ff27afe43eeef4a77d48ef9d99364e772ba319
 SRC_URI:append:aarch64 = " \
     https://github.com/EdgeFirstAI/hal/releases/download/v${PV}/edgefirst_hal-${PV}-cp311-abi3-manylinux_2_17_aarch64.manylinux2014_aarch64.whl;name=python \
 "
-SRC_URI[python.sha256sum] = "dd1dd8a4e1bd7529a44a9a9ef57f9492b4adf38d40b318a6c9816de41ef073fc"
+SRC_URI[python.sha256sum] = "2bf670944487cefe9cdb11ce5ad105ec7c3a515f964e914171f37b361df73e3d"
 
-CLIB_SHA256SUM[aarch64] = "b5bd8bed536c1c46a5fe7a46159ea5f224386f380c9baff774a1d1884276a3a5"
-CLIB_SHA256SUM[x86_64] = "2703d71b98ed498060b4ea7ffe98334f459385c8e0db5f2e9c0d40d7c7bc1e6a"
+CLIB_SHA256SUM[aarch64] = "db94175ba6adffb5c869be2a03e97ef96bc4dda65f07d62e72276c4f03851764"
+CLIB_SHA256SUM[x86_64] = "ed1cb4b9f74acd90d1154fb00490312f2e38d32a5c837ade0ca2ef235591535a"
 
 python () {
     arch = d.getVar('TARGET_ARCH')
@@ -35,7 +35,7 @@ RDEPENDS:${PN}-python = "python3"
 
 do_install() {
     # The upstream tarball ships a correct SONAME symlink chain
-    # (libedgefirst_hal.so → .so.0 → .so.0.18 → .so.0.18.0) plus the
+    # (libedgefirst_hal.so → .so.0 → .so.0.23 → .so.0.23.1) plus the
     # static library and pkg-config file. Copy the lib/ tree verbatim
     # with `cp -a` to preserve the symlinks, then reset ownership to
     # root:root since `cp -a` also preserves the host-build uid/gid

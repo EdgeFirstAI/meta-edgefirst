@@ -5,6 +5,64 @@ All notable changes to the `meta-edgefirst` Yocto layer are documented here.
 Each entry lists package version changes with links to the upstream
 CHANGELOG. For full per-package details, follow the links.
 
+## [Unreleased]
+
+### Package Updates
+
+| Package | v1.2.2 | Unreleased | Changelog |
+|---------|--------|------------|-----------|
+| edgefirst-hal | 0.18.0 | 0.23.1 | [CHANGELOG](https://github.com/EdgeFirstAI/hal/blob/v0.23.1/CHANGELOG.md) |
+| edgefirst-schemas | 3.1.0 | 3.4.0 | [CHANGELOG](https://github.com/EdgeFirstAI/schemas/blob/v3.4.0/CHANGELOG.md) |
+| edgefirst-tflite | 0.5.0 | 0.7.0 | [CHANGELOG](https://github.com/EdgeFirstAI/tflite-rs/blob/v0.7.0/CHANGELOG.md) |
+| edgefirst-camera | 2.6.0 | 2.7.0 | [CHANGELOG](https://github.com/EdgeFirstAI/camera/blob/v2.7.0/CHANGELOG.md) |
+| edgefirst-recorder | 1.7.1 | 1.8.0 | [CHANGELOG](https://github.com/EdgeFirstAI/recorder/blob/v1.8.0/CHANGELOG.md) |
+| zenoh-c / zenohd / python3-zenoh | 1.8.0 | 1.9.0 | — |
+
+### Layer Changes
+
+- **edgefirst-hal 0.18 → 0.23.1**: Five-minor jump. C ABI delta: 4
+  symbols removed (`hal_tensor_load_image{,_file,_jpeg,_png}` — replaced
+  by the new `edgefirst_codec` decode-into-tensor flow at
+  `hal_tensor_decode_image{,_file}`), 10 added (`hal_decoder_input_dims`,
+  `hal_decoder_params_set_input_dims`, `hal_decoder_params_set_max_det`,
+  `hal_decoder_params_set_pre_nms_top_k`, `hal_proto_data_layout`,
+  `hal_start_tracing` / `hal_stop_tracing` / `hal_is_tracing_active`,
+  `hal_tensor_decode_image`, `hal_tensor_decode_image_file`). Neither
+  `nnstreamer` nor `edgefirst-gstreamer` reference any of the removed
+  symbols. SONAME chain remains
+  `libedgefirst_hal.so → .so.0 → .so.0.23 → .so.0.23.1`; recipe install
+  logic unchanged. Behavioural changes documented upstream: binary `{0,
+  255}` masks from `MaskResolution::Proto`/`::Scaled` (0.19.0), default
+  NMS resolves from model config (`Nms::Auto`, 0.22.0), `max_det` default
+  300 (0.20.0). `edgefirst-gstreamer` explicitly sets
+  `HAL_NMS_CLASS_AGNOSTIC` so the Auto default is not exposed.
+- **edgefirst-schemas 3.1.0 → 3.4.0**: SONAME stable at `.so.3`. Zero
+  C symbols removed, 635 added (geometry_msgs / mavros_msgs message
+  types, full builder pattern surface). 3.2.0 introduced a PyO3 rewrite
+  of the Python module — recipe now pulls the arch-specific
+  `cp311-abi3-manylinux_2_17_aarch64` wheel from GitHub releases instead
+  of the legacy `py3-none-any` wheel from PyPI. `python3-pip-native`
+  dependency dropped (no longer needed for the unzip-based install).
+  Recipe adds `PRIVATE_LIBS:${PN}-python = "libedgefirst_schemas.so.3"`
+  to work around an upstream wheel-build bug: `schemas.abi3.so` is
+  linked with SONAME `libedgefirst_schemas.so.3` inherited from the
+  Rust cdylib metadata, which without `PRIVATE_LIBS` would cause
+  `do_package` to fail with "Multiple shlib providers". Track-and-fix
+  upstream so the Python extension's SONAME matches its filename.
+- **edgefirst-tflite 0.5.0 → 0.7.0**: Python wheel only; cp38-abi3 ABI
+  unchanged.
+- **edgefirst-camera 2.6.0 → 2.7.0** and **edgefirst-recorder 1.7.1 →
+  1.8.0**: Minor bumps; no recipe-level changes beyond checksum refresh.
+- **zenoh-c / zenohd / python3-zenoh 1.8.0 → 1.9.0**: Eclipse Zenoh
+  upstream release.
+- **meta-kinara edgefirst-ara2 0.5.0 → 0.10.0**: Python bindings bumped
+  through five intermediate releases. The wrapped HAL surface is pinned
+  to HAL 0.23 in lockstep (matches this layer's bump). `dequantize()`
+  qmode-9 formula correction (0.4.0), `Session.close()`/`Model.close()`
+  context-manager fix (0.4.0), `OutputQuantization.scale` removed,
+  `InputQuantization.mean/scale` moved to `InputPreprocess` (0.4.0
+  migration items still apply to consumers of the older Python API).
+
 ## v1.2.2 — 2026-04-26
 
 ### Package Updates

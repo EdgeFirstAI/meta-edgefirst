@@ -4,8 +4,8 @@ HOMEPAGE = "https://github.com/eclipse-zenoh/zenoh-python"
 LICENSE = "Apache-2.0"
 LIC_FILES_CHKSUM = "file://${COMMON_LICENSE_DIR}/Apache-2.0;md5=89aea4e17d99a7cacdbeed46a0096b10"
 
-SRC_URI = "https://files.pythonhosted.org/packages/cf/ba/7bb452da75a6c3d40d512112e90aa9942996466051ebfb038c6dc41ed302/eclipse_zenoh-${PV}-cp39-abi3-manylinux_2_28_aarch64.whl"
-SRC_URI[sha256sum] = "1aca875fd5aa38284cf7161964241a73b4e4090a48385c35a6d8e6169cc8e88a"
+SRC_URI = "https://files.pythonhosted.org/packages/ab/33/c3116f1bf7647ee0ea8972efbe0fe5710ae75ea7226440a8fda7f04a4cbc/eclipse_zenoh-${PV}-cp39-abi3-manylinux_2_28_aarch64.whl"
+SRC_URI[sha256sum] = "8c139a43706c8ff3c94fa625008af8667687c161a8395ad1fa3faff29c16fae4"
 
 S = "${@d.getVar('UNPACKDIR') or d.getVar('WORKDIR')}"
 

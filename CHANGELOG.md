@@ -17,6 +17,7 @@ CHANGELOG. For full per-package details, follow the links.
 | edgefirst-tflite | 0.5.0 | 0.7.0 | [CHANGELOG](https://github.com/EdgeFirstAI/tflite-rs/blob/v0.7.0/CHANGELOG.md) |
 | edgefirst-camera | 2.6.0 | 2.7.0 | [CHANGELOG](https://github.com/EdgeFirstAI/camera/blob/v2.7.0/CHANGELOG.md) |
 | edgefirst-recorder | 1.7.1 | 1.8.0 | [CHANGELOG](https://github.com/EdgeFirstAI/recorder/blob/v1.8.0/CHANGELOG.md) |
+| edgefirst-replay | 2.2.0 | 2.3.0 | [CHANGELOG](https://github.com/EdgeFirstAI/replay/blob/v2.3.0/CHANGELOG.md) |
 | zenoh-c / zenohd / python3-zenoh | 1.8.0 | 1.9.0 | — |
 
 ### Layer Changes
@@ -48,6 +49,22 @@ CHANGELOG. For full per-package details, follow the links.
   `camhost` to handle slow consumers. Upstream confirms no public API
   or ABI changes — `SOVERSION` stays at 2, exported symbol set is
   identical.
+- **edgefirst-replay 2.2.0 → 2.3.0**: Rebuilt against this layer's
+  refreshed deps — pulls in `edgefirst-schemas` 3.4.0, `videostream`
+  2.5.2, and `edgefirst-hal` 0.23.x. **Breaking on the wire**:
+  `rt/camera/dma` now publishes decoder-native NV12 (matches the live
+  camera contract) instead of pre-converting to RGBA. Consumers that
+  needed RGBA should subscribe to the new opt-in
+  `--camera-image-topic` (env `CAMERA_IMAGE_TOPIC`) which publishes
+  `sensor_msgs/Image` rgba8 via the HAL `ImageProcessor` (auto-selects
+  G2D / OpenGL / CPU). Replay drops G2D/turbojpeg/dma-heap/tokio
+  in-tree image plumbing and routes JPEG decode through the optimized
+  `edgefirst-codec` path. h264 decoder switched to
+  `Decoder::create_ex(.., CodecBackend::Auto)` so it picks the v4l2
+  backend (`/dev/video1 vsi_v4l2dec` on imx8mp, tighter 1920-byte NV12
+  stride vs the legacy 2880-byte Hantro path). `main` is now sync to
+  avoid colliding with HAL's GL backend `blocking_recv` during
+  converter init.
 - **edgefirst-schemas 3.1.0 → 3.4.0**: SONAME stable at `.so.3`. Zero
   C symbols removed, 635 added (geometry_msgs / mavros_msgs message
   types, full builder pattern surface). 3.2.0 introduced a PyO3 rewrite

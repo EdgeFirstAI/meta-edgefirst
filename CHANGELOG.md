@@ -11,8 +11,9 @@ CHANGELOG. For full per-package details, follow the links.
 
 | Package | v1.2.2 | Unreleased | Changelog |
 |---------|--------|------------|-----------|
-| edgefirst-hal | 0.18.0 | 0.23.1 | [CHANGELOG](https://github.com/EdgeFirstAI/hal/blob/v0.23.1/CHANGELOG.md) |
+| edgefirst-hal | 0.18.0 | 0.23.2 | [CHANGELOG](https://github.com/EdgeFirstAI/hal/blob/v0.23.2/CHANGELOG.md) |
 | edgefirst-schemas | 3.1.0 | 3.4.0 | [CHANGELOG](https://github.com/EdgeFirstAI/schemas/blob/v3.4.0/CHANGELOG.md) |
+| videostream | 2.5.1 | 2.5.2 | [CHANGELOG](https://github.com/EdgeFirstAI/videostream/blob/v2.5.2/CHANGELOG.md) |
 | edgefirst-tflite | 0.5.0 | 0.7.0 | [CHANGELOG](https://github.com/EdgeFirstAI/tflite-rs/blob/v0.7.0/CHANGELOG.md) |
 | edgefirst-camera | 2.6.0 | 2.7.0 | [CHANGELOG](https://github.com/EdgeFirstAI/camera/blob/v2.7.0/CHANGELOG.md) |
 | edgefirst-recorder | 1.7.1 | 1.8.0 | [CHANGELOG](https://github.com/EdgeFirstAI/recorder/blob/v1.8.0/CHANGELOG.md) |
@@ -20,7 +21,7 @@ CHANGELOG. For full per-package details, follow the links.
 
 ### Layer Changes
 
-- **edgefirst-hal 0.18 → 0.23.1**: Five-minor jump. C ABI delta: 4
+- **edgefirst-hal 0.18 → 0.23.2**: Five-minor jump. C ABI delta: 4
   symbols removed (`hal_tensor_load_image{,_file,_jpeg,_png}` — replaced
   by the new `edgefirst_codec` decode-into-tensor flow at
   `hal_tensor_decode_image{,_file}`), 10 added (`hal_decoder_input_dims`,
@@ -30,12 +31,23 @@ CHANGELOG. For full per-package details, follow the links.
   `hal_tensor_decode_image`, `hal_tensor_decode_image_file`). Neither
   `nnstreamer` nor `edgefirst-gstreamer` reference any of the removed
   symbols. SONAME chain remains
-  `libedgefirst_hal.so → .so.0 → .so.0.23 → .so.0.23.1`; recipe install
+  `libedgefirst_hal.so → .so.0 → .so.0.23 → .so.0.23.2`; recipe install
   logic unchanged. Behavioural changes documented upstream: binary `{0,
   255}` masks from `MaskResolution::Proto`/`::Scaled` (0.19.0), default
   NMS resolves from model config (`Nms::Auto`, 0.22.0), `max_det` default
   300 (0.20.0). `edgefirst-gstreamer` explicitly sets
-  `HAL_NMS_CLASS_AGNOSTIC` so the Auto default is not exposed.
+  `HAL_NMS_CLASS_AGNOSTIC` so the Auto default is not exposed. 0.23.2
+  is a pure tracing-span rename across all crates — Perfetto/Chrome
+  trace labels change (`decode` → `decoder.decode`, `image_convert` →
+  `image.convert`, etc.) but no API/ABI changes (116 exported C
+  symbols, identical to 0.23.1).
+- **videostream 2.5.1 → 2.5.2**: Patch release. V4L2 encoder now
+  honors `crop_region` (BGRA/YUYV), VSL client returns accurate
+  `errno` (`ESTALE`/`EBADMSG`/`ENOLCK`), frame lifespan bumped 90 ms →
+  200 ms and camera buffer count 4/6 → 8 in `videostream stream` /
+  `camhost` to handle slow consumers. Upstream confirms no public API
+  or ABI changes — `SOVERSION` stays at 2, exported symbol set is
+  identical.
 - **edgefirst-schemas 3.1.0 → 3.4.0**: SONAME stable at `.so.3`. Zero
   C symbols removed, 635 added (geometry_msgs / mavros_msgs message
   types, full builder pattern surface). 3.2.0 introduced a PyO3 rewrite

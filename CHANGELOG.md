@@ -49,6 +49,24 @@ CHANGELOG. For full per-package details, follow the links.
   `camhost` to handle slow consumers. Upstream confirms no public API
   or ABI changes — `SOVERSION` stays at 2, exported symbol set is
   identical.
+- **ConnMan removed from imx-image-full rootfs.** ConnMan's recipe in
+  Poky registers itself as the `update-alternatives` provider for
+  `/etc/resolv.conf` (pointing at `/etc/resolv-conf.connman`) whenever
+  `systemd` is in `DISTRO_FEATURES`, which fights `systemd-resolved`
+  for DNS on target and produces stale/empty resolv.conf at runtime.
+  This BSP runs `systemd-networkd` + `systemd-resolved` as the
+  authoritative network stack, so ConnMan must not be installed.
+  Implemented as two complementary changes in `meta-edgefirst`:
+    1. `recipes-core/packagegroups/packagegroup-core-tools-testapps.bbappend`
+       removes `connman-tools / connman-tests / connman-client` from
+       the `tools-testapps` packagegroup's `RDEPENDS` (the only
+       in-tree path that pulled ConnMan).
+    2. `conf/layer.conf` adds
+       `PACKAGE_EXCLUDE:append = " connman connman-conf connman-client connman-tools connman-tests connman-gnome python3-pyconnman"`
+       as a defence-in-depth guard that fails the build loudly if any
+       future path tries to pull ConnMan back. Verified that the
+       `imx-image-full` rootfs manifest no longer contains any
+       `connman*` package on imx8mp-frdm and imx95-frdm.
 - **edgefirst-replay 2.2.0 → 2.3.0**: Rebuilt against this layer's
   refreshed deps — pulls in `edgefirst-schemas` 3.4.0, `videostream`
   2.5.2, and `edgefirst-hal` 0.23.x. **Breaking on the wire**:

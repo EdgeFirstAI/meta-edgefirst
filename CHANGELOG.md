@@ -16,6 +16,7 @@ CHANGELOG. For full per-package details, follow the links.
 | videostream | 2.5.1 | 2.5.2 | [CHANGELOG](https://github.com/EdgeFirstAI/videostream/blob/v2.5.2/CHANGELOG.md) |
 | edgefirst-tflite | 0.5.0 | 0.7.0 | [CHANGELOG](https://github.com/EdgeFirstAI/tflite-rs/blob/v0.7.0/CHANGELOG.md) |
 | edgefirst-camera | 2.6.0 | 2.7.0 | [CHANGELOG](https://github.com/EdgeFirstAI/camera/blob/v2.7.0/CHANGELOG.md) |
+| edgefirst-model | 2.8.0 | 2.9.0 | [CHANGELOG](https://github.com/EdgeFirstAI/model/blob/v2.9.0/CHANGELOG.md) |
 | edgefirst-recorder | 1.7.1 | 1.8.0 | [CHANGELOG](https://github.com/EdgeFirstAI/recorder/blob/v1.8.0/CHANGELOG.md) |
 | edgefirst-replay | 2.2.0 | 2.3.0 | [CHANGELOG](https://github.com/EdgeFirstAI/replay/blob/v2.3.0/CHANGELOG.md) |
 | zenoh-c / zenohd / python3-zenoh | 1.8.0 | 1.9.0 | — |
@@ -100,6 +101,19 @@ CHANGELOG. For full per-package details, follow the links.
   unchanged.
 - **edgefirst-camera 2.6.0 → 2.7.0** and **edgefirst-recorder 1.7.1 →
   1.8.0**: Minor bumps; no recipe-level changes beyond checksum refresh.
+- **edgefirst-model 2.8.0 → 2.9.0**: Rebuilt against this layer's
+  refreshed deps — pulls in edgefirst-hal 0.23, edgefirst-tflite 0.7,
+  edgefirst-tracker 0.23, and ara2 0.10. Adds Neutron NPU support for
+  i.MX 95 (auto-selects `libneutron_delegate.so` vs `libvx_delegate.so`
+  by scanning the loaded model for the Neutron custom op),
+  aspect-preserving letterbox preprocessing with back-projection of
+  detections/masks to original-frame coordinates, full DMA-BUF
+  zero-copy input pipeline across all three runtimes, and support for
+  the `edgefirst.json` embedded model config alongside
+  `edgefirst.yaml`. Forces the G2D image backend (HAL 0.23's threaded
+  GL backend uses `tokio::mpsc::blocking_send` which panics under the
+  service's tokio runtime). No recipe-level changes beyond the
+  checksum refresh.
 - **zenoh-c / zenohd / python3-zenoh 1.8.0 → 1.9.0**: Eclipse Zenoh
   upstream release.
 - **meta-kinara edgefirst-ara2 0.5.0 → 0.10.0**: Python bindings bumped

@@ -14,10 +14,10 @@ SRC_URI[license.sha256sum] = "acbbda305958ff27afe43eeef4a77d48ef9d99364e772ba319
 SRC_URI:append:aarch64 = " \
     https://github.com/EdgeFirstAI/hal/releases/download/v${PV}/edgefirst_hal-${PV}-cp311-abi3-manylinux_2_17_aarch64.manylinux2014_aarch64.whl;name=python \
 "
-SRC_URI[python.sha256sum] = "2c6bb25bb002e0f37da5a622ca55db259310a5700ed541939b1337d8d70ce9aa"
+SRC_URI[python.sha256sum] = "67d61f7bcadb168d2393ab030f009e446f4f332187e46997cf01c6652002ce42"
 
-CLIB_SHA256SUM[aarch64] = "4421debd20f80c666e79ffb8840012e99b7b0755b0cb741453d28e86da4866df"
-CLIB_SHA256SUM[x86_64] = "10c7cbdc19de97ad92d336d6c8382f6261efdb7d0e4a02d7b678378b5e54c720"
+CLIB_SHA256SUM[aarch64] = "be3e54e30cb67ed1ffb569dbc66c89607804bac5b019bd730e6de29716d8b2f7"
+CLIB_SHA256SUM[x86_64] = "0ededbd116ba680f8f97a424bcdc51fc6c1fe71d7a6d529425e7123ba8c65168"
 
 python () {
     arch = d.getVar('TARGET_ARCH')
@@ -35,11 +35,12 @@ RDEPENDS:${PN}-python = "python3"
 
 do_install() {
     # The upstream tarball ships a correct SONAME symlink chain
-    # (libedgefirst_hal.so → .so.0 → .so.0.23 → .so.0.23.2) plus the
-    # static library and pkg-config file. Copy the lib/ tree verbatim
-    # with `cp -a` to preserve the symlinks, then reset ownership to
-    # root:root since `cp -a` also preserves the host-build uid/gid
-    # which the Yocto package-QA rejects.
+    # (libedgefirst_hal.so → .so.MAJOR → .so.MAJOR.MINOR →
+    # .so.MAJOR.MINOR.PATCH) plus the static library and pkg-config
+    # file. Copy the lib/ tree verbatim with `cp -a` to preserve the
+    # symlinks, then reset ownership to root:root since `cp -a` also
+    # preserves the host-build uid/gid which the Yocto package-QA
+    # rejects.
     install -d ${D}${libdir}
     cp -a ${S}/edgefirst-hal-capi-${PV}-${TARGET_ARCH}-linux/lib/. ${D}${libdir}/
     chown -R 0:0 ${D}${libdir}

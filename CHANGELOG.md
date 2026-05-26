@@ -11,38 +11,55 @@ CHANGELOG. For full per-package details, follow the links.
 
 | Package | v1.2.2 | Unreleased | Changelog |
 |---------|--------|------------|-----------|
-| edgefirst-hal | 0.18.0 | 0.23.2 | [CHANGELOG](https://github.com/EdgeFirstAI/hal/blob/v0.23.2/CHANGELOG.md) |
+| edgefirst-hal | 0.18.0 | 0.24.0 | [CHANGELOG](https://github.com/EdgeFirstAI/hal/blob/v0.24.0/CHANGELOG.md) |
 | edgefirst-schemas | 3.1.0 | 3.4.0 | [CHANGELOG](https://github.com/EdgeFirstAI/schemas/blob/v3.4.0/CHANGELOG.md) |
 | videostream | 2.5.1 | 2.5.2 | [CHANGELOG](https://github.com/EdgeFirstAI/videostream/blob/v2.5.2/CHANGELOG.md) |
 | edgefirst-tflite | 0.5.0 | 0.7.0 | [CHANGELOG](https://github.com/EdgeFirstAI/tflite-rs/blob/v0.7.0/CHANGELOG.md) |
 | edgefirst-camera | 2.6.0 | 2.7.0 | [CHANGELOG](https://github.com/EdgeFirstAI/camera/blob/v2.7.0/CHANGELOG.md) |
 | edgefirst-model | 2.8.0 | 2.9.0 | [CHANGELOG](https://github.com/EdgeFirstAI/model/blob/v2.9.0/CHANGELOG.md) |
 | edgefirst-recorder | 1.7.1 | 1.8.0 | [CHANGELOG](https://github.com/EdgeFirstAI/recorder/blob/v1.8.0/CHANGELOG.md) |
-| edgefirst-replay | 2.2.0 | 2.3.0 | [CHANGELOG](https://github.com/EdgeFirstAI/replay/blob/v2.3.0/CHANGELOG.md) |
+| edgefirst-replay | 2.2.0 | 2.3.1 | [CHANGELOG](https://github.com/EdgeFirstAI/replay/blob/v2.3.1/CHANGELOG.md) |
+| edgefirst-websrv | 3.8.5 | 4.0.1 | [CHANGELOG](https://github.com/EdgeFirstAI/websrv/blob/v4.0.1/CHANGELOG.md) |
+| edgefirst-webui | 3.8.0 | 4.1.1 | [CHANGELOG](https://github.com/EdgeFirstAI/webui/blob/v4.1.1/CHANGELOG.md) |
+| edgefirst-gstreamer | 0.2.0 | 0.4.0 + main | [CHANGELOG](https://github.com/EdgeFirstAI/gstreamer/blob/main/CHANGELOG.md) |
 | zenoh-c / zenohd / python3-zenoh | 1.8.0 | 1.9.0 | — |
 
 ### Layer Changes
 
-- **edgefirst-hal 0.18 → 0.23.2**: Five-minor jump. C ABI delta: 4
-  symbols removed (`hal_tensor_load_image{,_file,_jpeg,_png}` — replaced
-  by the new `edgefirst_codec` decode-into-tensor flow at
-  `hal_tensor_decode_image{,_file}`), 10 added (`hal_decoder_input_dims`,
-  `hal_decoder_params_set_input_dims`, `hal_decoder_params_set_max_det`,
-  `hal_decoder_params_set_pre_nms_top_k`, `hal_proto_data_layout`,
-  `hal_start_tracing` / `hal_stop_tracing` / `hal_is_tracing_active`,
-  `hal_tensor_decode_image`, `hal_tensor_decode_image_file`). Neither
-  `nnstreamer` nor `edgefirst-gstreamer` reference any of the removed
-  symbols. SONAME chain remains
-  `libedgefirst_hal.so → .so.0 → .so.0.23 → .so.0.23.2`; recipe install
-  logic unchanged. Behavioural changes documented upstream: binary `{0,
-  255}` masks from `MaskResolution::Proto`/`::Scaled` (0.19.0), default
-  NMS resolves from model config (`Nms::Auto`, 0.22.0), `max_det` default
-  300 (0.20.0). `edgefirst-gstreamer` explicitly sets
-  `HAL_NMS_CLASS_AGNOSTIC` so the Auto default is not exposed. 0.23.2
-  is a pure tracing-span rename across all crates — Perfetto/Chrome
-  trace labels change (`decode` → `decoder.decode`, `image_convert` →
-  `image.convert`, etc.) but no API/ABI changes (116 exported C
-  symbols, identical to 0.23.1).
+- **edgefirst-hal 0.18 → 0.24.0**: Six-minor jump. C ABI delta from
+  0.18: 4 symbols removed (`hal_tensor_load_image{,_file,_jpeg,_png}` —
+  replaced by the `edgefirst_codec` decode-into-tensor flow at
+  `hal_tensor_decode_image{,_file}`), 10 added in the 0.19–0.23 series
+  (`hal_decoder_input_dims`, `hal_decoder_params_set_input_dims`,
+  `hal_decoder_params_set_max_det`, `hal_decoder_params_set_pre_nms_top_k`,
+  `hal_proto_data_layout`, `hal_start_tracing` / `hal_stop_tracing` /
+  `hal_is_tracing_active`, `hal_tensor_decode_image`,
+  `hal_tensor_decode_image_file`), 1 added in 0.24
+  (`hal_tensor_set_quantization` — lets consumers attach per-tensor
+  affine quantization to integer tensors wrapped from upstream
+  framework buffers; required by the schema-driven per-scale decoder,
+  which reads quant live from each bound tensor and fails with
+  `QuantMissing` if absent). 0.24.0 also splits the decoder C-API
+  errno mapping: `QuantMissing` / `InvalidShape` / `DtypeMismatch` /
+  `InvalidConfig` and related caller-side preconditions now map to
+  `EINVAL` (was `EIO`); `EIO` is reserved for internal faults (mutex
+  poisoning, unreachable kernel dispatch, hardware-feature mismatch).
+  Neither `nnstreamer` nor `edgefirst-gstreamer` reference any of the
+  removed symbols. SONAME chain remains
+  `libedgefirst_hal.so → .so.0 → .so.0.24 → .so.0.24.0`; recipe install
+  logic unchanged. Behavioural changes documented upstream: binary
+  `{0, 255}` masks from `MaskResolution::Proto`/`::Scaled` (0.19.0),
+  default NMS resolves from model config (`Nms::Auto`, 0.22.0),
+  `max_det` default 300 (0.20.0). `edgefirst-gstreamer` explicitly
+  sets `HAL_NMS_CLASS_AGNOSTIC` so the Auto default is not exposed.
+  **Known issue (workaround in edgefirst-gstreamer):**
+  `hal_decoder_normalized_boxes()` returns the schema's static
+  `normalized` annotation, not the runtime output state. The per-scale
+  pipeline pre-normalises coords to `[0, 1]` whenever
+  `hal_decoder_input_dims()` succeeds, but the function still reports
+  `Some(false)`. `edgefirst-gstreamer` works around the disagreement at
+  start-time; the proper fix is queued for the next HAL release and
+  the workaround is a no-op against a corrected HAL.
 - **videostream 2.5.1 → 2.5.2**: Patch release. V4L2 encoder now
   honors `crop_region` (BGRA/YUYV), VSL client returns accurate
   `errno` (`ESTALE`/`EBADMSG`/`ENOLCK`), frame lifespan bumped 90 ms →
@@ -68,7 +85,7 @@ CHANGELOG. For full per-package details, follow the links.
        future path tries to pull ConnMan back. Verified that the
        `imx-image-full` rootfs manifest no longer contains any
        `connman*` package on imx8mp-frdm and imx95-frdm.
-- **edgefirst-replay 2.2.0 → 2.3.0**: Rebuilt against this layer's
+- **edgefirst-replay 2.2.0 → 2.3.1**: Rebuilt against this layer's
   refreshed deps — pulls in `edgefirst-schemas` 3.4.0, `videostream`
   2.5.2, and `edgefirst-hal` 0.23.x. **Breaking on the wire**:
   `rt/camera/dma` now publishes decoder-native NV12 (matches the live
@@ -83,7 +100,56 @@ CHANGELOG. For full per-package details, follow the links.
   backend (`/dev/video1 vsi_v4l2dec` on imx8mp, tighter 1920-byte NV12
   stride vs the legacy 2880-byte Hantro path). `main` is now sync to
   avoid colliding with HAL's GL backend `blocking_recv` during
-  converter init.
+  converter init. **2.3.1 patch:** clean MCAP-restart — back-to-back
+  replay against the same MCAP no longer wedges the consumer pipeline
+  after EOS (the producer-side DMA-BUF FDs are re-allocated cleanly so
+  `edgefirst-model`'s pidfd cache rebinds on the next frame). Note
+  that 2.3.1's bundled Zenoh runtime rejects empty endpoint strings:
+  the shipped `/etc/default/edgefirst-replay` carries `CONNECT=""` and
+  `LISTEN=""` placeholders that must be commented out for the service
+  to start (upstream report queued).
+- **edgefirst-websrv 3.8.5 → 4.0.1** and **edgefirst-webui 3.8.0 →
+  4.1.1**: Coordinated jump to the unified `rt/model/output` schema.
+  The legacy `rt/model/boxes2d` / `rt/model/mask` topics are now
+  opt-in (`DETECT_TOPIC` / `MASK_TOPIC` empty by default in
+  `/etc/default/edgefirst-model`). The 4.0.x websrv/webui pair still
+  expected the legacy detection topic shape and rendered no overlays
+  against current `edgefirst-model` 2.9 output; 4.0.1 / 4.1.1 consume
+  the unified message correctly. Landing-page service cards (Camera,
+  LiDAR, …) are gated on `systemctl is-active` for the corresponding
+  `edgefirst-<service>.service` unit — services launched outside
+  systemd (e.g. `nohup` from a manual replay session) leave the
+  landing page empty, but `/camera`, `/lidar`, `/imu`, `/gps` remain
+  reachable by direct URL.
+- **edgefirst-gstreamer 0.2.0 → 0.4.0 + main**: Picks up the
+  schema-driven `edgefirstoverlay` path for YOLOv8 smart-model
+  pipelines. Three coordinated overlay changes vs 0.4.0:
+    1. CAPS event handler always parses tensor shapes — the
+       schema-driven path builds the decoder at `overlay_start()` from
+       JSON, but the tensors chain still needs `hal_shapes[]` populated
+       to bind by shape. Without this fix the per-scale decoder fails
+       with `InvalidShape` on every frame.
+    2. Integer outputs are tagged with their per-tensor quantization
+       at chain time via `hal_tensor_set_quantization()` (sourced from
+       `GstNnsTensorQuantMeta`). The schema-driven per-scale decoder
+       reads quant live from each bound tensor and fails with
+       `QuantMissing` if it is absent.
+    3. Model input dimensions are inferred from the parsed tensor
+       shapes (finest per-scale × 8, or strictly-larger single-instance
+       proto × 4) when no `model-width` / `model-height` override is
+       set, so `overlay_effective_letterbox()` can compute an
+       aspect-preserving un-letterbox on the rendered overlays.
+  Adds the HAL `normalized_boxes()` / `input_dims()` workaround
+  documented under `edgefirst-hal 0.24.0`. Recipe `SRCREV` bumped from
+  the v0.4.0 release commit to the head of `main`.
+- **imx-nnstreamer-examples**: `yolov8n` binary now extracts the
+  embedded `edgefirst.json` schema from the TFLite associated-files
+  ZIP trailer and sets it on `edgefirstoverlay`'s `model-config`
+  property; when the model has no embedded schema the overlay falls
+  back to its `decoder-version=yolov8` + tensor-shape inference path.
+  Recipe gains a `zlib` build dependency for the inflate-on-target
+  step. `SRCREV` bumped to the head of `edgefirst-yolov8` on the
+  EdgeFirstAI fork.
 - **edgefirst-schemas 3.1.0 → 3.4.0**: SONAME stable at `.so.3`. Zero
   C symbols removed, 635 added (geometry_msgs / mavros_msgs message
   types, full builder pattern surface). 3.2.0 introduced a PyO3 rewrite

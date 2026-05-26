@@ -6,9 +6,9 @@
 
 NXP_NNSTREAMER_EXAMPLES_SRC = "git://github.com/EdgeFirstAI/nxp-nnstreamer-examples.git;protocol=https"
 SRCBRANCH = "edgefirst-yolov8"
-SRCREV = "6d15fa93318c5dd8cafd3480044352fc7d4a7e57"
+SRCREV = "8aa59243d4151c55d937092f6718bb4564f1b2b2"
 
-DEPENDS += "edgefirst-hal edgefirst-gstreamer gstreamer1.0-plugins-base"
+DEPENDS += "edgefirst-hal edgefirst-gstreamer gstreamer1.0-plugins-base zlib"
 RDEPENDS:${PN} += "edgefirst-hal edgefirst-gstreamer"
 
 # yolov8n is a standalone CMake project within the repo

@@ -11,7 +11,7 @@ CHANGELOG. For full per-package details, follow the links.
 
 | Package | v1.2.2 | Unreleased | Changelog |
 |---------|--------|------------|-----------|
-| edgefirst-hal | 0.18.0 | 0.24.0 | [CHANGELOG](https://github.com/EdgeFirstAI/hal/blob/v0.24.0/CHANGELOG.md) |
+| edgefirst-hal | 0.18.0 | 0.24.2 | [CHANGELOG](https://github.com/EdgeFirstAI/hal/blob/v0.24.2/CHANGELOG.md) |
 | edgefirst-schemas | 3.1.0 | 3.4.0 | [CHANGELOG](https://github.com/EdgeFirstAI/schemas/blob/v3.4.0/CHANGELOG.md) |
 | videostream | 2.5.1 | 2.5.2 | [CHANGELOG](https://github.com/EdgeFirstAI/videostream/blob/v2.5.2/CHANGELOG.md) |
 | edgefirst-tflite | 0.5.0 | 0.7.0 | [CHANGELOG](https://github.com/EdgeFirstAI/tflite-rs/blob/v0.7.0/CHANGELOG.md) |
@@ -26,7 +26,7 @@ CHANGELOG. For full per-package details, follow the links.
 
 ### Layer Changes
 
-- **edgefirst-hal 0.18 → 0.24.0**: Six-minor jump. C ABI delta from
+- **edgefirst-hal 0.18 → 0.24.2**: Six-minor jump. C ABI delta from
   0.18: 4 symbols removed (`hal_tensor_load_image{,_file,_jpeg,_png}` —
   replaced by the `edgefirst_codec` decode-into-tensor flow at
   `hal_tensor_decode_image{,_file}`), 10 added in the 0.19–0.23 series
@@ -46,7 +46,7 @@ CHANGELOG. For full per-package details, follow the links.
   poisoning, unreachable kernel dispatch, hardware-feature mismatch).
   Neither `nnstreamer` nor `edgefirst-gstreamer` reference any of the
   removed symbols. SONAME chain remains
-  `libedgefirst_hal.so → .so.0 → .so.0.24 → .so.0.24.0`; recipe install
+  `libedgefirst_hal.so → .so.0 → .so.0.24 → .so.0.24.2`; recipe install
   logic unchanged. Behavioural changes documented upstream: binary
   `{0, 255}` masks from `MaskResolution::Proto`/`::Scaled` (0.19.0),
   default NMS resolves from model config (`Nms::Auto`, 0.22.0),

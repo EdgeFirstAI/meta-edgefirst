@@ -7,10 +7,12 @@ CHANGELOG. For full per-package details, follow the links.
 
 ## [Unreleased]
 
+## v1.2.3 — 2026-05-28
+
 ### Package Updates
 
-| Package | v1.2.2 | Unreleased | Changelog |
-|---------|--------|------------|-----------|
+| Package | v1.2.2 | v1.2.3 | Changelog |
+|---------|--------|--------|-----------|
 | edgefirst-hal | 0.18.0 | 0.24.2 | [CHANGELOG](https://github.com/EdgeFirstAI/hal/blob/v0.24.2/CHANGELOG.md) |
 | edgefirst-schemas | 3.1.0 | 3.4.0 | [CHANGELOG](https://github.com/EdgeFirstAI/schemas/blob/v3.4.0/CHANGELOG.md) |
 | videostream | 2.5.1 | 2.5.2 | [CHANGELOG](https://github.com/EdgeFirstAI/videostream/blob/v2.5.2/CHANGELOG.md) |
@@ -45,7 +47,10 @@ CHANGELOG. For full per-package details, follow the links.
   `EINVAL` (was `EIO`); `EIO` is reserved for internal faults (mutex
   poisoning, unreachable kernel dispatch, hardware-feature mismatch).
   Neither `nnstreamer` nor `edgefirst-gstreamer` reference any of the
-  removed symbols. SONAME chain remains
+  removed symbols. **0.24.2 patch** resets `TEXTURE_SWIZZLE_R` after the
+  `RGBA → PlanarRgb` conversion so the red channel is not silently
+  zeroed on the next overlay draw — fixes the green-tint regression
+  observed on segmentation overlays in 0.24.0/0.24.1. SONAME chain remains
   `libedgefirst_hal.so → .so.0 → .so.0.24 → .so.0.24.2`; recipe install
   logic unchanged. Behavioural changes documented upstream: binary
   `{0, 255}` masks from `MaskResolution::Proto`/`::Scaled` (0.19.0),

@@ -7,6 +7,11 @@ CHANGELOG. For full per-package details, follow the links.
 
 ## [Unreleased]
 
+### Layer Changes
+
+- `LAYERSERIES_COMPAT` extended with `whinlatter` (Yocto 5.3) for the
+  NXP imx-6.18.2-1.0.0 BSP. Scarthgap and walnascar remain supported.
+
 ## v1.2.3 — 2026-05-28
 
 ### Package Updates

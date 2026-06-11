@@ -6,7 +6,7 @@
 
 NXP_NNSTREAMER_EXAMPLES_SRC = "git://github.com/EdgeFirstAI/nxp-nnstreamer-examples.git;protocol=https"
 SRCBRANCH = "edgefirst-yolov8"
-SRCREV = "8aa59243d4151c55d937092f6718bb4564f1b2b2"
+SRCREV = "2b60271d6df07d0b0601fc2b643448127c18e88f"
 
 DEPENDS += "edgefirst-hal edgefirst-gstreamer gstreamer1.0-plugins-base zlib"
 RDEPENDS:${PN} += "edgefirst-hal edgefirst-gstreamer"
@@ -15,7 +15,8 @@ RDEPENDS:${PN} += "edgefirst-hal edgefirst-gstreamer"
 do_configure:append() {
     cmake -S ${S}/yolov8n -B ${B}/yolov8n \
         -DCMAKE_TOOLCHAIN_FILE=${WORKDIR}/toolchain.cmake \
-        -DCMAKE_SYSROOT=${PKG_CONFIG_SYSROOT_DIR}
+        -DCMAKE_SYSROOT=${PKG_CONFIG_SYSROOT_DIR} \
+        -DCMAKE_POLICY_VERSION_MINIMUM=3.5
 }
 
 do_compile:append() {

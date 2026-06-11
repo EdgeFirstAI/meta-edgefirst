@@ -6,6 +6,6 @@
 
 NEUTRON_DELEGATE_SRC = "git://github.com/EdgeFirstAI/tflite-neutron-delegate.git;protocol=https"
 SRCBRANCH_neutron = "edgefirst"
-SRCREV_neutron = "3c0e03e8ebbdb6eab1d8ab78756bf9277d278055"
+SRCREV_neutron = "4a9f0af0debaa642c129cab93831ecfd0a4a7430"
 
 DEPENDS:append = " edgefirst-hal"

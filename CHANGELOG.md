@@ -7,10 +7,33 @@ CHANGELOG. For full per-package details, follow the links.
 
 ## [Unreleased]
 
+### Package Updates
+
+| Package | v1.2.3 | Unreleased | Changelog |
+|---------|--------|------------|-----------|
+| edgefirst-gstreamer | 0.4.0 + main | 0.4.0 + main (`c2c9e1f`, overlay expose-timing property + frame-timing signal) | [CHANGELOG](https://github.com/EdgeFirstAI/gstreamer/blob/main/CHANGELOG.md) |
+
 ### Layer Changes
 
 - `LAYERSERIES_COMPAT` extended with `whinlatter` (Yocto 5.3) for the
   NXP imx-6.18.2-1.0.0 BSP. Scarthgap and walnascar remain supported.
+- Forked NXP components rebased onto the `lf-6.18.2_1.0.0` baselines
+  (the prior pins are preserved on `edgefirst-1.2.3` branches in each
+  fork):
+  - `tim-vx` → `736c50d` (carries NXP's gcc-15 `permute_vector.h` fix,
+    which our full `SRC_URI` override would otherwise drop)
+  - `tensorflow-lite-vx-delegate` / `litert-vx-delegate` → `a4c9e26`
+  - `tensorflow-lite-neutron-delegate` → `4a9f0af`
+  - `imx-gst1.0-plugin` → `58f899e` (rebased onto
+    `MM_04.10.03_2512_L6.18.2`; keep-ratio fill adapted to the new
+    4-argument `fill()` device op)
+  - `imx-nnstreamer-examples` → `2b60271` (rebased onto upstream main;
+    includes overlay frame-timing wiring and p99-trimmed stage timings)
+  - `nnstreamer` fork unchanged — upstream base and NXP patch set are
+    identical between walnascar and whinlatter
+- `edgefirst-gstreamer` and `imx-nnstreamer-examples` recipes adapted to
+  whinlatter's `BB_GIT_DEFAULT_DESTSUFFIX` git checkout layout and
+  cmake 4 (`CMAKE_POLICY_VERSION_MINIMUM`).
 
 ## v1.2.3 — 2026-05-28
 

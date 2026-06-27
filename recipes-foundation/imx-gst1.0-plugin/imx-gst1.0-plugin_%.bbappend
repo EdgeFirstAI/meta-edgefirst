@@ -5,5 +5,5 @@
 # NNStreamer and the NPU.
 
 IMXGST_SRC = "git://github.com/EdgeFirstAI/imx-gst1.0-plugin.git;protocol=https"
-SRCBRANCH = "edgefirst-dmabuf"
+SRCBRANCH = "edgefirst-1.2.3"
 SRCREV = "f3e158798839d8162c74d6cde6d5f550d6840a27"

@@ -11,7 +11,7 @@
 
 # Override SRC_URI directly to avoid conflict with meta-imx-ml bbappend
 # which also sets SRCBRANCH/SRCREV
-SRC_URI = "git://github.com/EdgeFirstAI/tim-vx-imx.git;protocol=https;branch=edgefirst-dmabuf"
+SRC_URI = "git://github.com/EdgeFirstAI/tim-vx-imx.git;protocol=https;branch=edgefirst-1.2.3"
 SRCREV = "dd3e9fd21d60e8180387ae8d1fbf5f2d82789f6c"
 
 EXTRA_OECMAKE:append = " -DVX_CREATE_TENSOR_SUPPORT_PHYSICAL=on"

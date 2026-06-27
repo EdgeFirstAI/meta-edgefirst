@@ -18,7 +18,7 @@
 # - gray8 padding removal
 # - default delegates fix
 
-SRC_URI = "git://github.com/EdgeFirstAI/nnstreamer.git;branch=edgefirst;protocol=https"
+SRC_URI = "git://github.com/EdgeFirstAI/nnstreamer.git;branch=edgefirst-1.2.3;protocol=https"
 SRCREV = "925d9ba391a2f84b5f5f9e8006548ec2e136a766"
 
 # EdgeFirst HAL delegate DMA-BUF support (EDGEAI-1189)

@@ -7,6 +7,18 @@ CHANGELOG. For full per-package details, follow the links.
 
 ## [Unreleased]
 
+- **videostream 2.5.2 → 2.5.3**: Patch release. No public API or ABI changes
+  — `SOVERSION` stays at `2`, exported symbol set is identical. Fixes a
+  `vsl_frame_attach` dmabuf-fd leak that hit `RLIMIT_NOFILE` after ~34 s at
+  30 fps and left `vsl-camhost` silently refusing new clients (`EMFILE` from
+  `accept()`); a client watchdog that stayed armed after `vsl_frame_wait`
+  and revoked a consumer's frame lock ~1 s after it stopped polling,
+  letting the producer recycle a buffer the consumer was still reading; a
+  fractional-timeout bug (`create_timer` scaled by `10e9` instead of `1e9`)
+  that silently disabled the watchdog for any non-integer
+  `vsl_client_set_timeout`; and a double-unlock of `vsl_mutex` on
+  `vsl-camhost`'s `do_process` error path. [CHANGELOG](https://github.com/EdgeFirstAI/videostream/blob/v2.5.3/CHANGELOG.md)
+
 ## v1.2.3 — 2026-05-28
 
 ### Package Updates

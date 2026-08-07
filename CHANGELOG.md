@@ -12,6 +12,7 @@ CHANGELOG. For full per-package details, follow the links.
 | Package | v1.2.3 | Unreleased | Changelog |
 |---------|--------|------------|-----------|
 | edgefirst-gstreamer | 0.4.0 + main | 0.4.0 + main (`c2c9e1f`, overlay expose-timing property + frame-timing signal) | [CHANGELOG](https://github.com/EdgeFirstAI/gstreamer/blob/main/CHANGELOG.md) |
+| videostream | 2.5.2 | 2.5.3 | [CHANGELOG](https://github.com/EdgeFirstAI/videostream/blob/v2.5.3/CHANGELOG.md) |
 
 ### Layer Changes
 
@@ -37,6 +38,11 @@ CHANGELOG. For full per-package details, follow the links.
 - `edgefirst-gstreamer` and `imx-nnstreamer-examples` recipes adapted to
   whinlatter's `BB_GIT_DEFAULT_DESTSUFFIX` git checkout layout and
   cmake 4 (`CMAKE_POLICY_VERSION_MINIMUM`).
+- **videostream 2.5.2 → 2.5.3**: Patch release. No public API or ABI changes
+  — `SOVERSION` stays at `2`. Fixes a `vsl_frame_attach` dmabuf-fd leak,
+  a client watchdog that could revoke a held frame lock, a fractional-timeout
+  bug that silently disabled the watchdog, and a double-unlock on the
+  camhost error path.
 
 ## v1.2.3 — 2026-05-28
 

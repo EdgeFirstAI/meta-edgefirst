@@ -13,6 +13,10 @@ CHANGELOG. For full per-package details, follow the links.
 |---------|--------|------------|-----------|
 | edgefirst-gstreamer | 0.4.0 + main | 0.4.0 + main (`c2c9e1f`, overlay expose-timing property + frame-timing signal) | [CHANGELOG](https://github.com/EdgeFirstAI/gstreamer/blob/main/CHANGELOG.md) |
 | videostream | 2.5.2 | 2.5.3 | [CHANGELOG](https://github.com/EdgeFirstAI/videostream/blob/v2.5.3/CHANGELOG.md) |
+| edgefirst-schemas | 3.4.0 | 3.5.0 | [CHANGELOG](https://github.com/EdgeFirstAI/schemas/blob/v3.5.0/CHANGELOG.md) |
+| edgefirst-tflite | 0.7.0 | 0.9.0 | [CHANGELOG](https://github.com/EdgeFirstAI/tflite-rs/blob/v0.9.0/CHANGELOG.md) |
+| zenoh-c / zenohd / python3-zenoh | 1.9.0 | 1.10.0 | — |
+| edgefirst-hal | 0.24.2 | 0.28.3 | [CHANGELOG](https://github.com/EdgeFirstAI/hal/blob/v0.28.3/CHANGELOG.md) |
 
 ### Layer Changes
 
@@ -43,6 +47,16 @@ CHANGELOG. For full per-package details, follow the links.
   a client watchdog that could revoke a held frame lock, a fractional-timeout
   bug that silently disabled the watchdog, and a double-unlock on the
   camhost error path.
+- **edgefirst-schemas 3.4.0 → 3.5.0**: SONAME stable at `.so.3`, additive only.
+- **edgefirst-tflite 0.7.0 → 0.9.0**: Python wheel only; cp38-abi3 ABI unchanged.
+- **zenoh-c / zenohd / python3-zenoh 1.9.0 → 1.10.0**: Eclipse Zenoh upstream release.
+- **edgefirst-hal 0.24.2 → 0.28.3**: Standalone C-library package; in-tree
+  consumers use the tensor/decoder C API unaffected by image/codec surface
+  breaks. Confirmed by a clean `torizon-core-maivin` build against 0.28.3.
+- Split `packagegroup-edgefirst` into standalone `-zenoh`/`-gstreamer`/`-python`
+  recipes so wanting one flavor does not force BitBake to build the others.
+- `edgefirst-camera` / `edgefirst-replay`: add runtime `RDEPENDS` on videostream.
+- Add `edgefirst-modelzoo` recipe (YOLOv8n det/seg INT8 smart TFLite from Hugging Face).
 
 ## v1.2.3 — 2026-05-28
 

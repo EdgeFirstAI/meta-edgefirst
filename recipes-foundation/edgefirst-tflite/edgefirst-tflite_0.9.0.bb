@@ -9,7 +9,7 @@ SRC_URI = " \
     https://raw.githubusercontent.com/EdgeFirstAI/tflite-rs/v${PV}/LICENSE;downloadfilename=${BPN}-LICENSE;name=license \
 "
 SRC_URI[license.sha256sum] = "cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30"
-SRC_URI[python.sha256sum] = "5ca54e8827e38fef76295fb42b9de6092cf26b1344f702e942f59114a2e2f9a4"
+SRC_URI[python.sha256sum] = "a12d3cbe456d9bce2f4944b4bd5c45b0e52d94404af3209f82072ff2dcbc50bb"
 
 S = "${@d.getVar('UNPACKDIR') or d.getVar('WORKDIR')}"
 

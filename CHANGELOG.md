@@ -18,6 +18,37 @@ CHANGELOG. For full per-package details, follow the links.
   that silently disabled the watchdog for any non-integer
   `vsl_client_set_timeout`; and a double-unlock of `vsl_mutex` on
   `vsl-camhost`'s `do_process` error path. [CHANGELOG](https://github.com/EdgeFirstAI/videostream/blob/v2.5.3/CHANGELOG.md)
+- **edgefirst-schemas 3.4.0 → 3.5.0**: SONAME stable at `.so.3`, additive only
+  — no symbols removed. Adds full four-language (Rust/C/C++/Python) support
+  for six new `nav_msgs`/`sensor_msgs` types (`MapMetaData`, `GridCells`,
+  `OccupancyGrid`, `Path`, `RelativeHumidity`, `TimeReference`) with builders
+  and zero-copy views, plus a `Path` zero-copy iterator (O(n) vs the previous
+  O(n²)). Fixes a `TimeReference::new()` field-offset bug and tightens the
+  `Path` CDR sequence-count floor. [CHANGELOG](https://github.com/EdgeFirstAI/schemas/blob/v3.5.0/CHANGELOG.md)
+- **edgefirst-tflite 0.7.0 → 0.9.0**: Python wheel only; cp38-abi3 ABI
+  unchanged, so the packaged artifact is a drop-in replacement. Upstream adds
+  soft-optional LiteRT Next bindings (probed at runtime, never panics when
+  absent) alongside the existing classic TFLite path — not exercised by this
+  layer's consumers, who use the classic `Interpreter` path.
+  [CHANGELOG](https://github.com/EdgeFirstAI/tflite-rs/blob/v0.9.0/CHANGELOG.md)
+- **zenoh-c / zenohd / python3-zenoh 1.9.0 → 1.10.0**: Eclipse Zenoh
+  upstream release.
+- **edgefirst-hal 0.24.2 → 0.28.3**: Four-minor jump, standalone C-library
+  package only — nothing in this layer's `DEPENDS`/`RDEPENDS` graph links it
+  except `edgefirst-gstreamer`, `nnstreamer`, and `imx-nnstreamer-examples`
+  (build-time, via the C API); the prebuilt `edgefirst-camera`/`edgefirst-model`/
+  `edgefirst-fusion`/etc. service binaries statically link their own Rust HAL
+  dependency at their own build time and do not RDEPEND on this package.
+  Upstream breaking changes land mostly in the image/codec surface (0.26.0:
+  image constructors require an explicit `CpuAccess` declaration; later
+  releases remove `DecodeOptions`/`opts` and the `edgefirst-image`
+  `load_image()` free function, and change `edgefirst-codec` to decode to the
+  source's native pixel format instead of colour-converting) — this layer's
+  in-tree consumers use the tensor/decoder C API
+  (`hal_tensor_set_quantization`, `hal_decoder_*`, `hal_shapes`), a different
+  surface not touched by those changes; confirmed by a clean
+  `torizon-core-maivin` build against 0.28.3. SONAME chain unaffected.
+  [CHANGELOG](https://github.com/EdgeFirstAI/hal/blob/v0.28.3/CHANGELOG.md)
 
 ## v1.2.3 — 2026-05-28
 

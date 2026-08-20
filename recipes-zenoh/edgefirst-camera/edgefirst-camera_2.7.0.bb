@@ -23,6 +23,7 @@ python () {
 }
 
 DEPENDS = "videostream"
+RDEPENDS:${PN} = "videostream"
 
 S = "${@d.getVar('UNPACKDIR') or d.getVar('WORKDIR')}"
 

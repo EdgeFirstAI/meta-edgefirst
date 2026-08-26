@@ -19,12 +19,16 @@ EDGEFIRST_YOLOV8_SEG_REV = "214a396ca20675a4c51f456cda673f59a0628a82"
 
 # Select platform artifacts in anonymous python so unused SRC_URI checksums
 # are never registered (avoids BitBake warnings on the other SoC).
+# Match override *prefixes* (mx95-nxp-bsp, mx8mp-generic-bsp, bare mx8mp from
+# Toradex, etc.) — exact-token "mx95" in MACHINEOVERRIDES is not always set.
 python () {
-    overrides = set((d.getVar("MACHINEOVERRIDES") or "").split(":"))
+    overrides = (d.getVar("MACHINEOVERRIDES") or "").split(":")
+    is_mx95 = any(o == "mx95" or o.startswith("mx95-") for o in overrides)
+    is_mx8mp = any(o == "mx8mp" or o.startswith("mx8mp-") for o in overrides)
     det_rev = d.getVar("EDGEFIRST_YOLOV8_DET_REV")
     seg_rev = d.getVar("EDGEFIRST_YOLOV8_SEG_REV")
 
-    if "mx95" in overrides:
+    if is_mx95:
         d.appendVar("SRC_URI", " "
             "https://huggingface.co/EdgeFirst/yolov8-det/resolve/%s/imx95/yolov8n-det-int8-smart.imx95.tflite"
             ";downloadfilename=yolov8n-det-int8-smart.tflite;name=yolov8n-det "
@@ -34,7 +38,7 @@ python () {
                      "5fde7c12d19dbba42c3ed6b9a2bc3fa007ab9d673ff93fb89adb6378d5b28d7e")
         d.setVarFlag("SRC_URI", "yolov8n-seg.sha256sum",
                      "3f49578a60f58e97b826ecfbab86449aea57956673cb5ecd1ff89652917b3f0e")
-    elif "mx8mp" in overrides:
+    elif is_mx8mp:
         d.appendVar("SRC_URI", " "
             "https://huggingface.co/EdgeFirst/yolov8-det/resolve/%s/tflite/yolov8n-det-int8-smart.tflite"
             ";downloadfilename=yolov8n-det-int8-smart.tflite;name=yolov8n-det "

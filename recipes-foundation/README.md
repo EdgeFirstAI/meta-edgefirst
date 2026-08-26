@@ -10,6 +10,7 @@ See the [EdgeFirst organization](https://github.com/EdgeFirstAI) for the full pr
 |--------|------|-------------|
 | edgefirst-hal | [hal](https://github.com/EdgeFirstAI/hal) | Hardware abstraction layer — preprocessing, post-processing (quantized NMS), model metadata, DMA-BUF tensor management. C library + Python bindings. |
 | edgefirst-tflite | [tflite-rs](https://github.com/EdgeFirstAI/tflite-rs) | TensorFlow Lite bindings with NPU acceleration support. Python module. |
+| edgefirst-modelzoo | [Hugging Face Model Zoo](https://huggingface.co/EdgeFirst) | Pre-installed INT8 smart TFLite models (YOLOv8n det/seg). Subpackages `edgefirst-modelzoo-yolov8n-det` and `-yolov8n-seg`; `mx8mp` gets generic `.tflite`, `mx95` gets `.imx95.tflite`. Installs under `/usr/share/edgefirst/modelzoo/`. |
 | videostream | [videostream](https://github.com/EdgeFirstAI/videostream) | V4L2/ISP video capture library with DMA-BUF zero-copy. GStreamer plugin, CLI tools, and Python bindings. |
 
 ## NXP i.MX NPU Extensions (bbappends)

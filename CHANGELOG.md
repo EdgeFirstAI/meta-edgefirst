@@ -57,6 +57,9 @@ CHANGELOG. For full per-package details, follow the links.
   recipes so wanting one flavor does not force BitBake to build the others.
 - `edgefirst-camera` / `edgefirst-replay`: add runtime `RDEPENDS` on videostream.
 - Add `edgefirst-modelzoo` recipe (YOLOv8n det/seg INT8 smart TFLite from Hugging Face).
+- NXP fork bbappends select SRCREV/branch from `LAYERSERIES_CORENAMES`:
+  whinlatter/wrynose keep the lf-6.18 tips; scarthgap/walnascar use the
+  frozen `edgefirst-1.2.3` fork branches (so one `main` tip can serve both).
 
 ## v1.2.3 — 2026-05-28
 

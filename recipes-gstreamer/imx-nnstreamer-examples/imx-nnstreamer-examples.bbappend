@@ -6,7 +6,14 @@
 
 NXP_NNSTREAMER_EXAMPLES_SRC = "git://github.com/EdgeFirstAI/nxp-nnstreamer-examples.git;protocol=https"
 SRCBRANCH = "edgefirst-yolov8"
-SRCREV = "2b60271d6df07d0b0601fc2b643448127c18e88f"
+
+python () {
+    series = set((d.getVar("LAYERSERIES_CORENAMES") or "").split())
+    if series & {"whinlatter", "wrynose"}:
+        d.setVar("SRCREV", "2b60271d6df07d0b0601fc2b643448127c18e88f")
+    else:
+        d.setVar("SRCREV", "8aa59243d4151c55d937092f6718bb4564f1b2b2")
+}
 
 DEPENDS += "edgefirst-hal edgefirst-gstreamer gstreamer1.0-plugins-base zlib"
 RDEPENDS:${PN} += "edgefirst-hal edgefirst-gstreamer"

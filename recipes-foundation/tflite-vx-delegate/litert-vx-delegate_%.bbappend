@@ -2,8 +2,16 @@
 # (see tensorflow-lite-vx-delegate bbappend for full description)
 
 TENSORFLOW_LITE_VX_DELEGATE_SRC = "git://github.com/EdgeFirstAI/tflite-vx-delegate-imx.git;protocol=https"
-SRCBRANCH_vx = "edgefirst"
-SRCREV_vx = "a4c9e2603d286044b5c6765dbbc0b35810f2179e"
+
+python () {
+    series = set((d.getVar("LAYERSERIES_CORENAMES") or "").split())
+    if series & {"whinlatter", "wrynose"}:
+        d.setVar("SRCBRANCH_vx", "edgefirst")
+        d.setVar("SRCREV_vx", "a4c9e2603d286044b5c6765dbbc0b35810f2179e")
+    else:
+        d.setVar("SRCBRANCH_vx", "edgefirst-1.2.3")
+        d.setVar("SRCREV_vx", "80b3409ee15edd0e68e7f64bd7f8e32d059cf2f0")
+}
 
 # G2D is needed by the camera_adaptor_test example for hardware-accelerated
 # image resize. Provided by imx-gpu-g2d on i.MX8MP via virtual/libg2d.

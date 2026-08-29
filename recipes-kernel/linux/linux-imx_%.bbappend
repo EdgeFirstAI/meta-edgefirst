@@ -5,4 +5,8 @@
 
 FILESEXTRAPATHS:prepend := "${THISDIR}/files:"
 
-SRC_URI += "file://0001-staging-neutron-export-buffers-as-dma-buf.patch"
+# Temporarily disabled: does not apply cleanly against the wrynose/6.18.20
+# kernel tree (drivers/staging/neutron/neutron_buffer.c context changed
+# upstream between 6.18.2 and 6.18.20). Needs porting to the new tree
+# before re-enabling. Neutron DMA-BUF zero-copy is unavailable until then.
+# SRC_URI += "file://0001-staging-neutron-export-buffers-as-dma-buf.patch"

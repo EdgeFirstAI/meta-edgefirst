@@ -49,8 +49,13 @@ PACKAGECONFIG[ara2] = "\
 PACKAGECONFIG_SOC:mx8mp-nxp-bsp:append = " ara2"
 PACKAGECONFIG_SOC:mx9-nxp-bsp:append = " ara2"
 
-# Package the ara2 tensor_filter sub-plugin
-PACKAGES =+ "${@bb.utils.contains('PACKAGECONFIG', 'ara2', '${PN}-ara2', '', d)}"
+# NXP's meta-imx-ml nnstreamer_2.4.2.bbappend already adds ${PN}-ara2 to
+# PACKAGES (unconditionally reachable via its own PACKAGECONFIG:append on
+# mx8mp/mx9 overrides) — PACKAGES =+ accumulates across bbappends, so
+# re-declaring it here duplicates the package name and fails do_package QA.
+# Our overrides below (FILES/RDEPENDS/PACKAGECONFIG[ara2]) still take effect
+# since meta-edgefirst has higher BBFILE_PRIORITY and simple assignments
+# replace rather than accumulate.
 
 FILES:${PN}-ara2 = "\
     ${libdir}/nnstreamer/filters/libnnstreamer_filter_ara2.so \

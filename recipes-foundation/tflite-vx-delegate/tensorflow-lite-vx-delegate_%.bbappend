@@ -22,7 +22,7 @@ python () {
     series = set((d.getVar("LAYERSERIES_CORENAMES") or "").split())
     if series & {"whinlatter", "wrynose"}:
         d.setVar("SRCBRANCH_vx", "edgefirst")
-        d.setVar("SRCREV_vx", "a4c9e2603d286044b5c6765dbbc0b35810f2179e")
+        d.setVar("SRCREV_vx", "c8e52d736c2028b82816b25e81c2779db21018a3")
     else:
         d.setVar("SRCBRANCH_vx", "edgefirst-1.2.3")
         d.setVar("SRCREV_vx", "80b3409ee15edd0e68e7f64bd7f8e32d059cf2f0")

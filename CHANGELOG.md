@@ -67,6 +67,14 @@ CHANGELOG. For full per-package details, follow the links.
   process-global singleton meant a second context wiped the first's DMA-BUF
   state and `hal_dmabuf_get_instance()` could hand producers the wrong
   context's buffers.
+- **tensorflow-lite-vx-delegate / litert-vx-delegate `a4c9e26` → `c8e52d7`**
+  (whinlatter/wrynose SRCREV, EDGEAI-1435): `VxDelegateGetInstance()` /
+  `hal_dmabuf_get_instance()` now resolve the delegate most recently
+  created on the calling thread via a mutex-guarded live-instance
+  registry, so concurrent per-worker delegate creation always pairs each
+  worker with its own instance and a deleted instance is never returned.
+  DMA-BUF state was already per-instance in this delegate; multi-context
+  operation verified on imx8mp-frdm.
 - **Neutron DMA-BUF kernel patch gated by layer series** (EDGEAI-1186):
   NXP merged our `staging: neutron: export buffers as dma-buf` patch into
   the wrynose 6.18.20 kernel tree (`053be821725d`, with the follow-up

@@ -8,7 +8,7 @@ LICENSE = "Apache-2.0"
 LIC_FILES_CHKSUM = "file://LICENSE;md5=3257033d1fff3bf8edd31697b409f14d"
 
 SRC_URI = "git://github.com/EdgeFirstAI/gstreamer.git;branch=main;protocol=https"
-SRCREV = "c2c9e1f61370048052b530801f746ea5af1871e2"
+SRCREV = "b93cf605bb01c0466c26cc96069023cfc064b9bd"
 
 # Dual-compat source dir for git checkouts. Whinlatter unpacks to
 # ${UNPACKDIR}/${BB_GIT_DEFAULT_DESTSUFFIX} (= ${BP}) and QA-fatals on a

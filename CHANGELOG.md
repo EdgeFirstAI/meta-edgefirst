@@ -75,6 +75,13 @@ CHANGELOG. For full per-package details, follow the links.
   worker with its own instance and a deleted instance is never returned.
   DMA-BUF state was already per-instance in this delegate; multi-context
   operation verified on imx8mp-frdm.
+- **litert-vx-delegate uses NXP stock source on wrynose**: the edgefirst
+  fork's cmake targets the litert 2.0 layout and fails `do_configure`
+  against wrynose's litert 2.1.0, so the fork override now applies only
+  through whinlatter. The classic `tensorflow-lite-vx-delegate` recipe
+  (what `libvx_delegate.so` consumers use) still builds the fork with
+  the DMA-BUF + CameraAdaptor features. To be restored once the fork is
+  rebased onto NXP's `lf-6.18.20_2.0.0` baseline.
 - **Neutron DMA-BUF kernel patch gated by layer series** (EDGEAI-1186):
   NXP merged our `staging: neutron: export buffers as dma-buf` patch into
   the wrynose 6.18.20 kernel tree (`053be821725d`, with the follow-up

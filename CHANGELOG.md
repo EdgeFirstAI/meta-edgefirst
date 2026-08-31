@@ -60,6 +60,12 @@ CHANGELOG. For full per-package details, follow the links.
 - NXP fork bbappends select SRCREV/branch from `LAYERSERIES_CORENAMES`:
   whinlatter/wrynose keep the lf-6.18 tips; scarthgap/walnascar use the
   frozen `edgefirst-1.2.3` fork branches (so one `main` tip can serve both).
+- **Neutron DMA-BUF kernel patch gated by layer series** (EDGEAI-1186):
+  NXP merged our `staging: neutron: export buffers as dma-buf` patch into
+  the wrynose 6.18.20 kernel tree (`053be821725d`, with the follow-up
+  `MODULE_IMPORT_NS("DMA_BUF")` fix `464fd6f2e2de`), so the
+  `linux-imx_%.bbappend` now applies the patch only on
+  scarthgap/walnascar/whinlatter where the driver still uses anon inodes.
 
 ## v1.2.3 — 2026-05-28
 

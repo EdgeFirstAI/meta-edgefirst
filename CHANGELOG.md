@@ -60,6 +60,13 @@ CHANGELOG. For full per-package details, follow the links.
 - NXP fork bbappends select SRCREV/branch from `LAYERSERIES_CORENAMES`:
   whinlatter/wrynose keep the lf-6.18 tips; scarthgap/walnascar use the
   frozen `edgefirst-1.2.3` fork branches (so one `main` tip can serve both).
+- **tensorflow-lite-neutron-delegate `4a9f0af` → `dd81103`**
+  (whinlatter/wrynose SRCREV, EDGEAI-1188): per-delegate DMA-BUF registry —
+  multiple interpreter contexts (worker pools for overlapped inference) can
+  now run zero-copy concurrently in one process. Previously the delegate's
+  process-global singleton meant a second context wiped the first's DMA-BUF
+  state and `hal_dmabuf_get_instance()` could hand producers the wrong
+  context's buffers.
 - **Neutron DMA-BUF kernel patch gated by layer series** (EDGEAI-1186):
   NXP merged our `staging: neutron: export buffers as dma-buf` patch into
   the wrynose 6.18.20 kernel tree (`053be821725d`, with the follow-up

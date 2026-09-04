@@ -22,7 +22,9 @@ python () {
         d.setVarFlag('SRC_URI', 'binary.sha256sum', sha256)
 }
 
-RDEPENDS:${PN} = "tensorflow-lite"
+# The default MODEL below names a file from edgefirst-modelzoo, so the
+# service cannot start without it installed.
+RDEPENDS:${PN} = "tensorflow-lite edgefirst-modelzoo-yolov8n-det"
 
 S = "${@d.getVar('UNPACKDIR') or d.getVar('WORKDIR')}"
 
@@ -36,6 +38,15 @@ do_install:append () {
     install -m 0644 ${S}/edgefirst-model.service ${D}${systemd_system_unitdir}
     install -m 0644 ${S}/edgefirst-model.default ${D}${sysconfdir}/default/edgefirst-model
     install -m 0755 ${S}/edgefirst-model ${D}${bindir}/edgefirst-model
+
+    # The released model.default ships MODEL="" for an option the service
+    # treats as required, so an image installing this recipe alone gets a
+    # service that cannot start. Point it at the YOLOv8n detection model
+    # from edgefirst-modelzoo (RDEPENDS above), which every EdgeFirst image
+    # already carries. Distro layers may still override MODEL for their own
+    # hardware; this only supplies a working default.
+    sed -i 's|^MODEL=.*|MODEL="${datadir}/edgefirst/modelzoo/yolov8n-det-int8-smart.tflite"|' \
+        ${D}${sysconfdir}/default/edgefirst-model
 }
 
 REQUIRED_DISTRO_FEATURES = "systemd"

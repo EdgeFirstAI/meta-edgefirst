@@ -11,20 +11,31 @@ CHANGELOG. For full per-package details, follow the links.
 
 | Package | v1.2.3 | Unreleased | Changelog |
 |---------|--------|------------|-----------|
-| edgefirst-gstreamer | 0.4.0 + main | 0.4.0 + main (`c2c9e1f`, overlay expose-timing property + frame-timing signal) | [CHANGELOG](https://github.com/EdgeFirstAI/gstreamer/blob/main/CHANGELOG.md) |
-| videostream | 2.5.2 | 2.5.3 | [CHANGELOG](https://github.com/EdgeFirstAI/videostream/blob/v2.5.3/CHANGELOG.md) |
-| edgefirst-schemas | 3.4.0 | 3.5.0 | [CHANGELOG](https://github.com/EdgeFirstAI/schemas/blob/v3.5.0/CHANGELOG.md) |
-| edgefirst-tflite | 0.7.0 | 0.9.0 | [CHANGELOG](https://github.com/EdgeFirstAI/tflite-rs/blob/v0.9.0/CHANGELOG.md) |
-| zenoh-c / zenohd / python3-zenoh | 1.9.0 | 1.10.0 | — |
 | edgefirst-hal | 0.24.2 | 0.28.3 | [CHANGELOG](https://github.com/EdgeFirstAI/hal/blob/v0.28.3/CHANGELOG.md) |
+| edgefirst-schemas | 3.4.0 | 3.5.0 | [CHANGELOG](https://github.com/EdgeFirstAI/schemas/blob/v3.5.0/CHANGELOG.md) |
+| videostream | 2.5.2 | 2.5.3 | [CHANGELOG](https://github.com/EdgeFirstAI/videostream/blob/v2.5.3/CHANGELOG.md) |
+| edgefirst-tflite | 0.7.0 | 0.9.0 | [CHANGELOG](https://github.com/EdgeFirstAI/tflite-rs/blob/v0.9.0/CHANGELOG.md) |
+| edgefirst-camera | 2.7.0 | 2.10.0 | [CHANGELOG](https://github.com/EdgeFirstAI/camera/blob/v2.10.0/CHANGELOG.md) |
+| edgefirst-model | 2.9.0 | 2.10.1 | [CHANGELOG](https://github.com/EdgeFirstAI/model/blob/v2.10.1/CHANGELOG.md) |
+| edgefirst-fusion | 1.7.2 | 1.8.0 | [CHANGELOG](https://github.com/EdgeFirstAI/fusion/blob/v1.8.0/CHANGELOG.md) |
+| edgefirst-imu | 3.1.0 | 3.3.0 | [CHANGELOG](https://github.com/EdgeFirstAI/imu/blob/v3.3.0/CHANGELOG.md) |
+| edgefirst-navsat | 1.6.0 | 1.8.0 | [CHANGELOG](https://github.com/EdgeFirstAI/navsat/blob/v1.8.0/CHANGELOG.md) |
+| edgefirst-radarpub | 1.6.3 | 1.7.1 | [CHANGELOG](https://github.com/EdgeFirstAI/radarpub/blob/v1.7.1/CHANGELOG.md) |
+| edgefirst-lidarpub | 2.2.1 | 2.3.0 | [CHANGELOG](https://github.com/EdgeFirstAI/lidarpub/blob/v2.3.0/CHANGELOG.md) |
+| edgefirst-recorder | 1.8.0 | 1.10.0 | [CHANGELOG](https://github.com/EdgeFirstAI/recorder/blob/v1.10.0/CHANGELOG.md) |
+| edgefirst-websrv | 4.0.1 | 4.1.0 | [CHANGELOG](https://github.com/EdgeFirstAI/websrv/blob/v4.1.0/CHANGELOG.md) |
+| edgefirst-webui | 4.1.1 | 4.3.0 | [CHANGELOG](https://github.com/EdgeFirstAI/webui/blob/v4.3.0/CHANGELOG.md) |
+| edgefirst-modelzoo | — | 1.0.0 (new) | [Model Zoo](https://huggingface.co/EdgeFirst) |
+| edgefirst-gstreamer | 0.4.0 + main | 0.4.0 + main (`b93cf60`, overlay expose-timing property + frame-timing signal) | [CHANGELOG](https://github.com/EdgeFirstAI/gstreamer/blob/main/CHANGELOG.md) |
+| zenoh-c / zenohd / python3-zenoh | 1.9.0 | 1.10.0 | — |
+
+`edgefirst-replay` is unchanged at 2.3.1.
 
 ### Layer Changes
 
-- `LAYERSERIES_COMPAT` extended with `wrynose` (Yocto 5.4) for the NXP
-  imx-6.18.20-2.0.0 BSP. Scarthgap, walnascar, and whinlatter remain
-  supported.
-- `LAYERSERIES_COMPAT` extended with `whinlatter` (Yocto 5.3) for the
-  NXP imx-6.18.2-1.0.0 BSP. Scarthgap and walnascar remain supported.
+- `LAYERSERIES_COMPAT` extended with `whinlatter` (Yocto 5.3) and
+  `wrynose` (Yocto 5.4) for the NXP imx-6.18.2-1.0.0 and
+  imx-6.18.20-2.0.0 BSPs. Scarthgap and walnascar remain supported.
 - Forked NXP components rebased onto the `lf-6.18.2_1.0.0` baselines
   (the prior pins are preserved on `edgefirst-1.2.3` branches in each
   fork):
@@ -47,16 +58,72 @@ CHANGELOG. For full per-package details, follow the links.
   a client watchdog that could revoke a held frame lock, a fractional-timeout
   bug that silently disabled the watchdog, and a double-unlock on the
   camhost error path.
-- **edgefirst-schemas 3.4.0 → 3.5.0**: SONAME stable at `.so.3`, additive only.
+- **edgefirst-schemas 3.4.0 → 3.5.0**: SONAME stable at `.so.3`, additive
+  `nav_msgs`/`sensor_msgs` types. Deliberately held below 4.0.0, which renames
+  the whole C API symbol family (`ros_*` → `edgefirst_msgs_*` /
+  `edgefirst_schemas_*`); `edgefirst-gstreamer` still calls
+  `ros_image_encode`/`ros_bytes_free` directly, so 4.0.0 has to wait for that
+  migration. The Rust services are unaffected — they pin their own schemas
+  release, and the ones below are already on the 4.0 wire format.
 - **edgefirst-tflite 0.7.0 → 0.9.0**: Python wheel only; cp38-abi3 ABI unchanged.
 - **zenoh-c / zenohd / python3-zenoh 1.9.0 → 1.10.0**: Eclipse Zenoh upstream release.
 - **edgefirst-hal 0.24.2 → 0.28.3**: Standalone C-library package; in-tree
   consumers use the tensor/decoder C API unaffected by image/codec surface
   breaks. Confirmed by a clean `torizon-core-maivin` build against 0.28.3.
+- **edgefirst-camera 2.7.0 → 2.10.0**: `CameraFrame` publishing moved onto
+  edgefirst-schemas 4.0 (tensor dtype advertised as HAL U8), closing the
+  wire-format gap with the model, fusion, imu, navsat, radarpub and lidarpub
+  releases pinned here. Maivin-reported fixes: an unloadable calibration
+  warns and falls back to built-in defaults instead of aborting the node
+  (EDGEAI-1441); topic and frame-ID options are settable from the environment
+  (EDGEAI-1438); a failed read counts a dropped frame instead of killing the
+  process, `H264_TILES_FPS=0` no longer divides by zero, and the encoder is
+  given the frame rate the camera is actually configured for rather than a
+  hardcoded 30 — which removed the measured 0.78% frame loss at 1080p60
+  (EDGEAI-1403); tile pacing is phase-locked, JPEG quality is configurable,
+  and `STREAM_SIZE` larger than `CAMERA_SIZE` is rejected (EDGEAI-1230).
+  A `RECORD=""` in the shipped `camera.default` no longer aborts argument
+  parsing, which previously failed every fresh unit instantly and took
+  `imx8-isp.service` past its start limit within a second. The device open
+  now retries in-process while the vvcam driver reports `EAGAIN` (the ISP is
+  running but not yet serving), bounded to 15s and 6 attempts; this only
+  engages on Au-Zone's isp-vvcam fork, so startup on the stock BSP is
+  unchanged.
+  New `camera.default` entries: `JPEG_QUALITY`, the topic variables,
+  `RECORD`/`REPLAY` documentation, and H.264 defaulted on — subject to the
+  diverged-config caveat below.
+- **edgefirst-imu 3.1.0 → 3.3.0**: Pulls in bno08x-rs 3.0.0, which ends the
+  `InvalidChipId`/166ms-reset crash loop (EDGEAI-1100) by gating SPI writes on
+  `H_INTN` instead of racing the hub while it sleeps, and moves publishing off
+  the sampling thread onto a lock-free queue.
+- **edgefirst-webui 4.1.1 → 4.3.0**: Fixes the radar page never drawing the
+  point cloud — the grid renderer was initialised with point drawing disabled,
+  so only the polar grid appeared even while `radar/targets` was publishing.
+  Adds Source/Colour/Elevation controls matching the LiDAR page and a "Radar
+  Unavailable" overlay for a stream that is not publishing.
+- **edgefirst-model 2.9.0 → 2.10.1, fusion 1.7.2 → 1.8.0, navsat 1.6.0 →
+  1.8.0, radarpub 1.6.3 → 1.7.1, lidarpub 2.2.1 → 2.3.0, recorder 1.8.0 →
+  1.10.0, websrv 4.0.1 → 4.1.0**: Upstream service releases; see each
+  package's own CHANGELOG above.
+- **Shipped `/etc/default` files changed** for camera, model, fusion, navsat,
+  radarpub, lidarpub, recorder and webui (websrv and imu are unchanged).
+  Licence files are unchanged across every package. The upgrade note under
+  edgefirst-camera applies to all of them: a unit whose `/etc/default/<svc>`
+  has diverged from the shipped copy keeps its own version across an OSTree
+  upgrade and will not pick up newly added entries.
+- `edgefirst-model` now defaults `MODEL` to the model zoo YOLOv8n INT8
+  detector and RDEPENDs on that subpackage. The released `model.default`
+  ships `MODEL=""` for an option the service treats as required, so an image
+  installing the recipe alone got a service that could not start and every
+  consumer carried the same override; that decision belongs to the recipe,
+  not the distro layers, which can still override it.
 - Split `packagegroup-edgefirst` into standalone `-zenoh`/`-gstreamer`/`-python`
   recipes so wanting one flavor does not force BitBake to build the others.
 - `edgefirst-camera` / `edgefirst-replay`: add runtime `RDEPENDS` on videostream.
-- Add `edgefirst-modelzoo` recipe (YOLOv8n det/seg INT8 smart TFLite from Hugging Face).
+- Add `edgefirst-modelzoo` recipe: YOLOv8n det/seg INT8 smart TFLite from
+  Hugging Face as selectable subpackages, generic `.tflite` on mx8mp and
+  Neutron `.imx95.tflite` on mx95, under a stable
+  `/usr/share/edgefirst/modelzoo/` path.
 - NXP fork bbappends select SRCREV/branch from `LAYERSERIES_CORENAMES`:
   whinlatter/wrynose keep the lf-6.18 tips; scarthgap/walnascar use the
   frozen `edgefirst-1.2.3` fork branches (so one `main` tip can serve both).

@@ -14,20 +14,20 @@ CHANGELOG. For full per-package details, follow the links.
 | edgefirst-hal | 0.24.2 | 0.28.3 | [CHANGELOG](https://github.com/EdgeFirstAI/hal/blob/v0.28.3/CHANGELOG.md) |
 | edgefirst-schemas | 3.4.0 | 3.5.0 | [CHANGELOG](https://github.com/EdgeFirstAI/schemas/blob/v3.5.0/CHANGELOG.md) |
 | videostream | 2.5.2 | 2.5.3 | [CHANGELOG](https://github.com/EdgeFirstAI/videostream/blob/v2.5.3/CHANGELOG.md) |
-| edgefirst-tflite | 0.7.0 | 0.9.0 | [CHANGELOG](https://github.com/EdgeFirstAI/tflite-rs/blob/v0.9.0/CHANGELOG.md) |
-| edgefirst-camera | 2.7.0 | 2.10.0 | [CHANGELOG](https://github.com/EdgeFirstAI/camera/blob/v2.10.0/CHANGELOG.md) |
-| edgefirst-model | 2.9.0 | 2.10.1 | [CHANGELOG](https://github.com/EdgeFirstAI/model/blob/v2.10.1/CHANGELOG.md) |
-| edgefirst-fusion | 1.7.2 | 1.8.0 | [CHANGELOG](https://github.com/EdgeFirstAI/fusion/blob/v1.8.0/CHANGELOG.md) |
-| edgefirst-imu | 3.1.0 | 3.3.0 | [CHANGELOG](https://github.com/EdgeFirstAI/imu/blob/v3.3.0/CHANGELOG.md) |
-| edgefirst-navsat | 1.6.0 | 1.8.0 | [CHANGELOG](https://github.com/EdgeFirstAI/navsat/blob/v1.8.0/CHANGELOG.md) |
-| edgefirst-radarpub | 1.6.3 | 1.7.1 | [CHANGELOG](https://github.com/EdgeFirstAI/radarpub/blob/v1.7.1/CHANGELOG.md) |
-| edgefirst-lidarpub | 2.2.1 | 2.3.0 | [CHANGELOG](https://github.com/EdgeFirstAI/lidarpub/blob/v2.3.0/CHANGELOG.md) |
-| edgefirst-recorder | 1.8.0 | 1.10.0 | [CHANGELOG](https://github.com/EdgeFirstAI/recorder/blob/v1.10.0/CHANGELOG.md) |
-| edgefirst-websrv | 4.0.1 | 4.1.0 | [CHANGELOG](https://github.com/EdgeFirstAI/websrv/blob/v4.1.0/CHANGELOG.md) |
-| edgefirst-webui | 4.1.1 | 4.3.0 | [CHANGELOG](https://github.com/EdgeFirstAI/webui/blob/v4.3.0/CHANGELOG.md) |
+| edgefirst-tflite | 0.7.0 | 0.10.1 | [CHANGELOG](https://github.com/EdgeFirstAI/tflite-rs/blob/v0.10.1/CHANGELOG.md) |
+| edgefirst-camera | 2.7.0 | 2.10.1 | [CHANGELOG](https://github.com/EdgeFirstAI/camera/blob/v2.10.1/CHANGELOG.md) |
+| edgefirst-model | 2.9.0 | 2.10.2 | [CHANGELOG](https://github.com/EdgeFirstAI/model/blob/v2.10.2/CHANGELOG.md) |
+| edgefirst-fusion | 1.7.2 | 1.8.1 | [CHANGELOG](https://github.com/EdgeFirstAI/fusion/blob/v1.8.1/CHANGELOG.md) |
+| edgefirst-imu | 3.1.0 | 3.3.1 | [CHANGELOG](https://github.com/EdgeFirstAI/imu/blob/v3.3.1/CHANGELOG.md) |
+| edgefirst-navsat | 1.6.0 | 1.8.1 | [CHANGELOG](https://github.com/EdgeFirstAI/navsat/blob/v1.8.1/CHANGELOG.md) |
+| edgefirst-radarpub | 1.6.3 | 1.7.2 | [CHANGELOG](https://github.com/EdgeFirstAI/radarpub/blob/v1.7.2/CHANGELOG.md) |
+| edgefirst-lidarpub | 2.2.1 | 2.3.1 | [CHANGELOG](https://github.com/EdgeFirstAI/lidarpub/blob/v2.3.1/CHANGELOG.md) |
+| edgefirst-recorder | 1.8.0 | 1.10.1 | [CHANGELOG](https://github.com/EdgeFirstAI/recorder/blob/v1.10.1/CHANGELOG.md) |
+| edgefirst-websrv | 4.0.1 | 4.2.0 | [CHANGELOG](https://github.com/EdgeFirstAI/websrv/blob/v4.2.0/CHANGELOG.md) |
+| edgefirst-webui | 4.1.1 | 4.4.0 | [CHANGELOG](https://github.com/EdgeFirstAI/webui/blob/v4.4.0/CHANGELOG.md) |
 | edgefirst-modelzoo | — | 1.0.0 (new) | [Model Zoo](https://huggingface.co/EdgeFirst) |
 | edgefirst-gstreamer | 0.4.0 + main | 0.4.0 + main (`b93cf60`, overlay expose-timing property + frame-timing signal) | [CHANGELOG](https://github.com/EdgeFirstAI/gstreamer/blob/main/CHANGELOG.md) |
-| zenoh-c / zenohd / python3-zenoh | 1.9.0 | 1.10.0 | — |
+| zenoh-c / zenohd / python3-zenoh | 1.9.0 | 1.10.1 | — |
 
 `edgefirst-replay` is unchanged at 2.3.1.
 
@@ -61,16 +61,32 @@ CHANGELOG. For full per-package details, follow the links.
 - **edgefirst-schemas 3.4.0 → 3.5.0**: SONAME stable at `.so.3`, additive
   `nav_msgs`/`sensor_msgs` types. Deliberately held below 4.0.0, which renames
   the whole C API symbol family (`ros_*` → `edgefirst_msgs_*` /
-  `edgefirst_schemas_*`); `edgefirst-gstreamer` still calls
-  `ros_image_encode`/`ros_bytes_free` directly, so 4.0.0 has to wait for that
-  migration. The Rust services are unaffected — they pin their own schemas
-  release, and the ones below are already on the 4.0 wire format.
-- **edgefirst-tflite 0.7.0 → 0.9.0**: Python wheel only; cp38-abi3 ABI unchanged.
-- **zenoh-c / zenohd / python3-zenoh 1.9.0 → 1.10.0**: Eclipse Zenoh upstream release.
+  `edgefirst_schemas_*`); `edgefirst-gstreamer` still calls 47 `ros_*` entry
+  points directly, and 4.0.0 ships no `ros_*` aliases, so 4.0.0 has to wait
+  for that migration. 4.0.0 is also wire-incompatible — `CameraFrame` keeps
+  its schema name but is redefined over the new `Tensor` family — and bumps
+  the SONAME to `.so.4`. The Rust services are unaffected — they pin their
+  own schemas release, and the ones below are already on the 4.0 wire
+  format.
+- **edgefirst-tflite 0.7.0 → 0.10.1**: Python wheel only; cp38-abi3 ABI
+  unchanged. 0.10.x loads models that store constant buffers outside the
+  flatbuffer (the ai-edge/LiteRT offset-buffer format that standard
+  Ultralytics int8 exports use), which the TFLite C API does not resolve on
+  its own — such a model previously aborted with "Input tensor N lacks data"
+  despite running under the C++ interpreter. Buffers are inlined in memory;
+  a model that already stores everything inline is loaded unchanged.
+- **zenoh-c / zenohd / python3-zenoh 1.9.0 → 1.10.1**: Eclipse Zenoh upstream release.
 - **edgefirst-hal 0.24.2 → 0.28.3**: Standalone C-library package; in-tree
   consumers use the tensor/decoder C API unaffected by image/codec surface
   breaks. Confirmed by a clean `torizon-core-maivin` build against 0.28.3.
-- **edgefirst-camera 2.7.0 → 2.10.0**: `CameraFrame` publishing moved onto
+  Held below 0.29.0, which splits the single `libedgefirst_hal` into five
+  libraries (`codec`, `decoder`, `image`, `tensor`, `tracker`), each with its
+  own header and `.pc` file. There is no `edgefirst-hal.pc` or `hal.h` any
+  more, so `edgefirst-gstreamer` — whose `hal` meson option is `auto` — would
+  silently drop its HAL plugin rather than fail the build, and this recipe's
+  `FILES`/`PACKAGES` split would need rewriting. Waits on the same
+  `edgefirst-gstreamer` migration as schemas 4.0.0 above.
+- **edgefirst-camera 2.7.0 → 2.10.1**: `CameraFrame` publishing moved onto
   edgefirst-schemas 4.0 (tensor dtype advertised as HAL U8), closing the
   wire-format gap with the model, fusion, imu, navsat, radarpub and lidarpub
   releases pinned here. Maivin-reported fixes: an unloadable calibration
@@ -92,21 +108,47 @@ CHANGELOG. For full per-package details, follow the links.
   New `camera.default` entries: `JPEG_QUALITY`, the topic variables,
   `RECORD`/`REPLAY` documentation, and H.264 defaulted on — subject to the
   diverged-config caveat below.
-- **edgefirst-imu 3.1.0 → 3.3.0**: Pulls in bno08x-rs 3.0.0, which ends the
+- **edgefirst-imu 3.1.0 → 3.3.1**: Pulls in bno08x-rs 3.0.0, which ends the
   `InvalidChipId`/166ms-reset crash loop (EDGEAI-1100) by gating SPI writes on
   `H_INTN` instead of racing the hub while it sleeps, and moves publishing off
   the sampling thread onto a lock-free queue.
-- **edgefirst-webui 4.1.1 → 4.3.0**: Fixes the radar page never drawing the
+- **edgefirst-webui 4.1.1 → 4.4.0**: Fixes the radar page never drawing the
   point cloud — the grid renderer was initialised with point drawing disabled,
   so only the polar grid appeared even while `radar/targets` was publishing.
   Adds Source/Colour/Elevation controls matching the LiDAR page and a "Radar
-  Unavailable" overlay for a stream that is not publishing.
-- **edgefirst-model 2.9.0 → 2.10.1, fusion 1.7.2 → 1.8.0, navsat 1.6.0 →
-  1.8.0, radarpub 1.6.3 → 1.7.1, lidarpub 2.2.1 → 2.3.0, recorder 1.8.0 →
-  1.10.0, websrv 4.0.1 → 4.1.0**: Upstream service releases; see each
+  Unavailable" overlay for a stream that is not publishing. 4.4.0 fixes the
+  configuration pages reporting a successful save when the service had failed
+  to restart — WebSRV writes the file before restarting, so a failed restart
+  arrives as `restart_error` on an HTTP 200 and the pages checked only
+  `response.ok`. Five pages gave no feedback at all on success; per-key
+  rejection reasons, 404s and 500s are now distinguished, and a save that
+  never reaches the server times out after 30s instead of leaving the overlay
+  up forever.
+- **edgefirst-model 2.9.0 → 2.10.2, fusion 1.7.2 → 1.8.1, navsat 1.6.0 →
+  1.8.1, radarpub 1.6.3 → 1.7.2, lidarpub 2.2.1 → 2.3.1, recorder 1.8.0 →
+  1.10.1, websrv 4.0.1 → 4.2.0**: Upstream service releases; see each
   package's own CHANGELOG above.
+- **Empty `/etc/default` values no longer stop a service starting**
+  (EDGEAI-1094). `KEY=` in an `EnvironmentFile` is an empty string, not an
+  unset variable, so any clap option that takes a value and has no default
+  aborted argument parsing. camera 2.9.1 had fixed this by clearing a
+  hand-written list of five variables, which left every other option
+  (`JPEG_QUALITY=""`, `MIRROR=""`, ...) still failing; the patch releases in
+  this batch — camera 2.10.1, model 2.10.2, fusion 1.8.1, imu 3.3.1, navsat
+  1.8.1, radarpub 1.7.2, lidarpub 2.3.1, recorder 1.10.1 — derive the set from
+  the argument definitions so it cannot drift, and scrub the environment
+  before the tokio runtime starts any thread. Argument parsing only: no
+  wire-format or configuration-key changes in any of them.
+- **websrv 4.2.0 + webui 4.4.0 fix the configuration API end to end**
+  (EDGEAI-1402). `POST /api/config/{service}` silently returned 200 OK having
+  written nothing when a key was absent from the file or shipped commented
+  out — which is most of `lidarpub.default`, where 19 of 26 keys ship
+  commented. Numbers, booleans and space-separated arrays (`TF_VEC`,
+  `AZIMUTH`) were written as empty values instead of round-tripping, and `;`
+  comments are now parsed the way systemd's own `EnvironmentFile` parser
+  treats them.
 - **Shipped `/etc/default` files changed** for camera, model, fusion, navsat,
-  radarpub, lidarpub, recorder and webui (websrv and imu are unchanged).
+  radarpub, lidarpub, recorder, websrv and webui (imu is unchanged).
   Licence files are unchanged across every package. The upgrade note under
   edgefirst-camera applies to all of them: a unit whose `/etc/default/<svc>`
   has diverged from the shipped copy keeps its own version across an OSTree

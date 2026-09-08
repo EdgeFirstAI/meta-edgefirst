@@ -6,8 +6,8 @@ LIC_FILES_CHKSUM = "file://${COMMON_LICENSE_DIR}/Apache-2.0;md5=89aea4e17d99a7ca
 
 SRC_URI = "https://github.com/eclipse-zenoh/zenoh-c/releases/download/${PV}/zenoh-c-${PV}-${TARGET_ARCH}-unknown-linux-gnu-standalone.zip"
 
-SRC_URI_SHA256SUM[aarch64] = "dca6b6ff8fe1ac18984bdd88714559df64871ffd02f5ab108692b3f30d7fb77c"
-SRC_URI_SHA256SUM[x86_64] = "1168b3dffa7f4f48ffabfd640a3878ec0527c0a612ce825aa6f93e2cd05762d1"
+SRC_URI_SHA256SUM[aarch64] = "65970bbed6dc10fec4fa39d05f3876e85fcb9b0f87d5be0a54bd7517240db501"
+SRC_URI_SHA256SUM[x86_64] = "9ee0f2d732b0f3042a7e1cd3076042a2bc3ac0415587c40bc3ed7b8b62fbde11"
 
 python () {
     arch = d.getVar('TARGET_ARCH')

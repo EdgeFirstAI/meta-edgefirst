@@ -6,7 +6,7 @@ SRC_URI = "\
     https://github.com/EdgeFirstAI/webui/releases/download/v${PV}/edgefirst-webui-${PV}.zip;name=archive;subdir=edgefirst-webui \
     https://raw.githubusercontent.com/EdgeFirstAI/webui/v${PV}/LICENSE;downloadfilename=${BPN}-LICENSE;name=license;subdir=edgefirst-webui \
 "
-SRC_URI[archive.sha256sum] = "0dcb87c15868518fd1365d7bb01399104e398a01ab7cb8a7b670fcfa4c4891f7"
+SRC_URI[archive.sha256sum] = "9291f719d4c3e314880b379371340e59d78c0fa588c40485a8e72f898cab377d"
 SRC_URI[license.sha256sum] = "a2e3ba06380d0e627965e004c96c0af1447fb37bbf0d9a4ddf3382f2187531fa"
 
 S = "${@(d.getVar('UNPACKDIR') or d.getVar('WORKDIR')) + '/edgefirst-webui'}"

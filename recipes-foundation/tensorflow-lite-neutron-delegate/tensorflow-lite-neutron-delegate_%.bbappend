@@ -10,7 +10,7 @@ SRCBRANCH_neutron = "edgefirst"
 python () {
     series = set((d.getVar("LAYERSERIES_CORENAMES") or "").split())
     if series & {"whinlatter", "wrynose"}:
-        d.setVar("SRCREV_neutron", "4a9f0af0debaa642c129cab93831ecfd0a4a7430")
+        d.setVar("SRCREV_neutron", "dd81103c1305b0ee7e49cde51624cda18f7dd51c")
     else:
         d.setVar("SRCREV_neutron", "3c0e03e8ebbdb6eab1d8ab78756bf9277d278055")
 }

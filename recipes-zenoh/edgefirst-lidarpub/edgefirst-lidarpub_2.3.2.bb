@@ -10,10 +10,10 @@ SRC_URI = "\
     file://edgefirst-lidarpub.service \
 "
 SRC_URI[license.sha256sum] = "acbbda305958ff27afe43eeef4a77d48ef9d99364e772ba319d1d38ae759ae43"
-SRC_URI[default.sha256sum] = "a75ec6e5cd4787c8c3ca106cf50a32d1f8e1b1f9d736aa82d97752cb089dfc26"
+SRC_URI[default.sha256sum] = "528ce3cb53ec95caea0a8ecb5137c2d0227ad3258dee4adde5590e6a53e6f079"
 
-BINARY_SHA256SUM[aarch64] = "87ecfa3dcc91cddbdbaa7578b396dcb984c022a806c92b17704bce113f5fc0dc"
-BINARY_SHA256SUM[x86_64] = "932baff72668c2f17735a317dd368d7585a802b0495492115779aebc309a4166"
+BINARY_SHA256SUM[aarch64] = "7fc87a576a0465fff6f1cfb20e0364a1c1f206f11098474e5fd9f43736097c67"
+BINARY_SHA256SUM[x86_64] = "97e7d5bf6793c2e2c3413576433d84369e957cd0713de342e8a9cda97440988d"
 
 python () {
     arch = d.getVar('TARGET_ARCH')

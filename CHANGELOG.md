@@ -75,19 +75,33 @@ CHANGELOG. For full per-package details, follow the links.
   worker with its own instance and a deleted instance is never returned.
   DMA-BUF state was already per-instance in this delegate; multi-context
   operation verified on imx8mp-frdm.
-- **litert-vx-delegate uses NXP stock source on wrynose**: the edgefirst
-  fork's cmake targets the litert 2.0 layout and fails `do_configure`
-  against wrynose's litert 2.1.0, so the fork override now applies only
-  through whinlatter. The classic `tensorflow-lite-vx-delegate` recipe
-  (what `libvx_delegate.so` consumers use) still builds the fork with
-  the DMA-BUF + CameraAdaptor features. To be restored once the fork is
-  rebased onto NXP's `lf-6.18.20_2.0.0` baseline.
+- **tflite-vx-delegate-imx rebased onto NXP's `lf-6.18.20_2.0.0` baseline**
+  (`edgefirst` `c8e52d7` → `c3e44b8`): restores the EdgeFirst fork (DMA-BUF
+  zero-copy + CameraAdaptor) on wrynose for both the classic
+  `tensorflow-lite-vx-delegate` recipe and the new `litert-vx-delegate`
+  recipe (`BUILD_FOR_LITERT=ON`, litert 2.1.0). Only conflict was
+  `CMakeLists.txt`'s `TFLITE_GIT_TAG`/`LITERT_GIT_TAG` pins, which NXP now
+  sets itself via `CACHE STRING` + `find_package()` — our old hardcoded
+  override was dropped in favor of NXP's. The pre-rebase tip (still
+  targeting litert 2.0 / whinlatter's `lf-6.18.2_1.0.0`) is preserved on
+  the new `edgefirst-imx-6.18.2-1.0.0` anchor branch, which whinlatter now
+  pins to instead of the rolling `edgefirst` tip.
 - **Neutron DMA-BUF kernel patch gated by layer series** (EDGEAI-1186):
   NXP merged our `staging: neutron: export buffers as dma-buf` patch into
   the wrynose 6.18.20 kernel tree (`053be821725d`, with the follow-up
   `MODULE_IMPORT_NS("DMA_BUF")` fix `464fd6f2e2de`), so the
   `linux-imx_%.bbappend` now applies the patch only on
   scarthgap/walnascar/whinlatter where the driver still uses anon inodes.
+- **imx-gst1.0-plugin DMA-BUF zero-copy restored on wrynose** (EDGEAI-1186
+  follow-up): rebased `edgefirst-dmabuf` onto NXP's current
+  `MM_04.11.00_2605_L6.18.20` baseline (`58f899e` → `59f9a44`), the same
+  SRCREV meta-imx-bsp now pins for `rel_imx_6.18.20_2.0.0`. The rebase
+  applied with no conflicts — the previously-reported missing
+  `gstimxcommon.h` and 16 undefined `HAS_*`/`IS_*` SoC-capability macros
+  were against an earlier pre-release wrynose SRCREV; NXP's current tag has
+  the `gstimxsocfeatures.h/.c` migration finished, and our one DMA-BUF
+  patch never touched the affected code paths. Build-validated on
+  imx95-pro. Pre-rebase tip preserved on `edgefirst-imx-6.18.2-1.0.0`.
 
 ## v1.2.3 — 2026-05-28
 

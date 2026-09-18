@@ -4,42 +4,28 @@
 # i.MX GStreamer elements, enabling zero-copy inference pipelines with
 # NNStreamer and the NPU.
 #
-# Temporarily disabled on wrynose (EDGEAI-1186 follow-up): the fork's
-# edgefirst-dmabuf branch (and edgefirst-1.2.3, same issue) is missing
-# libs/gstimxcommon.h — only gstimxcommon.c survived — which several
-# files still #include, breaking do_compile the first time this fork
-# was build-tested for i.MX95 (armv8a-mx95). Restoring the header
-# exposed a much bigger gap: 16 SoC-capability macros (HAS_DCSS,
-# HAS_DPU, HAS_G2D, HAS_G3D, HAS_IPU, HAS_PXP, HAS_VPU, IS_AMPHION,
-# IS_HANTRO, IS_IMX6Q, IS_IMX8MM, IS_IMX8MP, IS_IMX8Q, IS_IMX8ULP,
-# IS_IMX95, IS_IMX952) are used throughout the fork but defined
-# nowhere. NXP's real upstream (meta-imx-bsp's own SRCREV, not our
-# fork) now provides these via a proper gstimxsocfeatures.h/.c +
-# imx_soc_features.ini subsystem (added in their commit a31ad60
-# "MMFMWK-9614 imxsocfeatures: add new apis for soc features map",
-# with imx_2d_device.h/etc. switched over in 5a6ec33 "remove
-# dependency of gstimxcommon.h"). Porting our fork onto that is real
-# work — stubbing the macros per-build would be wrong since this same
-# header is shared across every machine this fork builds for
-# (i.MX8MP, i.MX8MP EVK, i.MX95 variants), not just i.MX95.
+# EDGEAI-1186 follow-up, resolved: an earlier wrynose pre-release SRCREV of
+# NXP's fork was mid-migration to a new gstimxsocfeatures.h/.c SoC-capability
+# subsystem, missing libs/gstimxcommon.h and leaving 16 HAS_*/IS_* macros
+# undefined. NXP's SRCREV now pinned by meta-imx-bsp for rel_imx_6.18.20_2.0.0
+# (MM_04.11.00_2605_L6.18.20, e0b7f80a) has that migration complete —
+# gstimxcommon.h/gstimxsocfeatures.h both exist and our patch's touched files
+# (gstimxcommon.c, gstimxcompositor.c, gstimxvideoconvert.c/.h) don't
+# reference the removed macros. Rebased edgefirst-dmabuf onto that baseline
+# cleanly (no textual conflicts); build-validated on imx95-pro.
 #
-# Also found and worth carrying into the port: imx_2d_device.c uses
-# FILE/fopen/fseek/ftell/fread/fclose/SEEK_END/SEEK_SET without
-# including <stdio.h>, and imxoverlaycompositionmeta.c includes
-# <gst/allocators/gstphymemmeta.h> but the header this fork actually
-# ships lands at <gst/video/gstphymemmeta.h> instead.
-#
-# Falling back to NXP's stock source for now (loses DMA-BUF zero-copy
-# on i.MX95 until the fork is ported) so the image build succeeds.
-#IMXGST_SRC = "git://github.com/EdgeFirstAI/imx-gst1.0-plugin.git;protocol=https"
+# whinlatter's pre-rebase tip is preserved on the edgefirst-imx-6.18.2-1.0.0
+# anchor branch.
+
+IMXGST_SRC = "git://github.com/EdgeFirstAI/imx-gst1.0-plugin.git;protocol=https"
 
 python () {
     series = set((d.getVar("LAYERSERIES_CORENAMES") or "").split())
     if series & {"wrynose"}:
-        return
-    d.setVar("IMXGST_SRC", "git://github.com/EdgeFirstAI/imx-gst1.0-plugin.git;protocol=https")
-    if series & {"whinlatter"}:
         d.setVar("SRCBRANCH", "edgefirst-dmabuf")
+        d.setVar("SRCREV", "59f9a4418489c98c552d682c0909b7d030ddfcef")
+    elif series & {"whinlatter"}:
+        d.setVar("SRCBRANCH", "edgefirst-imx-6.18.2-1.0.0")
         d.setVar("SRCREV", "58f899e2e54605f921dfff947e067ce101d8b649")
     else:
         d.setVar("SRCBRANCH", "edgefirst-1.2.3")

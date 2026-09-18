@@ -16,3 +16,11 @@ python () {
     if series & {"scarthgap", "walnascar", "whinlatter"}:
         d.appendVar("SRC_URI", " file://0001-staging-neutron-export-buffers-as-dma-buf.patch")
 }
+
+# NXP ships an os08a20+NeoISP+ADV7535 combo dtb for imx95-15x15-evk but not
+# for imx95-19x19-evk (only os08a20+IT6263 combos exist there); os08a20 uses
+# the dedicated CSI-2 #0 D-PHY, independent of the DSI/CSI-2 #1 combo D-PHY,
+# so camera and ADV7535 HDMI output can coexist on this board.
+SRC_URI:append:imx95-19x19-lpddr5-evk = " file://0002-arm64-dts-freescale-imx95-19x19-evk-add-os08a20-isp.patch"
+
+KERNEL_DEVICETREE:append:imx95-19x19-lpddr5-evk = " freescale/imx95-19x19-evk-os08a20-isp-adv7535.dtb"

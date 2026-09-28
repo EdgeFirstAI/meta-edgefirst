@@ -5,7 +5,7 @@
 #
 # Changes over upstream NXP:
 # - DMA-BUF zero-copy tensor passing through GStreamer pipeline
-# - tensor_filter: Ara-2 sub-plugin (dlopen's libaraclient.so.1 at runtime)
+# - tensor_filter: Ara-2 sub-plugin (Kinara SDK runtime only, see below)
 # - tensor_filter V2: flexible tensor input support (header-stripping fallback)
 # - TFLite VX delegate CameraAdaptor integration (i.MX 8M Plus)
 # - TFLite HAL delegate DMA-BUF probing for Neutron NPU (i.MX 95, EDGEAI-1189)
@@ -35,30 +35,27 @@ python () {
 # Enables tensor_filter to probe for hal_dmabuf_* symbols from Neutron delegate
 DEPENDS:append = " edgefirst-hal"
 
-# Kinara Ara-2 NPU tensor_filter sub-plugin
-# Build: requires dvapi.h from ara2-dev
-# Runtime: dlopen's libaraclient.so.1, communicates via /var/run/ara2.sock
-PACKAGECONFIG[ara2] = "\
-    -Dara2-support=enabled, \
-    -Dara2-support=disabled, \
-    ara2, \
-    , \
-"
+# Kinara Ara-2 NPU tensor_filter sub-plugin. It dlopens libaraclient.so.1
+# and talks to /var/run/ara2.sock, the Kinara SDK runtime, so it is built
+# only when imx-nxp-ara2 resolves to that packaging (KINARA_ARA2_RUNTIME,
+# set by meta-kinara). meta-imx-ml's wrynose append enables "ara2" on
+# mx8mp/mx95 whatever the runtime, so it is removed everywhere else,
+# including builds without meta-kinara.
+PACKAGECONFIG[ara2] = "-Dara2-support=enabled,-Dara2-support=disabled,imx-nxp-ara2,imx-nxp-ara2"
+EDGEFIRST_NNSTREAMER_ARA2 = "${@'ara2' if d.getVar('KINARA_ARA2_RUNTIME') == 'kinara' else ''}"
+PACKAGECONFIG:append:mx8mp-nxp-bsp = " ${EDGEFIRST_NNSTREAMER_ARA2}"
+PACKAGECONFIG:append:mx95-nxp-bsp = " ${EDGEFIRST_NNSTREAMER_ARA2}"
+PACKAGECONFIG:remove = "${@'' if d.getVar('EDGEFIRST_NNSTREAMER_ARA2') else 'ara2'}"
 
-# Enable Ara-2 on platforms with Kinara PCIe NPU support
-PACKAGECONFIG_SOC:mx8mp-nxp-bsp:append = " ara2"
-PACKAGECONFIG_SOC:mx9-nxp-bsp:append = " ara2"
+FILES:${PN}-ara2 = "${libdir}/nnstreamer/filters/libnnstreamer_filter_ara2.so"
+RDEPENDS:${PN}-ara2 = "imx-nxp-ara2"
+RRECOMMENDS:${PN} += "${@bb.utils.contains('PACKAGECONFIG', 'ara2', '${PN}-ara2', '', d)}"
 
-# NXP's meta-imx-ml nnstreamer_2.4.2.bbappend already adds ${PN}-ara2 to
-# PACKAGES (unconditionally reachable via its own PACKAGECONFIG:append on
-# mx8mp/mx9 overrides) — PACKAGES =+ accumulates across bbappends, so
-# re-declaring it here duplicates the package name and fails do_package QA.
-# Our overrides below (FILES/RDEPENDS/PACKAGECONFIG[ara2]) still take effect
-# since meta-edgefirst has higher BBFILE_PRIORITY and simple assignments
-# replace rather than accumulate.
-
-FILES:${PN}-ara2 = "\
-    ${libdir}/nnstreamer/filters/libnnstreamer_filter_ara2.so \
-"
-
-RDEPENDS:${PN}-ara2 = "ara2"
+# meta-imx-ml declares ${PN}-ara2 in PACKAGES on wrynose; earlier BSPs do
+# not. Add it only when missing, since a duplicate entry fails do_package.
+python () {
+    if bb.utils.contains('PACKAGECONFIG', 'ara2', True, False, d):
+        pkg = d.expand('${PN}-ara2')
+        if pkg not in (d.getVar('PACKAGES') or '').split():
+            d.prependVar('PACKAGES', pkg + ' ')
+}

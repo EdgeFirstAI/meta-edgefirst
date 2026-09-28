@@ -9,6 +9,5 @@ See the [EdgeFirst organization](https://github.com/EdgeFirstAI) for the full pr
 | Recipe | Repo | Description |
 |--------|------|-------------|
 | edgefirst-gstreamer | [gstreamer](https://github.com/EdgeFirstAI/gstreamer) | EdgeFirst GStreamer elements: `edgefirstcameraadaptor` (HAL-managed ML preprocessing), `edgefirstoverlay` (detection/mask rendering), `edgefirstzenohsub`/`edgefirstzenohpub` (Zenoh bridge), sensor fusion elements |
-| nnstreamer | [nnstreamer](https://github.com/EdgeFirstAI/nnstreamer) | EdgeFirst fork of NNStreamer (bbappend): DMA-BUF zero-copy tensor handling, HAL delegate probing, Ara-2 NPU sub-filter |
+| nnstreamer | [nnstreamer](https://github.com/EdgeFirstAI/nnstreamer) | EdgeFirst fork of NNStreamer (bbappend): DMA-BUF zero-copy tensor handling, HAL delegate probing, Ara-2 NPU sub-filter (`nnstreamer-ara2`, built only with the Kinara SDK runtime: meta-kinara's `KINARA_ARA2_RUNTIME = "kinara"`) |
 | imx-nnstreamer-examples | [nxp-nnstreamer-examples](https://github.com/EdgeFirstAI/nxp-nnstreamer-examples) | YOLOv8n detection and segmentation demo binaries (bbappend) |
-| packagegroup-imx-ml | — | Extends NXP ML packagegroup to include `nnstreamer-ara2` on Ara-2-capable machines (bbappend) |

@@ -26,6 +26,7 @@ CHANGELOG. For full per-package details, follow the links.
 | edgefirst-websrv | 4.0.1 | 4.2.0 | [CHANGELOG](https://github.com/EdgeFirstAI/websrv/blob/v4.2.0/CHANGELOG.md) |
 | edgefirst-webui | 4.1.1 | 4.4.0 | [CHANGELOG](https://github.com/EdgeFirstAI/webui/blob/v4.4.0/CHANGELOG.md) |
 | edgefirst-modelzoo | — | 1.0.0 (new) | [Model Zoo](https://huggingface.co/EdgeFirst) |
+| edgefirst-ara2 | 0.16.0 (meta-kinara) | 0.19.0 | [CHANGELOG](https://github.com/EdgeFirstAI/ara2-rs/blob/v0.19.0/CHANGELOG.md) |
 | edgefirst-gstreamer | 0.4.0 + main | 0.4.0 + main (`b93cf60`, overlay expose-timing property + frame-timing signal) | [CHANGELOG](https://github.com/EdgeFirstAI/gstreamer/blob/main/CHANGELOG.md) |
 | zenoh-c / zenohd / python3-zenoh | 1.9.0 | 1.10.1 | — |
 
@@ -33,6 +34,9 @@ CHANGELOG. For full per-package details, follow the links.
 
 ### Layer Changes
 
+- `edgefirst-ara2` moved here from meta-kinara and updated to 0.19.0, which probes the loaded `libaraclient` DVAPI generation and finds the proxy socket, so the bindings work with either `imx-nxp-ara2` packaging: NXP's `rt-sdk-ara2` (meta-imx-ml) or the Kinara SDK runtime (meta-kinara). Adds the missing runtime dependency on `python3-numpy`.
+- The NNStreamer Ara-2 `tensor_filter` sub-plugin (`nnstreamer-ara2`) is built only when `imx-nxp-ara2` resolves to the Kinara SDK runtime it was written for (meta-kinara's `KINARA_ARA2_RUNTIME = "kinara"`): the walnascar (6.12) BSP, or wrynose with `PREFERRED_VERSION_imx-nxp-ara2 = "1.2.1"`. With NXP's `rt-sdk-ara2` runtime, the default on wrynose, the `ara2` PACKAGECONFIG that meta-imx-ml appends on mx8mp/mx95 is removed. nnstreamer now recommends `nnstreamer-ara2` whenever it is built, so the `packagegroup-imx-ml` append is removed and the plugin depends on `imx-nxp-ara2` instead of `ara2`.
+- `pseudo` on walnascar moves to the pseudo-1.9 tip, 1.9.8. Walnascar's 1.9.0 has no `openat2()` wrapper, which host GNU `tar` 1.35 (Ubuntu 24.04) uses, so `do_package` failed on those hosts.
 - `LAYERSERIES_COMPAT` extended with `whinlatter` (Yocto 5.3) and
   `wrynose` (Yocto 5.4) for the NXP imx-6.18.2-1.0.0 and
   imx-6.18.20-2.0.0 BSPs. Scarthgap and walnascar remain supported.
@@ -162,13 +166,15 @@ CHANGELOG. For full per-package details, follow the links.
 - Split `packagegroup-edgefirst` into standalone `-zenoh`/`-gstreamer`/`-python`
   recipes so wanting one flavor does not force BitBake to build the others.
 - `edgefirst-camera` / `edgefirst-replay`: add runtime `RDEPENDS` on videostream.
-- Add `edgefirst-modelzoo` recipe: YOLOv8n det/seg INT8 smart TFLite from
-  Hugging Face as selectable subpackages, generic `.tflite` on mx8mp and
-  Neutron `.imx95.tflite` on mx95, under a stable
-  `/usr/share/edgefirst/modelzoo/` path.
+- Add `edgefirst-modelzoo` recipe: YOLOv8n det/seg from Hugging Face as selectable subpackages under a stable `/usr/share/edgefirst/modelzoo/` path: INT8 smart TFLite (generic `.tflite` on mx8mp, Neutron `.imx95.tflite` on mx95) and INT16 `.dvm` for the Ara-2 NPU, the same on both.
 - NXP fork bbappends select SRCREV/branch from `LAYERSERIES_CORENAMES`:
   whinlatter/wrynose keep the lf-6.18 tips; scarthgap/walnascar use the
   frozen `edgefirst-1.2.3` fork branches (so one `main` tip can serve both).
+- **tensorflow-lite-neutron-delegate `4a9f0af` → `dd81103`** (whinlatter/wrynose SRCREV, EDGEAI-1188): per-delegate DMA-BUF registry — multiple interpreter contexts (worker pools for overlapped inference) can now run zero-copy concurrently in one process. Previously the delegate's process-global singleton meant a second context wiped the first's DMA-BUF state and `hal_dmabuf_get_instance()` could hand producers the wrong context's buffers.
+- **tensorflow-lite-vx-delegate / litert-vx-delegate `a4c9e26` → `c8e52d7`** (whinlatter/wrynose SRCREV, EDGEAI-1435): `VxDelegateGetInstance()` / `hal_dmabuf_get_instance()` now resolve the delegate most recently created on the calling thread via a mutex-guarded live-instance registry, so concurrent per-worker delegate creation always pairs each worker with its own instance and a deleted instance is never returned. DMA-BUF state was already per-instance in this delegate; multi-context operation verified on imx8mp-frdm.
+- **tflite-vx-delegate-imx rebased onto NXP's `lf-6.18.20_2.0.0` baseline** (`edgefirst` `c8e52d7` → `c3e44b8`): restores the EdgeFirst fork (DMA-BUF zero-copy + CameraAdaptor) on wrynose for both the classic `tensorflow-lite-vx-delegate` recipe and the new `litert-vx-delegate` recipe (`BUILD_FOR_LITERT=ON`, litert 2.1.0). Only conflict was `CMakeLists.txt`'s `TFLITE_GIT_TAG`/`LITERT_GIT_TAG` pins, which NXP now sets itself via `CACHE STRING` + `find_package()` — our old hardcoded override was dropped in favor of NXP's. The pre-rebase tip (still targeting litert 2.0 / whinlatter's `lf-6.18.2_1.0.0`) is preserved on the new `edgefirst-imx-6.18.2-1.0.0` anchor branch, which whinlatter now pins to instead of the rolling `edgefirst` tip.
+- **Neutron DMA-BUF kernel patch gated by layer series** (EDGEAI-1186): NXP merged our `staging: neutron: export buffers as dma-buf` patch into the wrynose 6.18.20 kernel tree (`053be821725d`, with the follow-up `MODULE_IMPORT_NS("DMA_BUF")` fix `464fd6f2e2de`), so the `linux-imx_%.bbappend` now applies the patch only on scarthgap/walnascar/whinlatter where the driver still uses anon inodes.
+- **imx-gst1.0-plugin DMA-BUF zero-copy restored on wrynose** (EDGEAI-1186 follow-up): rebased `edgefirst-dmabuf` onto NXP's current `MM_04.11.00_2605_L6.18.20` baseline (`58f899e` → `59f9a44`), the same SRCREV meta-imx-bsp now pins for `rel_imx_6.18.20_2.0.0`. The rebase applied with no conflicts — the previously-reported missing `gstimxcommon.h` and 16 undefined `HAS_*`/`IS_*` SoC-capability macros were against an earlier pre-release wrynose SRCREV; NXP's current tag has the `gstimxsocfeatures.h/.c` migration finished, and our one DMA-BUF patch never touched the affected code paths. Build-validated on imx95-pro. Pre-rebase tip preserved on `edgefirst-imx-6.18.2-1.0.0`.
 
 ## v1.2.3 — 2026-05-28
 

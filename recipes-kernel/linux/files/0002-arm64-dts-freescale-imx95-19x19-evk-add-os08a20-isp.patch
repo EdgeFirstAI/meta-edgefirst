@@ -1,0 +1,38 @@
+From: Sébastien Taylor <sebastien@au-zone.com>
+Date: Fri, 18 Sep 2026 00:00:00 -0600
+Subject: [PATCH] arm64: dts: freescale: imx95-19x19-evk: add
+ os08a20-isp-adv7535 combo
+
+NXP ships an os08a20 + NeoISP + ADV7535 combo devicetree for the
+imx95-15x15-evk board (imx95-15x15-evk-os08a20-isp-adv7535.dtb) but
+never added the equivalent for imx95-19x19-evk -- only os08a20
+combos paired with the IT6263 bridge exist there.
+
+The os08a20 CSI-2 link uses the SoC's dedicated Rx-only D-PHY
+(CSI-2 controller #0), which is independent of the Rx/Tx combo D-PHY
+shared between CSI-2 controller #1 and the DSI host, so os08a20 and
+DSI-based ADV7535 output can run concurrently on this board.
+
+Add imx95-19x19-evk-os08a20-isp-adv7535.dtb by combining the existing
+imx95-19x19-evk-adv7535.dtb base with the imx95-19x19-evk-os08a20.dtbo
+overlay, mirroring the 15x15 pattern.
+
+Upstream-Status: Inappropriate [board-specific devicetree combination not shipped by NXP]
+Signed-off-by: Sébastien Taylor <sebastien@au-zone.com>
+---
+ arch/arm64/boot/dts/freescale/Makefile | 4 ++++
+ 1 file changed, 4 insertions(+)
+
+--- a/arch/arm64/boot/dts/freescale/Makefile
++++ b/arch/arm64/boot/dts/freescale/Makefile
+@@ -1043,6 +1043,10 @@
+ 				       imx95-19x19-evk-ap1302.dtbo
+ dtb-$(CONFIG_ARCH_MXC) += imx95-19x19-evk-adv7535-ap1302.dtb
+ 
++imx95-19x19-evk-os08a20-isp-adv7535-dtbs := imx95-19x19-evk-adv7535.dtb \
++					    imx95-19x19-evk-os08a20.dtbo
++dtb-$(CONFIG_ARCH_MXC) += imx95-19x19-evk-os08a20-isp-adv7535.dtb
++
+ imx95-19x19-evk-lt9611uxc-dtbs := imx95-19x19-evk.dtb imx95-19x19-evk-lt9611uxc.dtbo
+ dtb-$(CONFIG_ARCH_MXC) += imx95-19x19-evk-lt9611uxc.dtb
+ 

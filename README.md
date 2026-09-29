@@ -64,6 +64,7 @@ Standalone Zenoh-native services that publish, record, and replay sensor data. E
 | `edgefirst-websrv` | [EdgeFirstAI/websrv](https://github.com/EdgeFirstAI/websrv) | Web UI backend server for EdgeFirst services |
 | `edgefirst-webui` | [EdgeFirstAI/webui](https://github.com/EdgeFirstAI/webui) | Web dashboard for monitoring and configuring EdgeFirst services |
 | `edgefirst-hal` | [EdgeFirstAI/hal](https://github.com/EdgeFirstAI/hal) | Hardware abstraction layer (C library + Python bindings) |
+| `edgefirst-ara2` | [EdgeFirstAI/ara2-rs](https://github.com/EdgeFirstAI/ara2-rs) | Ara-2 NPU Python bindings; work with either `imx-nxp-ara2` runtime packaging (NXP's meta-imx-ml or the Kinara SDK from meta-kinara), which must be in the build |
 | `edgefirst-schemas` | [EdgeFirstAI/schemas](https://github.com/EdgeFirstAI/schemas) | Shared schema library (C + Python) for EdgeFirst message types |
 
 ### recipes-nnstreamer — ML Inference Pipelines
@@ -73,7 +74,7 @@ GStreamer/NNStreamer plugins for real-time ML inference on video and sensor stre
 | Recipe | GitHub Repository | Description |
 |--------|-------------------|-------------|
 | `edgefirst-gstreamer` | [EdgeFirstAI/gstreamer](https://github.com/EdgeFirstAI/gstreamer) | EdgeFirst Perception for GStreamer — Zenoh bridge elements, sensor fusion processing, HAL camera adaptor |
-| `nnstreamer` | [EdgeFirstAI/nnstreamer](https://github.com/EdgeFirstAI/nnstreamer) | EdgeFirst fork of NNStreamer — adds dmabuf zero-copy, TFLite-VX CameraAdaptor, Ara-2 sub-filter support |
+| `nnstreamer` | [EdgeFirstAI/nnstreamer](https://github.com/EdgeFirstAI/nnstreamer) | EdgeFirst fork of NNStreamer — adds dmabuf zero-copy, TFLite-VX CameraAdaptor, Ara-2 sub-filter support (built only with meta-kinara's Kinara SDK runtime, `KINARA_ARA2_RUNTIME = "kinara"`) |
 
 ### recipes-extensions — NPU Acceleration Libraries
 
@@ -92,6 +93,7 @@ Core infrastructure services and libraries required by the perception and GStrea
 |--------|-------------------|-------------|
 | `zenoh` | [eclipse-zenoh/zenoh](https://github.com/eclipse-zenoh/zenoh) | Zenoh router daemon (zenohd), libzenohc, and python3-zenoh bindings |
 | `videostream` | [EdgeFirstAI/videostream](https://github.com/EdgeFirstAI/videostream) | V4L2/ISP video capture library with DMA-BUF support for zero-copy pipelines |
+| `pseudo` | [pseudo](https://git.yoctoproject.org/pseudo) | Walnascar only: moved to 1.9.8 so builds work on hosts whose `tar` uses `openat2()` (bbappend in `recipes-devtools/`) |
 
 ## Packagegroups
 

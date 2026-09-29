@@ -13,24 +13,23 @@ CHANGELOG. For full per-package details, follow the links.
 |---------|--------|------------|-----------|
 | edgefirst-hal | 0.24.2 | 0.28.3 | [CHANGELOG](https://github.com/EdgeFirstAI/hal/blob/v0.28.3/CHANGELOG.md) |
 | edgefirst-schemas | 3.4.0 | 3.5.0 | [CHANGELOG](https://github.com/EdgeFirstAI/schemas/blob/v3.5.0/CHANGELOG.md) |
-| videostream | 2.5.2 | 2.5.3 | [CHANGELOG](https://github.com/EdgeFirstAI/videostream/blob/v2.5.3/CHANGELOG.md) |
-| edgefirst-tflite | 0.7.0 | 0.10.1 | [CHANGELOG](https://github.com/EdgeFirstAI/tflite-rs/blob/v0.10.1/CHANGELOG.md) |
-| edgefirst-camera | 2.7.0 | 2.10.1 | [CHANGELOG](https://github.com/EdgeFirstAI/camera/blob/v2.10.1/CHANGELOG.md) |
-| edgefirst-model | 2.9.0 | 2.10.2 | [CHANGELOG](https://github.com/EdgeFirstAI/model/blob/v2.10.2/CHANGELOG.md) |
-| edgefirst-fusion | 1.7.2 | 1.8.1 | [CHANGELOG](https://github.com/EdgeFirstAI/fusion/blob/v1.8.1/CHANGELOG.md) |
-| edgefirst-imu | 3.1.0 | 3.3.1 | [CHANGELOG](https://github.com/EdgeFirstAI/imu/blob/v3.3.1/CHANGELOG.md) |
-| edgefirst-navsat | 1.6.0 | 1.8.1 | [CHANGELOG](https://github.com/EdgeFirstAI/navsat/blob/v1.8.1/CHANGELOG.md) |
-| edgefirst-radarpub | 1.6.3 | 1.7.2 | [CHANGELOG](https://github.com/EdgeFirstAI/radarpub/blob/v1.7.2/CHANGELOG.md) |
-| edgefirst-lidarpub | 2.2.1 | 2.3.1 | [CHANGELOG](https://github.com/EdgeFirstAI/lidarpub/blob/v2.3.1/CHANGELOG.md) |
-| edgefirst-recorder | 1.8.0 | 1.10.1 | [CHANGELOG](https://github.com/EdgeFirstAI/recorder/blob/v1.10.1/CHANGELOG.md) |
+| videostream | 2.5.2 | 2.6.0 | [CHANGELOG](https://github.com/EdgeFirstAI/videostream/blob/v2.6.0/CHANGELOG.md) |
+| edgefirst-tflite | 0.7.0 | 0.10.2 | [CHANGELOG](https://github.com/EdgeFirstAI/tflite-rs/blob/v0.10.2/CHANGELOG.md) |
+| edgefirst-camera | 2.7.0 | 2.11.0 | [CHANGELOG](https://github.com/EdgeFirstAI/camera/blob/v2.11.0/CHANGELOG.md) |
+| edgefirst-model | 2.9.0 | 2.11.0 | [CHANGELOG](https://github.com/EdgeFirstAI/model/blob/v2.11.0/CHANGELOG.md) |
+| edgefirst-fusion | 1.7.2 | 1.9.0 | [CHANGELOG](https://github.com/EdgeFirstAI/fusion/blob/v1.9.0/CHANGELOG.md) |
+| edgefirst-imu | 3.1.0 | 3.4.0 | [CHANGELOG](https://github.com/EdgeFirstAI/imu/blob/v3.4.0/CHANGELOG.md) |
+| edgefirst-navsat | 1.6.0 | 1.9.0 | [CHANGELOG](https://github.com/EdgeFirstAI/navsat/blob/v1.9.0/CHANGELOG.md) |
+| edgefirst-radarpub | 1.6.3 | 1.8.0 | [CHANGELOG](https://github.com/EdgeFirstAI/radarpub/blob/v1.8.0/CHANGELOG.md) |
+| edgefirst-lidarpub | 2.2.1 | 2.4.0 | [CHANGELOG](https://github.com/EdgeFirstAI/lidarpub/blob/v2.4.0/CHANGELOG.md) |
+| edgefirst-recorder | 1.8.0 | 1.11.0 | [CHANGELOG](https://github.com/EdgeFirstAI/recorder/blob/v1.11.0/CHANGELOG.md) |
+| edgefirst-replay | 2.3.1 | 3.0.0 | [CHANGELOG](https://github.com/EdgeFirstAI/replay/blob/v3.0.0/CHANGELOG.md) |
 | edgefirst-websrv | 4.0.1 | 4.2.0 | [CHANGELOG](https://github.com/EdgeFirstAI/websrv/blob/v4.2.0/CHANGELOG.md) |
-| edgefirst-webui | 4.1.1 | 4.4.0 | [CHANGELOG](https://github.com/EdgeFirstAI/webui/blob/v4.4.0/CHANGELOG.md) |
+| edgefirst-webui | 4.1.1 | 4.5.0 | [CHANGELOG](https://github.com/EdgeFirstAI/webui/blob/v4.5.0/CHANGELOG.md) |
 | edgefirst-modelzoo | — | 1.0.0 (new) | [Model Zoo](https://huggingface.co/EdgeFirst) |
 | edgefirst-ara2 | 0.16.0 (meta-kinara) | 0.19.0 | [CHANGELOG](https://github.com/EdgeFirstAI/ara2-rs/blob/v0.19.0/CHANGELOG.md) |
 | edgefirst-gstreamer | 0.4.0 + main | 0.4.0 + main (`b93cf60`, overlay expose-timing property + frame-timing signal) | [CHANGELOG](https://github.com/EdgeFirstAI/gstreamer/blob/main/CHANGELOG.md) |
 | zenoh-c / zenohd / python3-zenoh | 1.9.0 | 1.10.1 | — |
-
-`edgefirst-replay` is unchanged at 2.3.1.
 
 ### Layer Changes
 

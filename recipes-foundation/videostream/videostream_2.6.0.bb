@@ -5,8 +5,8 @@ LIC_FILES_CHKSUM = "file://share/doc/VideoStream/LICENSE;md5=3929fde384c07d35ed0
 
 SRC_URI = "https://github.com/EdgeFirstAI/videostream/releases/download/v${PV}/videostream-${PV}-linux-${TARGET_ARCH}.zip"
 
-SRC_URI_SHA256SUM[aarch64] = "161cc469acdb28d124fc3c789b1a08d0dd63b9b519a9445f45e099a1cd3f0307"
-SRC_URI_SHA256SUM[x86_64] = "828b0dfd4ab902fe206e3e6719224ea6129e7884b3ff62f67dcab846930085ba"
+SRC_URI_SHA256SUM[aarch64] = "f0d186b7f1e2b6e29035a8e2a65912bc5f891be903c2d31d694567e72ecd2b9e"
+SRC_URI_SHA256SUM[x86_64] = "e6601bdbdabe9adf09cc6d66537f97d005395fcb6622645b33c48b6cad3e94f4"
 
 python () {
     arch = d.getVar('TARGET_ARCH')

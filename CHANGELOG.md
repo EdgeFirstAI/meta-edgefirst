@@ -15,9 +15,9 @@ CHANGELOG. For full per-package details, follow the links.
 | edgefirst-schemas | 3.4.0 | 3.5.0 | [CHANGELOG](https://github.com/EdgeFirstAI/schemas/blob/v3.5.0/CHANGELOG.md) |
 | videostream | 2.5.2 | 2.6.0 | [CHANGELOG](https://github.com/EdgeFirstAI/videostream/blob/v2.6.0/CHANGELOG.md) |
 | edgefirst-tflite | 0.7.0 | 0.10.2 | [CHANGELOG](https://github.com/EdgeFirstAI/tflite-rs/blob/v0.10.2/CHANGELOG.md) |
-| edgefirst-camera | 2.7.0 | 2.11.0 | [CHANGELOG](https://github.com/EdgeFirstAI/camera/blob/v2.11.0/CHANGELOG.md) |
+| edgefirst-camera | 2.7.0 | 2.12.0 | [CHANGELOG](https://github.com/EdgeFirstAI/camera/blob/v2.12.0/CHANGELOG.md) |
 | edgefirst-model | 2.9.0 | 2.11.0 | [CHANGELOG](https://github.com/EdgeFirstAI/model/blob/v2.11.0/CHANGELOG.md) |
-| edgefirst-fusion | 1.7.2 | 1.9.0 | [CHANGELOG](https://github.com/EdgeFirstAI/fusion/blob/v1.9.0/CHANGELOG.md) |
+| edgefirst-fusion | 1.7.2 | 1.10.0 | [CHANGELOG](https://github.com/EdgeFirstAI/fusion/blob/v1.10.0/CHANGELOG.md) |
 | edgefirst-imu | 3.1.0 | 3.4.0 | [CHANGELOG](https://github.com/EdgeFirstAI/imu/blob/v3.4.0/CHANGELOG.md) |
 | edgefirst-navsat | 1.6.0 | 1.9.0 | [CHANGELOG](https://github.com/EdgeFirstAI/navsat/blob/v1.9.0/CHANGELOG.md) |
 | edgefirst-radarpub | 1.6.3 | 1.8.0 | [CHANGELOG](https://github.com/EdgeFirstAI/radarpub/blob/v1.8.0/CHANGELOG.md) |

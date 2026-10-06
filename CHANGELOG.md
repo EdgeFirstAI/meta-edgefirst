@@ -14,7 +14,7 @@ CHANGELOG. For full per-package details, follow the links.
 | edgefirst-hal | 0.24.2 | 0.28.3 | [CHANGELOG](https://github.com/EdgeFirstAI/hal/blob/v0.28.3/CHANGELOG.md) |
 | edgefirst-schemas | 3.4.0 | 3.5.0 | [CHANGELOG](https://github.com/EdgeFirstAI/schemas/blob/v3.5.0/CHANGELOG.md) |
 | videostream | 2.5.2 | 2.6.0 | [CHANGELOG](https://github.com/EdgeFirstAI/videostream/blob/v2.6.0/CHANGELOG.md) |
-| edgefirst-tflite | 0.7.0 | 0.10.2 | [CHANGELOG](https://github.com/EdgeFirstAI/tflite-rs/blob/v0.10.2/CHANGELOG.md) |
+| edgefirst-tflite | 0.7.0 | 0.10.3 | [CHANGELOG](https://github.com/EdgeFirstAI/tflite-rs/blob/v0.10.3/CHANGELOG.md) |
 | edgefirst-camera | 2.7.0 | 2.12.0 | [CHANGELOG](https://github.com/EdgeFirstAI/camera/blob/v2.12.0/CHANGELOG.md) |
 | edgefirst-model | 2.9.0 | 2.11.1 | [CHANGELOG](https://github.com/EdgeFirstAI/model/blob/v2.11.1/CHANGELOG.md) |
 | edgefirst-fusion | 1.7.2 | 1.10.0 | [CHANGELOG](https://github.com/EdgeFirstAI/fusion/blob/v1.10.0/CHANGELOG.md) |
@@ -24,16 +24,16 @@ CHANGELOG. For full per-package details, follow the links.
 | edgefirst-lidarpub | 2.2.1 | 2.4.0 | [CHANGELOG](https://github.com/EdgeFirstAI/lidarpub/blob/v2.4.0/CHANGELOG.md) |
 | edgefirst-recorder | 1.8.0 | 1.11.0 | [CHANGELOG](https://github.com/EdgeFirstAI/recorder/blob/v1.11.0/CHANGELOG.md) |
 | edgefirst-replay | 2.3.1 | 3.0.0 | [CHANGELOG](https://github.com/EdgeFirstAI/replay/blob/v3.0.0/CHANGELOG.md) |
-| edgefirst-websrv | 4.0.1 | 4.2.0 | [CHANGELOG](https://github.com/EdgeFirstAI/websrv/blob/v4.2.0/CHANGELOG.md) |
-| edgefirst-webui | 4.1.1 | 4.5.0 | [CHANGELOG](https://github.com/EdgeFirstAI/webui/blob/v4.5.0/CHANGELOG.md) |
+| edgefirst-websrv | 4.0.1 | 4.4.0 | [CHANGELOG](https://github.com/EdgeFirstAI/websrv/blob/v4.4.0/CHANGELOG.md) |
+| edgefirst-webui | 4.1.1 | 4.7.0 | [CHANGELOG](https://github.com/EdgeFirstAI/webui/blob/v4.7.0/CHANGELOG.md) |
 | edgefirst-modelzoo | — | 1.0.0 (new) | [Model Zoo](https://huggingface.co/EdgeFirst) |
-| edgefirst-ara2 | 0.16.0 (meta-kinara) | 0.19.0 | [CHANGELOG](https://github.com/EdgeFirstAI/ara2-rs/blob/v0.19.0/CHANGELOG.md) |
+| edgefirst-ara2 | 0.16.0 (meta-kinara) | 0.20.0 | [CHANGELOG](https://github.com/EdgeFirstAI/ara2-rs/blob/v0.20.0/CHANGELOG.md) |
 | edgefirst-gstreamer | 0.4.0 + main | 0.4.0 + main (`b93cf60`, overlay expose-timing property + frame-timing signal) | [CHANGELOG](https://github.com/EdgeFirstAI/gstreamer/blob/main/CHANGELOG.md) |
 | zenoh-c / zenohd / python3-zenoh | 1.9.0 | 1.10.1 | — |
 
 ### Layer Changes
 
-- `edgefirst-ara2` moved here from meta-kinara and updated to 0.19.0, which probes the loaded `libaraclient` DVAPI generation and finds the proxy socket, so the bindings work with either `imx-nxp-ara2` packaging: NXP's `rt-sdk-ara2` (meta-imx-ml) or the Kinara SDK runtime (meta-kinara). Adds the missing runtime dependency on `python3-numpy`.
+- `edgefirst-ara2` moved here from meta-kinara and updated to 0.20.0. Since 0.19.0 it probes the loaded `libaraclient` DVAPI generation and finds the proxy socket, so the bindings work with either `imx-nxp-ara2` packaging: NXP's `rt-sdk-ara2` (meta-imx-ml) or the Kinara SDK runtime (meta-kinara). Adds the missing runtime dependency on `python3-numpy`.
 - The NNStreamer Ara-2 `tensor_filter` sub-plugin (`nnstreamer-ara2`) is built only when `imx-nxp-ara2` resolves to the Kinara SDK runtime it was written for (meta-kinara's `KINARA_ARA2_RUNTIME = "kinara"`): the walnascar (6.12) BSP, or wrynose with `PREFERRED_VERSION_imx-nxp-ara2 = "1.2.1"`. With NXP's `rt-sdk-ara2` runtime, the default on wrynose, the `ara2` PACKAGECONFIG that meta-imx-ml appends on mx8mp/mx95 is removed. nnstreamer now recommends `nnstreamer-ara2` whenever it is built, so the `packagegroup-imx-ml` append is removed and the plugin depends on `imx-nxp-ara2` instead of `ara2`.
 - `pseudo` on walnascar moves to the pseudo-1.9 tip, 1.9.8. Walnascar's 1.9.0 has no `openat2()` wrapper, which host GNU `tar` 1.35 (Ubuntu 24.04) uses, so `do_package` failed on those hosts.
 - `LAYERSERIES_COMPAT` extended with `whinlatter` (Yocto 5.3) and

@@ -13,7 +13,7 @@ CHANGELOG. For full per-package details, follow the links.
 |---------|--------|------------|-----------|
 | edgefirst-hal | 0.24.2 | 0.28.3 | [CHANGELOG](https://github.com/EdgeFirstAI/hal/blob/v0.28.3/CHANGELOG.md) |
 | edgefirst-schemas | 3.4.0 | 3.5.0 | [CHANGELOG](https://github.com/EdgeFirstAI/schemas/blob/v3.5.0/CHANGELOG.md) |
-| videostream | 2.5.2 | 2.6.0 | [CHANGELOG](https://github.com/EdgeFirstAI/videostream/blob/v2.6.0/CHANGELOG.md) |
+| videostream | 2.5.2 | 2.6.1 | [CHANGELOG](https://github.com/EdgeFirstAI/videostream/blob/v2.6.1/CHANGELOG.md) |
 | edgefirst-tflite | 0.7.0 | 0.10.3 | [CHANGELOG](https://github.com/EdgeFirstAI/tflite-rs/blob/v0.10.3/CHANGELOG.md) |
 | edgefirst-camera | 2.7.0 | 2.12.0 | [CHANGELOG](https://github.com/EdgeFirstAI/camera/blob/v2.12.0/CHANGELOG.md) |
 | edgefirst-model | 2.9.0 | 2.11.1 | [CHANGELOG](https://github.com/EdgeFirstAI/model/blob/v2.11.1/CHANGELOG.md) |

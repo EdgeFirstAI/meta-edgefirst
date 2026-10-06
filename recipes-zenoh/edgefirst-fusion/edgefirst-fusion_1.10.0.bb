@@ -10,10 +10,10 @@ SRC_URI = "\
     file://edgefirst-fusion.service \
 "
 SRC_URI[license.sha256sum] = "acbbda305958ff27afe43eeef4a77d48ef9d99364e772ba319d1d38ae759ae43"
-SRC_URI[default.sha256sum] = "84555ff9a3a0532bdcd358fa721e17bea5064617936569e171adb070810c4823"
+SRC_URI[default.sha256sum] = "10845b5f6b9198220cf4d4f1c4ba89e3d8debcc5142f2f804c798fe267df75aa"
 
-BINARY_SHA256SUM[aarch64] = "e549c48d4c078e21f8857639ba7eb45a0bdc9647d59ee8aa763818347d1c4d1a"
-BINARY_SHA256SUM[x86_64] = "59c2f4da2da655d664f6fd35887493c8c73ea1e0ab45a00b8b06b1b4e6b7d19b"
+BINARY_SHA256SUM[aarch64] = "1ac15b83084d1ecb15ef7d0cea5608b2eaf9e5153e1f734089dcbaf0f353ef9d"
+BINARY_SHA256SUM[x86_64] = "f5f0785988d70e2b45085cc59368798abc0fe0c16afbe61ef2713e2076fc4f0e"
 
 python () {
     arch = d.getVar('TARGET_ARCH')

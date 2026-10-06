@@ -10,10 +10,10 @@ SRC_URI = "\
     file://edgefirst-camera.service \
 "
 SRC_URI[license.sha256sum] = "acbbda305958ff27afe43eeef4a77d48ef9d99364e772ba319d1d38ae759ae43"
-SRC_URI[default.sha256sum] = "74756d2e75eead91d937731767ace21cd7ae4fea5309de8935565d3ce15d155e"
+SRC_URI[default.sha256sum] = "5840a63a171d99070fa5fbae046ec53cedf2071d1895b5c56a5533381b694db7"
 
-BINARY_SHA256SUM[aarch64] = "4fb9f00d5c399e16170f64aa0aad7c9ebe3fd395998a33fa69b88309f354ff29"
-BINARY_SHA256SUM[x86_64] = "03615323ca98785cdb557b2ee271dafacf78a2ae195cffe4ecd604514e89fc1f"
+BINARY_SHA256SUM[aarch64] = "5f32d358a693ff94109856ea10678578549a65d2a26be1b09495e42c0f74f03d"
+BINARY_SHA256SUM[x86_64] = "1d7221c360c3aecc03f6a3d8cee47ece84a160529d4481934e9fd0dda0ad6110"
 
 python () {
     arch = d.getVar('TARGET_ARCH')

@@ -13,7 +13,7 @@ SRC_URI = " \
     https://raw.githubusercontent.com/EdgeFirstAI/ara2-rs/v${PV}/LICENSE;downloadfilename=${BPN}-LICENSE;name=license \
 "
 SRC_URI[license.sha256sum] = "b8f67b53dc742540e9ea9a8197c0e546a812a2cb39451df3e22cc4112168afe3"
-SRC_URI[python.sha256sum] = "0062c08c973c1b6f19dd6287f4fe9428fbdb442b2e945df0f3a1ee1e0b316d38"
+SRC_URI[python.sha256sum] = "7eb4c0c7a4c1741784d1e9f6435cb0954beac03da9ec63e32580171dddaa7309"
 
 S = "${@d.getVar('UNPACKDIR') or d.getVar('WORKDIR')}"
 

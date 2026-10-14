@@ -17,6 +17,7 @@ python () {
     if series & {"whinlatter", "wrynose"}:
         d.setVar("SRCREV_neutron", "dd81103c1305b0ee7e49cde51624cda18f7dd51c")
     else:
+        d.setVar("SRCBRANCH_neutron", "edgefirst-1.2.3")
         d.setVar("SRCREV_neutron", "3c0e03e8ebbdb6eab1d8ab78756bf9277d278055")
 }
 

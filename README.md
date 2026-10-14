@@ -104,6 +104,14 @@ Prebuilt EdgeFirst command line tools installed from the upstream release archiv
 | `edgefirst-client` | [EdgeFirstAI/client](https://github.com/EdgeFirstAI/client) | EdgeFirst Studio command line client (Apache-2.0) |
 | `edgefirst-profiler` | [EdgeFirstAI/profiler-cli](https://github.com/EdgeFirstAI/profiler-cli) | On-target profiling agent for AI vision pipelines. Proprietary EULA; the Hailo and TensorRT shim libraries in the release are not installed. NPU inference goes through TFLite and the VX or Neutron delegate. |
 
+### dynamic-layers
+
+Appends whose target recipe comes from an optional layer live under `dynamic-layers/<collection>/` and are enabled by `BBFILES_DYNAMIC` in `conf/layer.conf` only when that collection is present. This keeps the layer parsing cleanly on BSPs that do not carry the layer, such as images built without GStreamer and NNStreamer.
+
+| Collection | Layer | Content |
+|------------|-------|---------|
+| `imx-demo` | `meta-nxp-demo-experience` | `imx-nnstreamer-examples` bbappend |
+
 ## Packagegroups
 
 All EdgeFirst packages are managed by a single `packagegroup-edgefirst` recipe with sub-packages:

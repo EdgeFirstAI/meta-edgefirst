@@ -95,6 +95,15 @@ Core infrastructure services and libraries required by the perception and GStrea
 | `videostream` | [EdgeFirstAI/videostream](https://github.com/EdgeFirstAI/videostream) | V4L2/ISP video capture library with DMA-BUF support for zero-copy pipelines |
 | `pseudo` | [pseudo](https://git.yoctoproject.org/pseudo) | Walnascar only: moved to 1.9.8 so builds work on hosts whose `tar` uses `openat2()` (bbappend in `recipes-devtools/`) |
 
+### recipes-tools — Command Line Tools
+
+Prebuilt EdgeFirst command line tools installed from the upstream release archives. They need only the C library, so they have no GStreamer, Python or ONNX Runtime dependency.
+
+| Recipe | GitHub Repository | Description |
+|--------|-------------------|-------------|
+| `edgefirst-client` | [EdgeFirstAI/client](https://github.com/EdgeFirstAI/client) | EdgeFirst Studio command line client (Apache-2.0) |
+| `edgefirst-profiler` | [EdgeFirstAI/profiler-cli](https://github.com/EdgeFirstAI/profiler-cli) | On-target profiling agent for AI vision pipelines. Proprietary EULA; the Hailo and TensorRT shim libraries in the release are not installed. NPU inference goes through TFLite and the VX or Neutron delegate. |
+
 ## Packagegroups
 
 All EdgeFirst packages are managed by a single `packagegroup-edgefirst` recipe with sub-packages:

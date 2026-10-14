@@ -15,6 +15,10 @@ python () {
     series = set((d.getVar("LAYERSERIES_CORENAMES") or "").split())
     if series & {"scarthgap", "walnascar", "whinlatter"}:
         d.appendVar("SRC_URI", " file://0001-staging-neutron-export-buffers-as-dma-buf.patch")
+    # MODULE_IMPORT_NS() takes an unquoted namespace before kernel 6.13; the
+    # whinlatter kernel (6.18) needs the quoted form, so it is excluded.
+    if series & {"scarthgap", "walnascar"}:
+        d.appendVar("SRC_URI", " file://0003-staging-neutron-import-dma-buf-namespace.patch")
 }
 
 # NXP ships an os08a20+NeoISP+ADV7535 combo dtb for imx95-15x15-evk but not

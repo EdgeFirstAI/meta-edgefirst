@@ -1,0 +1,28 @@
+From: Sébastien Taylor <sebastien@au-zone.com>
+Date: Wed, 14 Oct 2026 00:00:00 -0600
+Subject: [PATCH] staging: neutron: import DMA_BUF namespace
+
+The driver now calls dma_buf_export(), dma_buf_get(), dma_buf_put() and
+dma_buf_fd(), which are exported in the DMA_BUF symbol namespace.  Kernels
+that build neutron as a module (CONFIG_NEUTRON=m) fail modpost without the
+import; built-in kernels do not run that check.
+
+Upstream-Status: Inappropriate [embedded platform specific]
+Signed-off-by: Sébastien Taylor <sebastien@au-zone.com>
+---
+ drivers/staging/neutron/neutron_buffer.c | 2 ++
+ 1 file changed, 2 insertions(+)
+
+--- a/drivers/staging/neutron/neutron_buffer.c
++++ b/drivers/staging/neutron/neutron_buffer.c
+@@ -18,6 +18,8 @@
+ #include "neutron_device.h"
+ #include "uapi/neutron.h"
+ 
++MODULE_IMPORT_NS(DMA_BUF);
++
+ /****************************************************************************/
+ 
+ static void neutron_buffer_destroy(struct kref *kref)
+-- 
+2.43.0

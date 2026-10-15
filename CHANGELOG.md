@@ -5,11 +5,13 @@ All notable changes to the `meta-edgefirst` Yocto layer are documented here.
 Each entry lists package version changes with links to the upstream
 CHANGELOG. For full per-package details, follow the links.
 
-## [Unreleased]
+## 2026.10.0
+
+This layer is not tagged. Release versions are owned by torizon-maivin, and the layer revision that belongs to a release is the one pinned in the torizon-maivin manifest at that release's tag. This entry is cumulative since v1.2.3, the last layer-tagged release, and includes changes first shipped in 2026.08.0.
 
 ### Package Updates
 
-| Package | v1.2.3 | Unreleased | Changelog |
+| Package | v1.2.3 | 2026.10.0 | Changelog |
 |---------|--------|------------|-----------|
 | edgefirst-hal | 0.24.2 | 0.28.3 | [CHANGELOG](https://github.com/EdgeFirstAI/hal/blob/v0.28.3/CHANGELOG.md) |
 | edgefirst-schemas | 3.4.0 | 3.5.0 | [CHANGELOG](https://github.com/EdgeFirstAI/schemas/blob/v3.5.0/CHANGELOG.md) |

@@ -114,20 +114,40 @@ Appends whose target recipe comes from an optional layer live under `dynamic-lay
 
 ## Packagegroups
 
-All EdgeFirst packages are managed by a single `packagegroup-edgefirst` recipe with sub-packages:
+Packagegroups come in two families, and they answer different questions. The software groups choose which EdgeFirst runtime an image carries. The capability groups describe what a board's hardware can do, so a BSP vendor layer can compose the ones its boards actually have.
+
+Each is a standalone recipe, so asking for one does not drag in another's dependencies.
+
+### EdgeFirst software
 
 | Package | Description |
 |---------|-------------|
 | `packagegroup-edgefirst` | Shared infrastructure — zenoh-c, edgefirst-schemas, edgefirst-hal, videostream |
 | `packagegroup-edgefirst-zenoh` | Zenoh sensor services — zenohd, camera, model, fusion, imu, navsat, radarpub, lidarpub, recorder, replay, websrv, webui |
-| `packagegroup-edgefirst-gstreamer` | GStreamer/NNStreamer ML inference pipelines — edgefirst-gstreamer |
+| `packagegroup-edgefirst-gstreamer` | GStreamer — EdgeFirst's NNStreamer inference elements plus the platform plugin set and the codec userspace they need |
 | `packagegroup-edgefirst-python` | Python bindings — python3-zenoh, edgefirst-schemas-python, edgefirst-hal-python |
+| `packagegroup-edgefirst-sdk` | SDK sysroot packages for cross-compilation — the `-dev` and `-staticdev` halves of videostream, zenoh-c, edgefirst-schemas and edgefirst-hal |
 
-### packagegroup-edgefirst-sdk
+`packagegroup-edgefirst-gstreamer` is the only group that installs GStreamer. EdgeFirst's own components reach the camera through V4L2 and libcamera, and the video encoder and decoder through the V4L2 memory-to-memory API, so an image needs no GStreamer unless something else asks for it.
 
-SDK toolchain sysroot packages for cross-compilation (separate recipe).
+### Platform capabilities
 
-**Includes:** videostream-dev, zenoh-c-dev, zenoh-c-staticdev, edgefirst-schemas-dev, edgefirst-schemas-staticdev, edgefirst-hal-dev, edgefirst-hal-staticdev
+| Package | Description | Machine gating |
+|---------|-------------|----------------|
+| `packagegroup-edgefirst-npu` | TensorFlow Lite and the machine's NPU delegate | Neutron on `mx95`, VX on `mx8mp` |
+| `packagegroup-edgefirst-graphics` | GPU userspace and the Weston compositor | `imxviv` or `imxmali` |
+| `packagegroup-edgefirst-codec` | V4L2 video encode and decode userspace | Hantro on `mx8mp`, WAVE5 firmware on `mx95` |
+| `packagegroup-edgefirst-camera` | libcamera and the machine's ISP IPA | NEO IPA on `mx95` |
+| `packagegroup-edgefirst-studio` | EdgeFirst Studio tooling — edgefirst-client, edgefirst-profiler | — |
+| `packagegroup-edgefirst-diagnostics` | Hardware bring-up tools — v4l-utils, devmem2 | — |
+
+The graphics group keys off the `imxviv` and `imxmali` machine overrides rather than SoC names, so one definition serves any vendor's board carrying that GPU. The NPU and codec groups key off the machine, because the recipes they pull are `COMPATIBLE_MACHINE`-restricted.
+
+Keeping `-codec` separate from `-gstreamer` matters because the two are independent: the codec blocks are driven through V4L2, which needs a vendor library and, on Hantro, a daemon to arbitrate the single VPU — but no GStreamer. `-gstreamer` depends on `-codec` rather than duplicating it.
+
+### Composing them
+
+A BSP vendor layer decides which capabilities its boards ship and installs them from a recipe, not from `local.conf`. `meta-edgefirst-phytec` does this with `packagegroup-edgefirst-phytec`, applied by a `phytec-headless-image.bbappend`, which keeps a build reproducible from a manifest sync alone.
 
 ## Dependencies
 
@@ -171,17 +191,10 @@ bitbake-layers show-layers
 
 ### Adding EdgeFirst packages to your image
 
-Add a packagegroup to your image recipe or `local.conf`:
+Add the packagegroups you want from a bbappend on your image recipe, for example `recipes-images/images/my-image.bbappend`:
 
 ```
-# Zenoh perception services (includes shared infrastructure)
-IMAGE_INSTALL:append = " packagegroup-edgefirst-zenoh"
-
-# Python bindings (optional)
-IMAGE_INSTALL:append = " packagegroup-edgefirst-python"
-
-# GStreamer ML inference pipelines (planned)
-IMAGE_INSTALL:append = " packagegroup-edgefirst-gstreamer"
+IMAGE_INSTALL:append = " packagegroup-edgefirst-zenoh packagegroup-edgefirst-npu"
 ```
 
 Or install individual packages:
@@ -189,6 +202,8 @@ Or install individual packages:
 ```
 IMAGE_INSTALL:append = " edgefirst-camera edgefirst-schemas zenohd"
 ```
+
+Prefer a bbappend over `local.conf`. `local.conf` is in no repository, so a build is not reproducible for anyone who only syncs the manifest, and a conf-level `IMAGE_INSTALL:append` is a datastore operation applied after every image recipe's own `IMAGE_INSTALL`, so it reaches images it was never meant for and no recipe can assign its way out of it.
 
 ## Development Roadmap
 

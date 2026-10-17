@@ -3,7 +3,7 @@
 # Adds hal_dmabuf_* symbol exports and /proc/self/fd scanning for
 # DMA-BUF buffer discovery, enabling zero-copy GPU->NPU sharing.
 # Requires the neutron kernel dma_buf_export support (EDGEAI-1186):
-# our patch on pre-wrynose kernels, in-tree (053be821725d) on wrynose.
+# the layer's patch on kernels that lack it, in-tree (053be821725d) on wrynose.
 #
 # dd81103 adds the per-delegate DMA-BUF registry so multiple interpreter
 # contexts (worker pools for overlapped inference) can run zero-copy
@@ -13,12 +13,7 @@ NEUTRON_DELEGATE_SRC = "git://github.com/EdgeFirstAI/tflite-neutron-delegate.git
 SRCBRANCH_neutron = "edgefirst"
 
 python () {
-    series = set((d.getVar("LAYERSERIES_CORENAMES") or "").split())
-    if series & {"whinlatter", "wrynose"}:
-        d.setVar("SRCREV_neutron", "dd81103c1305b0ee7e49cde51624cda18f7dd51c")
-    else:
-        d.setVar("SRCBRANCH_neutron", "edgefirst-1.2.3")
-        d.setVar("SRCREV_neutron", "3c0e03e8ebbdb6eab1d8ab78756bf9277d278055")
+    d.setVar("SRCREV_neutron", "dd81103c1305b0ee7e49cde51624cda18f7dd51c")
 }
 
 DEPENDS:append = " edgefirst-hal"

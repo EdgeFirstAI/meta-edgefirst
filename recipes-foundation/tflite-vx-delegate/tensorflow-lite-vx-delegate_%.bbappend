@@ -14,24 +14,12 @@
 #
 # Supported conversions: RGBA/BGRA/RGBX/BGRX/ARGB/ABGR/XRGB/XBGR -> RGB/BGR
 
+# Every Yocto series builds the rolling edgefirst branch; there are no
+# per-series anchors.
 TENSORFLOW_LITE_VX_DELEGATE_SRC = "git://github.com/EdgeFirstAI/tflite-vx-delegate-imx.git;protocol=https"
-
-# wrynose: lf-6.18.20_2.0.0 rebase on rolling edgefirst (EDGEAI-1186 follow-up).
-# whinlatter: frozen edgefirst-imx-6.18.2-1.0.0 anchor — edgefirst was
-# advanced past this point to target wrynose's litert-imx/tensorflow-imx
-# tags, which whinlatter cannot build against.
-# scarthgap/walnascar: frozen edgefirst-1.2.3 fork tip.
 python () {
-    series = set((d.getVar("LAYERSERIES_CORENAMES") or "").split())
-    if "wrynose" in series:
-        d.setVar("SRCBRANCH_vx", "edgefirst")
-        d.setVar("SRCREV_vx", "c3e44b8fcffaa9b5ba19c07bd895c616a16012d6")
-    elif "whinlatter" in series:
-        d.setVar("SRCBRANCH_vx", "edgefirst-imx-6.18.2-1.0.0")
-        d.setVar("SRCREV_vx", "c8e52d736c2028b82816b25e81c2779db21018a3")
-    else:
-        d.setVar("SRCBRANCH_vx", "edgefirst-1.2.3")
-        d.setVar("SRCREV_vx", "80b3409ee15edd0e68e7f64bd7f8e32d059cf2f0")
+    d.setVar("SRCBRANCH_vx", "edgefirst")
+    d.setVar("SRCREV_vx", "6f8189fe3db880470e23cfdc1ac412caa10ad482")
 }
 
 # G2D is needed by the camera_adaptor_test example for hardware-accelerated

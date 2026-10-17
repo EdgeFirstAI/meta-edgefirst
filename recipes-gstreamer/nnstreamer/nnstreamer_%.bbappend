@@ -18,18 +18,8 @@
 # - gray8 padding removal
 # - default delegates fix
 
-SRC_URI = "git://github.com/EdgeFirstAI/nnstreamer.git;protocol=https;branch=${EDGEFIRST_NNSTREAMER_BRANCH}"
+SRC_URI = "git://github.com/EdgeFirstAI/nnstreamer.git;protocol=https;branch=edgefirst"
 SRCREV = "925d9ba391a2f84b5f5f9e8006548ec2e136a766"
-
-# Same commit is reachable from both branch names; pick the series-frozen
-# branch label so do_fetch does not depend on force-pushed rolling tips.
-python () {
-    series = set((d.getVar("LAYERSERIES_CORENAMES") or "").split())
-    if series & {"whinlatter", "wrynose"}:
-        d.setVar("EDGEFIRST_NNSTREAMER_BRANCH", "edgefirst")
-    else:
-        d.setVar("EDGEFIRST_NNSTREAMER_BRANCH", "edgefirst-1.2.3")
-}
 
 # EdgeFirst HAL delegate DMA-BUF support (EDGEAI-1189)
 # Enables tensor_filter to probe for hal_dmabuf_* symbols from Neutron delegate

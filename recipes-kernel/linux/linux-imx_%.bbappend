@@ -47,3 +47,30 @@ python () {
 SRC_URI:append:imx95-19x19-lpddr5-evk = " file://0002-arm64-dts-freescale-imx95-19x19-evk-add-os08a20-isp.patch"
 
 KERNEL_DEVICETREE:append:imx95-19x19-lpddr5-evk = " freescale/imx95-19x19-evk-os08a20-isp-adv7535.dtb"
+
+# The stock kernel-image-<type> scripts point /boot/<type> at the newest
+# installed kernel with a symlink, falling back to an in-place copy on a
+# filesystem without symlinks, and delete /boot/<type> whenever any kernel
+# package is removed. Kernel packages carry their version in the package name,
+# so removing an old kernel after upgrading deleted the new one's image.
+#
+# With the FAT boot partition mounted on /boot the image is a plain file that
+# U-Boot loads by name. The replacement scripts install it atomically, keep the
+# previous one as <type>.prev, and on removal only touch it when it is the image
+# of the package being removed. KERNEL_IMAGETYPE_SYMLINK stays set because the
+# deploy directory symlink that IMAGE_BOOT_FILES uses depends on it.
+python () {
+    kname = d.getVar("KERNEL_PACKAGE_NAME") or "kernel"
+    for scriptname, var in (("kernel-image-postinst.sh", "pkg_postinst"),
+                            ("kernel-image-prerm.sh", "pkg_prerm")):
+        path = bb.utils.which(d.getVar("FILESPATH"), scriptname)
+        if not path:
+            bb.fatal("%s not found in FILESPATH" % scriptname)
+        with open(path) as f:
+            script = f.read()
+        for imagetype in (d.getVar("KERNEL_IMAGETYPES") or "").split():
+            d.setVar("%s:%s-image-%s" % (var, kname, imagetype.lower()),
+                     script.replace("@TYPE@", imagetype))
+    for imagetype in (d.getVar("KERNEL_IMAGETYPES") or "").split():
+        d.delVar("pkg_postrm:%s-image-%s" % (kname, imagetype.lower()))
+}

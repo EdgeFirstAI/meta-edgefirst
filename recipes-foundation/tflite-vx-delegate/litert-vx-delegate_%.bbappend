@@ -9,6 +9,15 @@ python () {
     d.setVar("SRCREV_vx", "a65d4a23a43194b6c2d329f364c97183f507580d")
 }
 
+# The delegate's CMake fetches LiteRT itself and defaults to the wrynose tag.
+# Where the recipe builds against the walnascar LiteRT (6.12) that fetches
+# sources the delegate was not built with, so it is pointed at the tag the
+# recipe unpacks.
+python () {
+    if "walnascar" in (d.getVar("LAYERSERIES_CORENAMES") or "").split():
+        d.appendVar("EXTRA_OECMAKE", " -DLITERT_GIT_TAG=${SRCBRANCH_litert} -DTFLITE_GIT_TAG=${SRCBRANCH_litert}")
+}
+
 # G2D is needed by the camera_adaptor_test example for hardware-accelerated
 # image resize. Provided by imx-gpu-g2d on i.MX8MP via virtual/libg2d.
 DEPENDS:append = " virtual/libg2d"

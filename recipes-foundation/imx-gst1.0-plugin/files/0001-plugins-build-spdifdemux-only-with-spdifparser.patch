@@ -1,0 +1,21 @@
+From: EdgeFirst <noreply@edgefirst.ai>
+Subject: [PATCH] plugins: build spdifdemux only when spdifparser.h is available
+
+NXP's walnascar imx-parser does not provide spdifparser.h, which the wrynose
+baseline of this fork includes unconditionally.
+
+Upstream-Status: Inappropriate [walnascar compatibility for the EdgeFirst fork]
+---
+--- a/plugins/meson.build
++++ b/plugins/meson.build
+@@ -90,7 +90,9 @@
+     subdir('overlay_sink')
+   endif
+ elif build_MX8 == 'yes' or build_MX9 == 'yes'
+-  subdir('spdifdemux')
++  if cc.has_header('spdifparser.h', dependencies: imx_parser_dep)
++    subdir('spdifdemux')
++  endif
+   if have_asrc
+     subdir('imxasrc')
+   endif

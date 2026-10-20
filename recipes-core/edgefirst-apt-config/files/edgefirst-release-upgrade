@@ -1,0 +1,144 @@
+#!/bin/sh
+# Move this board to the next EdgeFirst quarterly release.
+#
+#   edgefirst-release-upgrade [-c|--check] [-y|--yes] [-r|--release YYYY.MM]
+#
+# Rolling PATCH updates need only apt update and apt full-upgrade. A new
+# quarterly release has its own feed and may be built on a newer vendor BSP, so
+# this tool reads the signed list of releases, points apt at the new feed by
+# installing the new edgefirst-apt-config from it, and then runs the upgrade.
+# With --check it only reports whether a newer release is available: exit 0 if
+# so, 1 if not.
+set -eu
+
+CONF=/etc/edgefirst/feed.conf
+OS_RELEASE=/etc/os-release
+LIST=/etc/apt/sources.list.d/edgefirst.list
+BOOTSTRAP=/etc/apt/sources.list.d/edgefirst-upgrade.list
+
+CHECK=0
+ASSUME_YES=0
+WANT=""
+while [ $# -gt 0 ]; do
+    case "$1" in
+        -c|--check) CHECK=1 ;;
+        -y|--yes) ASSUME_YES=1 ;;
+        -r|--release) shift; WANT="${1:?--release needs YYYY.MM}" ;;
+        -h|--help) sed -n '2,12p' "$0" | sed 's/^# \{0,1\}//'; exit 0 ;;
+        *) echo "unknown option: $1" >&2; exit 2 ;;
+    esac
+    shift
+done
+
+die() { echo "edgefirst-release-upgrade: $*" >&2; exit 1; }
+
+[ -r "$CONF" ] || die "$CONF is missing; this image has no EdgeFirst package feed"
+. "$CONF"
+. "$OS_RELEASE"
+[ -n "${EDGEFIRST_RELEASE:-}" ] || die "$OS_RELEASE does not name an EdgeFirst release"
+
+[ "$CHECK" -eq 1 ] || [ "$(id -u)" -eq 0 ] || die "must be run as root"
+
+WORK="$(mktemp -d "${TMPDIR:-/var/tmp}/edgefirst-upgrade.XXXXXX")"
+RESTORE=0
+cleanup() {
+    if [ "$RESTORE" -eq 1 ]; then
+        rm -f "$BOOTSTRAP"
+        [ ! -e "$LIST.save" ] || mv -f "$LIST.save" "$LIST"
+        apt-get update >/dev/null 2>&1 || true
+    fi
+    rm -rf "$WORK"
+}
+trap cleanup EXIT
+
+fetch() {
+    /usr/lib/apt/apt-helper download-file "$1" "$2" >/dev/null 2>&1 || die "cannot download $1"
+}
+
+fetch "$EDGEFIRST_FEED_URI/meta-release" "$WORK/meta-release"
+fetch "$EDGEFIRST_FEED_URI/meta-release.asc" "$WORK/meta-release.asc"
+gpgv --quiet --keyring "$EDGEFIRST_KEYRING" "$WORK/meta-release.asc" "$WORK/meta-release" 2>/dev/null \
+    || die "the list of releases is not signed by the EdgeFirst package key"
+
+# Stanzas: Release, BSP, Supported, Upgrade-From (space separated RELEASE/BSP
+# pairs this release can be reached from). The newest supported release that can
+# be reached from here is chosen, or the one named with --release.
+TARGET="$(awk -v from="$EDGEFIRST_RELEASE/$EDGEFIRST_BSP" -v want="$WANT" '
+    function flush() {
+        if (rel != "" && sup == "yes" && (want == "" || want == rel)) {
+            n = split(up, a, " ")
+            for (i = 1; i <= n; i++)
+                if (a[i] == from) print rel, bsp
+        }
+        rel = bsp = sup = up = ""
+    }
+    /^Release:/ { flush(); rel = $2 }
+    /^BSP:/ { bsp = $2 }
+    /^Supported:/ { sup = $2 }
+    /^Upgrade-From:/ { sub(/^Upgrade-From: */, ""); up = $0 }
+    END { flush() }' "$WORK/meta-release" | sort -V | tail -n1)"
+
+if [ -z "$TARGET" ]; then
+    echo "EdgeFirst Yocto $EDGEFIRST_RELEASE ($EDGEFIRST_BSP) has no newer release available."
+    exit 1
+fi
+NEW_RELEASE="${TARGET% *}"
+NEW_BSP="${TARGET#* }"
+
+echo "EdgeFirst Yocto $EDGEFIRST_VERSION on $EDGEFIRST_BSP"
+echo "can move to release $NEW_RELEASE on $NEW_BSP."
+[ "$CHECK" -eq 0 ] || exit 0
+
+# A run that stopped after the new feed was configured is finished by running
+# the tool again.
+RESUME=0
+grep -q "/$NEW_RELEASE/$NEW_BSP/" "$LIST" 2>/dev/null && RESUME=1
+
+if [ "$RESUME" -eq 0 ]; then
+    # The board has to be current on its own release first, so that what changes
+    # is only the release.
+    apt-get update >/dev/null || die "apt update failed"
+    PENDING="$(apt-get -s full-upgrade | grep -c '^Inst ' || true)"
+    [ "$PENDING" -eq 0 ] || die "$PENDING packages of $EDGEFIRST_RELEASE are not up to date; run apt full-upgrade first"
+fi
+if dpkg --audit | grep -q .; then
+    die "dpkg reports packages that are not fully installed; run dpkg --configure -a first"
+fi
+
+grep -q ' /boot ' /proc/mounts || die "/boot is not mounted; the kernel could not be installed"
+AVAIL_ROOT="$(df -Pk / | awk 'NR==2 {print $4}')"
+AVAIL_BOOT="$(df -Pk /boot | awk 'NR==2 {print $4}')"
+[ "$AVAIL_ROOT" -ge 1048576 ] || die "less than 1 GiB free on /"
+[ "$AVAIL_BOOT" -ge 81920 ] || die "less than 80 MiB free on /boot; remove a kernel you no longer need with apt remove"
+
+if [ "$ASSUME_YES" -eq 0 ]; then
+    printf 'Upgrade to EdgeFirst Yocto %s on %s? The board must be rebooted afterwards. [y/N] ' "$NEW_RELEASE" "$NEW_BSP"
+    read -r answer
+    case "$answer" in y|Y|yes) ;; *) echo "cancelled"; exit 1 ;; esac
+fi
+
+# apt reads only the new feed's machine directory first: it holds the
+# edgefirst-apt-config of the new release, whose installation then replaces the
+# list of feeds for the new release. A failure before that point puts the old
+# list back.
+export DEBIAN_FRONTEND=noninteractive
+if [ "$RESUME" -eq 0 ]; then
+    RESTORE=1
+    mv -f "$LIST" "$LIST.save"
+    echo "deb [signed-by=$EDGEFIRST_KEYRING] $EDGEFIRST_FEED_URI/$NEW_RELEASE/$NEW_BSP/$EDGEFIRST_FEED_MACHINE_ARCH ./" > "$BOOTSTRAP"
+    apt-get update || die "cannot read the $NEW_RELEASE feed"
+    apt-get install -y --allow-downgrades -o Dpkg::Options::=--force-confnew -o Dpkg::Options::=--force-confmiss \
+        edgefirst-apt-config || die "cannot install the $NEW_RELEASE feed configuration"
+    rm -f "$BOOTSTRAP" "$LIST.save"
+    RESTORE=0
+fi
+
+# The old release has been left; from here a failed run is finished by running
+# the tool again.
+apt-get update || die "cannot read the $NEW_RELEASE feeds; run edgefirst-release-upgrade again"
+apt-get full-upgrade -y --allow-downgrades -o Dpkg::Options::=--force-confdef -o Dpkg::Options::=--force-confold \
+    || die "the upgrade did not complete; run edgefirst-release-upgrade again"
+
+. "$OS_RELEASE"
+echo "Now on ${PRETTY_NAME:-EdgeFirst Yocto $NEW_RELEASE}."
+echo "Reboot to run the new kernel, then run apt autoremove to remove the old one."

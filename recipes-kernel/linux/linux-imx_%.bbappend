@@ -76,6 +76,15 @@ python () {
         d.delVar("pkg_postrm:%s-image-%s" % (kname, imagetype.lower()))
 }
 
+# meta-freescale makes every kernel conflict with the GPU module of the others,
+# which allows one kernel at a time. apt's full-upgrade never removes an
+# installed package to make room for a new one and so keeps the old kernel,
+# holding back the update. Without the conflict a new kernel installs beside the
+# old one, as it does on a desktop distribution, and apt autoremove retires the
+# old kernel and its modules, which are marked as automatically installed.
+RCONFLICTS:${KERNEL_PACKAGE_NAME}-base:remove = "kernel-module-imx-gpu-viv"
+RREPLACES:${KERNEL_PACKAGE_NAME}-base:remove = "kernel-module-imx-gpu-viv"
+
 # apt only replaces a package whose version string changed. A kernel patch or
 # a change to the scripts above leaves the kernel version unchanged, so the
 # revision carries a digest of everything local that goes into the kernel

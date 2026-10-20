@@ -33,6 +33,9 @@ NEUTRON_SRC = "git://github.com/EdgeFirstAI/neutron.git;protocol=https"
 SRCBRANCH = "eiq-neutron-sdk"
 SRCREV = "3b9a9d7c3dab89843bbba06844e07a3d5f647db3"
 
+# Where the git fetcher unpacks differs between Yocto series.
+S = "${@(d.getVar('UNPACKDIR') + '/' + d.getVar('BB_GIT_DEFAULT_DESTSUFFIX')) if d.getVar('BB_GIT_DEFAULT_DESTSUFFIX') else ((d.getVar('UNPACKDIR') or d.getVar('WORKDIR')) + '/git')}"
+
 NEUTRON_TARGET = ""
 NEUTRON_TARGET:mx943-nxp-bsp = "imx943"
 NEUTRON_TARGET:mx95-nxp-bsp = "imx95"

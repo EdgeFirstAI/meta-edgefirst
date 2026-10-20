@@ -26,6 +26,11 @@ do_install() {
 
 FILES:${PN} = "${sysconfdir}/edgefirst-release"
 
+# Declared here as well so that the image build, which decides what goes into the
+# rootfs from the task graph, knows to build and include it; the kernel packages
+# are added at package time below.
+RDEPENDS:${PN} = "edgefirst-apt-config"
+
 # The kernel recipe's package data names the packages of the kernel being
 # built. A dependency on the bare virtual names would be satisfied by the old
 # kernel that is already installed, so the exact package names and versions are

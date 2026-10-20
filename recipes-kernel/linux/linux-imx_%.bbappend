@@ -66,6 +66,7 @@ python () {
         path = bb.utils.which(d.getVar("FILESPATH"), scriptname)
         if not path:
             bb.fatal("%s not found in FILESPATH" % scriptname)
+        bb.parse.mark_dependency(d, path)
         with open(path) as f:
             script = f.read()
         for imagetype in (d.getVar("KERNEL_IMAGETYPES") or "").split():
@@ -73,4 +74,23 @@ python () {
                      script.replace("@TYPE@", imagetype))
     for imagetype in (d.getVar("KERNEL_IMAGETYPES") or "").split():
         d.delVar("pkg_postrm:%s-image-%s" % (kname, imagetype.lower()))
+}
+
+# apt only replaces a package whose version string changed. A kernel patch or
+# a change to the scripts above leaves the kernel version unchanged, so the
+# revision carries a digest of everything local that goes into the kernel
+# packages. The feed is pinned, so the revision only has to differ between
+# builds, not increase.
+python () {
+    import hashlib
+    digest = hashlib.sha256()
+    names = [uri[len("file://"):].split(";")[0]
+             for uri in (d.getVar("SRC_URI") or "").split() if uri.startswith("file://")]
+    names += ["kernel-image-postinst.sh", "kernel-image-prerm.sh"]
+    for name in sorted(set(names)):
+        path = bb.utils.which(d.getVar("FILESPATH"), name)
+        if path:
+            bb.parse.mark_dependency(d, path)
+            digest.update(name.encode() + bb.utils.sha256_file(path).encode())
+    d.setVar("PR", "r0." + digest.hexdigest()[:8])
 }

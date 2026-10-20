@@ -97,7 +97,7 @@ grep -q "/$NEW_RELEASE/$NEW_BSP/" "$LIST" 2>/dev/null && RESUME=1
 if [ "$RESUME" -eq 0 ]; then
     # The board has to be current on its own release first, so that what changes
     # is only the release.
-    apt-get update >/dev/null || die "apt update failed"
+    apt-get update -o APT::Update::Error-Mode=any >/dev/null || die "apt update failed"
     PENDING="$(apt-get -s full-upgrade | grep -c '^Inst ' || true)"
     [ "$PENDING" -eq 0 ] || die "$PENDING packages of $EDGEFIRST_RELEASE are not up to date; run apt full-upgrade first"
 fi
@@ -126,16 +126,24 @@ if [ "$RESUME" -eq 0 ]; then
     RESTORE=1
     mv -f "$LIST" "$LIST.save"
     echo "deb [signed-by=$EDGEFIRST_KEYRING] $EDGEFIRST_FEED_URI/$NEW_RELEASE/$NEW_BSP/$EDGEFIRST_FEED_MACHINE_ARCH ./" > "$BOOTSTRAP"
-    apt-get update || die "cannot read the $NEW_RELEASE feed"
+    apt-get update -o APT::Update::Error-Mode=any || die "cannot read the $NEW_RELEASE feed"
     apt-get install -y --allow-downgrades -o Dpkg::Options::=--force-confnew -o Dpkg::Options::=--force-confmiss \
         edgefirst-apt-config || die "cannot install the $NEW_RELEASE feed configuration"
     rm -f "$BOOTSTRAP" "$LIST.save"
     RESTORE=0
+    # The new configuration names the public feed; a board that reads a mirror
+    # keeps reading it.
+    NEW_URI="$(. "$CONF"; echo "$EDGEFIRST_FEED_URI")"
+    if [ "$NEW_URI" != "$EDGEFIRST_FEED_URI" ]; then
+        sed -i "s#^EDGEFIRST_FEED_URI=.*#EDGEFIRST_FEED_URI=$EDGEFIRST_FEED_URI#" "$CONF"
+        sed -i "s#$NEW_URI#$EDGEFIRST_FEED_URI#" "$LIST"
+        sed -i "s#^Pin: origin .*#Pin: origin $(echo "$EDGEFIRST_FEED_URI" | cut -d/ -f3 | cut -d: -f1)#" /etc/apt/preferences.d/edgefirst
+    fi
 fi
 
 # The old release has been left; from here a failed run is finished by running
 # the tool again.
-apt-get update || die "cannot read the $NEW_RELEASE feeds; run edgefirst-release-upgrade again"
+apt-get update -o APT::Update::Error-Mode=any || die "cannot read the $NEW_RELEASE feeds; run edgefirst-release-upgrade again"
 apt-get full-upgrade -y --allow-downgrades -o Dpkg::Options::=--force-confdef -o Dpkg::Options::=--force-confold \
     || die "the upgrade did not complete; run edgefirst-release-upgrade again"
 

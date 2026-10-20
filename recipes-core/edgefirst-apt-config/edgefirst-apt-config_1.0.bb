@@ -25,6 +25,11 @@ EDGEFIRST_FEED_URI ?= "https://repo.edgefirst.ai/nxp"
 # not it holds packages, and the publisher creates an index for each of them.
 EDGEFIRST_FEED_ARCHS ?= "${PACKAGE_ARCHS}"
 
+python () {
+    if d.getVar("EDGEFIRST_APT_FEED") != "1":
+        raise bb.parse.SkipRecipe("EDGEFIRST_APT_FEED is not 1")
+}
+
 KEYRING = "${datadir}/keyrings/edgefirst-nxp-apt.gpg"
 
 do_install() {
@@ -50,6 +55,15 @@ CONF
 
     install -d ${D}${sbindir}
     install -m 0755 ${S}/edgefirst-release-upgrade ${D}${sbindir}/edgefirst-release-upgrade
+
+    # Kernel module packages are named by kernel version and installed beside
+    # each other until the old kernel is removed, but a module's autoload
+    # configuration has the same path in every one of them. dpkg keeps the file
+    # when either package is removed.
+    install -d ${D}${sysconfdir}/apt/apt.conf.d
+    cat > ${D}${sysconfdir}/apt/apt.conf.d/50edgefirst <<APTCONF
+Dpkg::Options { "--force-overwrite"; };
+APTCONF
 
     install -d ${D}${sysconfdir}/apt/preferences.d
     cat > ${D}${sysconfdir}/apt/preferences.d/edgefirst <<PREF

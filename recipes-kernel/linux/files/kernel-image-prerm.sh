@@ -1,14 +1,17 @@
 set +e
+@BOOT_FUNCTIONS@
 b=/${KERNEL_IMAGEDEST}
-v=@TYPE@-${KERNEL_VERSION}
+src=$b/@TYPE@-${KERNEL_VERSION}
 # Removing a kernel other than the one in use leaves the image alone.
-if [ -z "$D" ] && [ "$1" = "remove" ]; then
-    if [ -f $b/@TYPE@ ] && cmp -s $b/@TYPE@ $b/$v; then
-        if [ -f $b/@TYPE@.prev ]; then
-            cp -f $b/@TYPE@.prev $b/@TYPE@.new && sync && mv -f $b/@TYPE@.new $b/@TYPE@ && rm -f $b/@TYPE@.prev
+if [ -z "$D" ] && [ "$1" = "remove" ] && edgefirst_mount_boot; then
+    dst=$EDGEFIRST_BOOT
+    if [ -f $dst/@TYPE@ ] && cmp -s $dst/@TYPE@ $src; then
+        if [ -f $dst/@TYPE@.prev ]; then
+            cp -f $dst/@TYPE@.prev $dst/@TYPE@.new && sync && mv -f $dst/@TYPE@.new $dst/@TYPE@ && rm -f $dst/@TYPE@.prev
         else
-            rm -f $b/@TYPE@
+            rm -f $dst/@TYPE@
         fi
     fi
+    edgefirst_umount_boot
 fi
 set -e

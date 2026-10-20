@@ -7,7 +7,7 @@ ROOTFS_POSTPROCESS_COMMAND += "edgefirst_mark_kernel_auto;"
 
 edgefirst_mark_kernel_auto () {
     status=${IMAGE_ROOTFS}${localstatedir}/lib/dpkg/status
-    if [ -z "${EDGEFIRST_VERSION}" ] || [ "${IMAGE_PKGTYPE}" != "deb" ] || ! grep -q '^Package: edgefirst-release$' $status 2>/dev/null; then
+    if [ "${EDGEFIRST_APT_FEED}" != "1" ] || [ -z "${EDGEFIRST_VERSION}" ] || [ "${IMAGE_PKGTYPE}" != "deb" ] || ! grep -q '^Package: edgefirst-release$' $status 2>/dev/null; then
         return 0
     fi
     install -d ${IMAGE_ROOTFS}${localstatedir}/lib/apt

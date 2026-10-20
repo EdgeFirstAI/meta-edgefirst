@@ -4,7 +4,7 @@
 
 python () {
     version = d.getVar("EDGEFIRST_VERSION")
-    if not version:
+    if d.getVar("EDGEFIRST_APT_FEED") != "1" or not version:
         return
     d.appendVar("OS_RELEASE_FIELDS", " EDGEFIRST_RELEASE EDGEFIRST_VERSION EDGEFIRST_BSP")
     d.setVar("EDGEFIRST_BSP", d.getVar("EDGEFIRST_FEED_BSP"))

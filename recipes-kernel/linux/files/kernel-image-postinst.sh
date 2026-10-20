@@ -1,25 +1,27 @@
 set +e
+@BOOT_FUNCTIONS@
 b=/${KERNEL_IMAGEDEST}
-v=@TYPE@-${KERNEL_VERSION}
-if [ -n "$D" ]; then
-    ln -sf $v $D$b/@TYPE@ > /dev/null 2>&1
-else
-    if ! grep -q " $b " /proc/mounts; then
-        echo "WARNING: $b is not the boot partition, so U-Boot will not see this kernel." >&2
+src=$b/@TYPE@-${KERNEL_VERSION}
+if [ -z "$D" ]; then
+    if ! edgefirst_mount_boot; then
+        echo "ERROR: no partition is labelled boot, so U-Boot would not see this kernel." >&2
+        exit 1
     fi
-    if [ -L $b/@TYPE@ ]; then
-        rm -f $b/@TYPE@
+    dst=$EDGEFIRST_BOOT
+    if [ -L $dst/@TYPE@ ]; then
+        rm -f $dst/@TYPE@
     fi
-    if ! cmp -s $b/$v $b/@TYPE@; then
-        if [ -f $b/@TYPE@ ]; then
-            cp -f $b/@TYPE@ $b/@TYPE@.prev
+    if ! cmp -s $src $dst/@TYPE@; then
+        if [ -f $dst/@TYPE@ ]; then
+            cp -f $dst/@TYPE@ $dst/@TYPE@.prev
         fi
-        if ! { cp -f $b/$v $b/@TYPE@.new && sync && mv -f $b/@TYPE@.new $b/@TYPE@; }; then
-            rm -f $b/@TYPE@.new
-            echo "ERROR: could not install $b/@TYPE@; the previous kernel is unchanged." >&2
+        if ! { cp -f $src $dst/@TYPE@.new && sync && mv -f $dst/@TYPE@.new $dst/@TYPE@; }; then
+            rm -f $dst/@TYPE@.new
+            edgefirst_umount_boot
+            echo "ERROR: could not install $dst/@TYPE@; the previous kernel is unchanged." >&2
             exit 1
         fi
     fi
-    sync
+    edgefirst_umount_boot
 fi
 set -e

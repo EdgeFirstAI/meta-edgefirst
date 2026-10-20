@@ -48,33 +48,25 @@ SRC_URI:append:imx95-19x19-lpddr5-evk = " file://0002-arm64-dts-freescale-imx95-
 
 KERNEL_DEVICETREE:append:imx95-19x19-lpddr5-evk = " freescale/imx95-19x19-evk-os08a20-isp-adv7535.dtb"
 
+# Everything below changes how the kernel is packaged so that apt can update it
+# on a board, and applies only where EDGEFIRST_APT_FEED is 1. The vendor stacks
+# that build this kernel recipe otherwise keep the stock packaging.
+#
 # The stock kernel-image-<type> scripts point /boot/<type> at the newest
-# installed kernel with a symlink, falling back to an in-place copy on a
-# filesystem without symlinks, and delete /boot/<type> whenever any kernel
+# installed kernel with a symlink, and delete /boot/<type> whenever any kernel
 # package is removed. Kernel packages carry their version in the package name,
 # so removing an old kernel after upgrading deleted the new one's image.
 #
-# With the FAT boot partition mounted on /boot the image is a plain file that
-# U-Boot loads by name. The replacement scripts install it atomically, keep the
-# previous one as <type>.prev, and on removal only touch it when it is the image
-# of the package being removed. KERNEL_IMAGETYPE_SYMLINK stays set because the
-# deploy directory symlink that IMAGE_BOOT_FILES uses depends on it.
-python () {
-    kname = d.getVar("KERNEL_PACKAGE_NAME") or "kernel"
-    for scriptname, var in (("kernel-image-postinst.sh", "pkg_postinst"),
-                            ("kernel-image-prerm.sh", "pkg_prerm")):
-        path = bb.utils.which(d.getVar("FILESPATH"), scriptname)
-        if not path:
-            bb.fatal("%s not found in FILESPATH" % scriptname)
-        bb.parse.mark_dependency(d, path)
-        with open(path) as f:
-            script = f.read()
-        for imagetype in (d.getVar("KERNEL_IMAGETYPES") or "").split():
-            d.setVar("%s:%s-image-%s" % (var, kname, imagetype.lower()),
-                     script.replace("@TYPE@", imagetype))
-    for imagetype in (d.getVar("KERNEL_IMAGETYPES") or "").split():
-        d.delVar("pkg_postrm:%s-image-%s" % (kname, imagetype.lower()))
-}
+# U-Boot loads the image and the device trees as plain files from the FAT boot
+# partition, which cannot hold what dpkg needs to replace a file: it makes a
+# hard link to the old one first. The packages therefore install into /boot on
+# the root filesystem, as the stock packages do, and the scripts below copy the
+# image and the device trees to the FAT partition, wherever it is mounted,
+# atomically and keeping the previous image as <type>.prev. The FAT partition
+# must not be mounted on /boot, which would hide the packaged files. Removing a
+# kernel only touches the partition's <type> when it is that kernel's image.
+# KERNEL_IMAGETYPE_SYMLINK stays set because the deploy directory symlink that
+# IMAGE_BOOT_FILES uses depends on it.
 
 # meta-freescale makes every kernel conflict with the GPU module of the others,
 # which allows one kernel at a time. apt's full-upgrade never removes an
@@ -82,24 +74,55 @@ python () {
 # holding back the update. Without the conflict a new kernel installs beside the
 # old one, as it does on a desktop distribution, and apt autoremove retires the
 # old kernel and its modules, which are marked as automatically installed.
-RCONFLICTS:${KERNEL_PACKAGE_NAME}-base:remove = "kernel-module-imx-gpu-viv"
-RREPLACES:${KERNEL_PACKAGE_NAME}-base:remove = "kernel-module-imx-gpu-viv"
-
+#
 # apt only replaces a package whose version string changed. A kernel patch or
-# a change to the scripts above leaves the kernel version unchanged, so the
-# revision carries a digest of everything local that goes into the kernel
-# packages. The feed is pinned, so the revision only has to differ between
-# builds, not increase.
+# a change to the scripts leaves the kernel version unchanged, so the revision
+# carries a digest of everything local that goes into the kernel packages, after
+# the release and PATCH so that a revision always sorts above the one it
+# replaces: apt would otherwise take an update whose digest sorts lower for a
+# downgrade.
 python () {
+    if d.getVar("EDGEFIRST_APT_FEED") != "1":
+        return
     import hashlib
+
+    kname = d.getVar("KERNEL_PACKAGE_NAME") or "kernel"
+    imagetypes = (d.getVar("KERNEL_IMAGETYPES") or "").split()
+
+    def script(name):
+        path = bb.utils.which(d.getVar("FILESPATH"), name)
+        if not path:
+            bb.fatal("%s not found in FILESPATH" % name)
+        bb.parse.mark_dependency(d, path)
+        with open(path) as f:
+            return f.read()
+
+    common = script("kernel-boot-common.sh")
+    for scriptname, var in (("kernel-image-postinst.sh", "pkg_postinst"),
+                            ("kernel-image-prerm.sh", "pkg_prerm")):
+        text = script(scriptname).replace("@BOOT_FUNCTIONS@", common)
+        for imagetype in imagetypes:
+            d.setVar("%s:%s-image-%s" % (var, kname, imagetype.lower()),
+                     text.replace("@TYPE@", imagetype))
+    d.setVar("pkg_postinst:%s-devicetree" % kname,
+             script("kernel-devicetree-postinst.sh").replace("@BOOT_FUNCTIONS@", common))
+    tools = " util-linux-findmnt util-linux-mount util-linux-umount"
+    d.appendVar("RDEPENDS:%s-devicetree" % kname, tools)
+    for imagetype in imagetypes:
+        d.appendVar("RDEPENDS:%s-image-%s" % (kname, imagetype.lower()), tools)
+        d.delVar("pkg_postrm:%s-image-%s" % (kname, imagetype.lower()))
+
+    d.setVar("RCONFLICTS:%s-base:remove" % kname, "kernel-module-imx-gpu-viv")
+    d.setVar("RREPLACES:%s-base:remove" % kname, "kernel-module-imx-gpu-viv")
+
     digest = hashlib.sha256()
     names = [uri[len("file://"):].split(";")[0]
              for uri in (d.getVar("SRC_URI") or "").split() if uri.startswith("file://")]
-    names += ["kernel-image-postinst.sh", "kernel-image-prerm.sh"]
+    names += ["kernel-image-postinst.sh", "kernel-image-prerm.sh", "kernel-devicetree-postinst.sh", "kernel-boot-common.sh"]
     for name in sorted(set(names)):
         path = bb.utils.which(d.getVar("FILESPATH"), name)
         if path:
             bb.parse.mark_dependency(d, path)
             digest.update(name.encode() + bb.utils.sha256_file(path).encode())
-    d.setVar("PR", "r0." + digest.hexdigest()[:8])
+    d.setVar("PR", "r0.%s.%s" % (d.getVar("EDGEFIRST_REVISION"), digest.hexdigest()[:8]))
 }

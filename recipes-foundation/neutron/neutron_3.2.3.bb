@@ -9,9 +9,10 @@
 # releases so only SRCREV moves.
 #
 # The fork's layout is identical to the one nxp-imx/neutron.git publishes,
-# validated byte-for-byte against 3.2.1, which NXP releases both ways. This
-# recipe therefore only redirects the fetch; packaging comes from the
-# meta-freescale-ml recipe unchanged.
+# validated byte-for-byte against 3.2.1, which NXP releases both ways.
+#
+# This recipe is self-contained. Where meta-freescale-ml also provides a
+# neutron recipe, this one wins on version.
 #
 # Driver, firmware and compiler have to come from one SDK version or the
 # firmware reports "Microcode version mismatch!". The compiler side is in
@@ -21,16 +22,43 @@
 # driver expects 0x0 and would wait forever, so each vendor kernel also
 # needs the 6.18.37 mailbox handshake backported.
 
-require recipes-libraries/neutron/neutron_1.0.0.bb
+SUMMARY = "The firmware, library and converter for i.MX Neutron NPU"
+DESCRIPTION = "The firmware library and converter for i.MX Neutron NPU"
+LICENSE = "Proprietary"
+# LA_OPT_NXP_Software_License v64.2 May 2026
+LIC_FILES_CHKSUM = "file://LICENSE.txt;md5=610e715743b41d3ebde8bd7bf208791d"
 
+SRC_URI = "${NEUTRON_SRC};branch=${SRCBRANCH}"
 NEUTRON_SRC = "git://github.com/EdgeFirstAI/neutron.git;protocol=https"
 SRCBRANCH = "eiq-neutron-sdk"
 SRCREV = "3b9a9d7c3dab89843bbba06844e07a3d5f647db3"
 
-# 3.2.3 ships LA_OPT_NXP_Software_License v64.2 May 2026, replacing the
-# v63 May 2025 text the 1.0.0 recipe pins.
-LIC_FILES_CHKSUM = "file://LICENSE.txt;md5=610e715743b41d3ebde8bd7bf208791d"
-
+NEUTRON_TARGET = ""
+NEUTRON_TARGET:mx943-nxp-bsp = "imx943"
+NEUTRON_TARGET:mx95-nxp-bsp = "imx95"
 NEUTRON_TARGET:mx952-nxp-bsp = "imx952"
+
+do_install () {
+    install -d ${D}${nonarch_base_libdir}/firmware
+    install -m 0644 ${S}/${NEUTRON_TARGET}/firmware/* ${D}${nonarch_base_libdir}/firmware/
+
+    install -d ${D}${includedir}/neutron
+    cp ${S}/${NEUTRON_TARGET}/include/* ${D}${includedir}/neutron
+
+    install -d ${D}${libdir}
+    cp --no-preserve=ownership -d ${S}/${NEUTRON_TARGET}/library/* ${D}${libdir}
+}
+
+# The packaged binaries have been stripped of debug info.
+INHIBIT_PACKAGE_DEBUG_SPLIT = "1"
+INHIBIT_PACKAGE_STRIP = "1"
+INHIBIT_SYSROOT_STRIP = "1"
+
+# The library file is unversioned.
+SOLIBS = ".so"
+FILES_SOLIBSDEV = ""
+
+FILES:${PN} += "${nonarch_base_libdir}/firmware/*"
+INSANE_SKIP:${PN} = "arch"
 
 COMPATIBLE_MACHINE = "(mx943-nxp-bsp|mx95-nxp-bsp|mx952-nxp-bsp)"

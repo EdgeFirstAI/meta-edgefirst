@@ -4,8 +4,10 @@
 # i.MX GStreamer elements, enabling zero-copy inference pipelines with
 # NNStreamer and the NPU.
 #
-# Based on NXP's MM_04.11.00_2605_L6.18.20 baseline (rel_imx_6.18.20_2.0.0).
-# Every Yocto series builds the rolling edgefirst-dmabuf branch.
+# Every Yocto series builds the rolling edgefirst-dmabuf branch, which carries
+# the same change once per NXP baseline: 59f9a44 on MM_04.11.00_2605_L6.18.20,
+# which older releases also use, and 0a07fd0 on MM_04.11.01_2608_L6.18.37. The
+# baseline the layer's recipe tracks selects the revision.
 
 # The fork is rebased onto NXP's wrynose baseline, where the physical memory
 # meta header is gst/video/gstphymemmeta.h. NXP's walnascar GStreamer ships it
@@ -14,8 +16,12 @@
 IMXGST_SRC = "git://github.com/EdgeFirstAI/imx-gst1.0-plugin.git;protocol=https"
 
 python () {
+    import re
+    nxp = re.match(r"MM_(\d+)\.(\d+)\.(\d+)", d.getVar("SRCBRANCH") or "")
+    newer = nxp and tuple(int(x) for x in nxp.groups()) >= (4, 11, 1)
     d.setVar("SRCBRANCH", "edgefirst-dmabuf")
-    d.setVar("SRCREV", "59f9a4418489c98c552d682c0909b7d030ddfcef")
+    d.setVar("SRCREV", "0a07fd00dee582f930e4638bd6554c41f2b0dcdb" if newer
+             else "59f9a4418489c98c552d682c0909b7d030ddfcef")
 }
 
 edgefirst_phymem_compat() {

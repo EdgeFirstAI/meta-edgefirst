@@ -9,6 +9,7 @@ See the [EdgeFirst organization](https://github.com/EdgeFirstAI) for the full pr
 | Recipe | Repo | Description |
 |--------|------|-------------|
 | edgefirst-hal | [hal](https://github.com/EdgeFirstAI/hal) | Hardware abstraction layer — preprocessing, post-processing (quantized NMS), model metadata, DMA-BUF tensor management. C library + Python bindings. |
+| edgefirst-camera-libcamera | [camera](https://github.com/EdgeFirstAI/camera) | C ABI shim over libcamera's C++ API, which the Camera SDK's libcamera backend loads with `dlopen` as `libedgefirst_camera_libcamera.so.1`. Built from source against the image's libcamera (0.5 or newer), so it matches that libcamera's minor version. Nothing links it, so a recipe or packagegroup that ships the SDK has to install it. |
 | edgefirst-ara2 | [ara2-rs](https://github.com/EdgeFirstAI/ara2-rs) | Ara-2 NPU Python bindings. Works with either `imx-nxp-ara2` runtime packaging (NXP's meta-imx-ml or the Kinara SDK from meta-kinara). |
 | edgefirst-tflite | [tflite-rs](https://github.com/EdgeFirstAI/tflite-rs) | TensorFlow Lite bindings with NPU acceleration support. Python module. |
 | edgefirst-modelzoo | [Hugging Face Model Zoo](https://huggingface.co/EdgeFirst) | Pre-installed YOLOv8n det/seg models. INT8 smart TFLite in subpackages `edgefirst-modelzoo-yolov8n-det` and `-yolov8n-seg` (`mx8mp` gets generic `.tflite`, `mx95` gets `.imx95.tflite`); INT16 Ara-2 `.dvm` in `-yolov8n-det-ara2` and `-yolov8n-seg-ara2`, the same on both. `edgefirst-modelzoo` installs all four. Installs under `/usr/share/edgefirst/modelzoo/`. |

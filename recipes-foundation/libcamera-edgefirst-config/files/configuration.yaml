@@ -1,0 +1,16 @@
+# Prefer the NXP NEO ISP pipeline handler on the SoCs that have one.
+#
+# libcamera matches pipeline handlers in registration order and stops at the
+# first that claims a camera. imx8-isi is registered before nxp/neo, so on an
+# i.MX 95 it claims the sensor and the application receives raw Bayer frames
+# straight off the sensor interface. Naming nxp/neo first routes the camera
+# through the ISP instead, which loads the sensor's tuning file and offers
+# processed formats (NV12, NV21, YUYV, RGB). The other handlers stay in the
+# list so USB and other cameras still enumerate.
+version: 1
+configuration:
+  pipelines_match_list:
+    - nxp/neo
+    - imx8-isi
+    - uvcvideo
+    - simple

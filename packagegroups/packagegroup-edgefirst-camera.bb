@@ -17,7 +17,11 @@ RDEPENDS:${PN} = " \
     libcamera \
 "
 
-# i.MX 95 ISP: the NEO IPA module libcamera loads for the on-SoC ISP.
+# i.MX 95 ISP: the NEO IPA module libcamera loads for the on-SoC ISP, and the
+# global configuration that makes libcamera match the NEO pipeline handler
+# ahead of imx8-isi, which would otherwise claim the camera and deliver raw
+# Bayer rather than ISP output.
 RDEPENDS:${PN}:append:mx95-nxp-bsp = " \
     neo-ipa-uguzzi \
+    libcamera-edgefirst-config \
 "

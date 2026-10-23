@@ -5,17 +5,6 @@ All notable changes to the `meta-edgefirst` Yocto layer are documented here.
 Each entry lists package version changes with links to the upstream
 CHANGELOG. For full per-package details, follow the links.
 
-## Unreleased
-
-### Package Updates
-
-| Package | 2026.10.0 | Unreleased | Changelog |
-|---------|-----------|------------|-----------|
-| edgefirst-websrv | 4.4.0 | 4.4.1 | [CHANGELOG](https://github.com/EdgeFirstAI/websrv/blob/v4.4.1/CHANGELOG.md) |
-| edgefirst-webui | 4.8.0 | 4.8.1 | [CHANGELOG](https://github.com/EdgeFirstAI/webui/blob/v4.8.1/CHANGELOG.md) |
-| edgefirst-ara2 | 0.21.0 | 0.23.0 | [CHANGELOG](https://github.com/EdgeFirstAI/ara2-rs/blob/v0.23.0/CHANGELOG.md) |
-| edgefirst-client | 2.17.0 | 2.19.0 | [CHANGELOG](https://github.com/EdgeFirstAI/client/blob/v2.19.0/CHANGELOG.md) |
-
 ## 2026.10.0
 
 This layer is not tagged. Release versions are owned by torizon-maivin, and the layer revision that belongs to a release is the one pinned in the torizon-maivin manifest at that release's tag. This entry is cumulative since v1.2.3, the last layer-tagged release, and includes changes first shipped in 2026.08.0.
@@ -37,10 +26,10 @@ This layer is not tagged. Release versions are owned by torizon-maivin, and the 
 | edgefirst-lidarpub | 2.2.1 | 2.5.0 | [CHANGELOG](https://github.com/EdgeFirstAI/lidarpub/blob/v2.5.0/CHANGELOG.md) |
 | edgefirst-recorder | 1.8.0 | 1.11.0 | [CHANGELOG](https://github.com/EdgeFirstAI/recorder/blob/v1.11.0/CHANGELOG.md) |
 | edgefirst-replay | 2.3.1 | 3.0.0 | [CHANGELOG](https://github.com/EdgeFirstAI/replay/blob/v3.0.0/CHANGELOG.md) |
-| edgefirst-websrv | 4.0.1 | 4.4.0 | [CHANGELOG](https://github.com/EdgeFirstAI/websrv/blob/v4.4.0/CHANGELOG.md) |
-| edgefirst-webui | 4.1.1 | 4.8.0 | [CHANGELOG](https://github.com/EdgeFirstAI/webui/blob/v4.8.0/CHANGELOG.md) |
+| edgefirst-websrv | 4.0.1 | 4.4.1 | [CHANGELOG](https://github.com/EdgeFirstAI/websrv/blob/v4.4.1/CHANGELOG.md) |
+| edgefirst-webui | 4.1.1 | 4.8.1 | [CHANGELOG](https://github.com/EdgeFirstAI/webui/blob/v4.8.1/CHANGELOG.md) |
 | edgefirst-modelzoo | — | 1.0.0 (new) | [Model Zoo](https://huggingface.co/EdgeFirst) |
-| edgefirst-ara2 | 0.16.0 (meta-kinara) | 0.21.0 | [CHANGELOG](https://github.com/EdgeFirstAI/ara2-rs/blob/v0.21.0/CHANGELOG.md) |
+| edgefirst-ara2 | 0.16.0 (meta-kinara) | 0.23.0 | [CHANGELOG](https://github.com/EdgeFirstAI/ara2-rs/blob/v0.23.0/CHANGELOG.md) |
 | edgefirst-gstreamer | 0.4.0 + main | 0.4.0 + main (`b93cf60`, overlay expose-timing property + frame-timing signal) | [CHANGELOG](https://github.com/EdgeFirstAI/gstreamer/blob/main/CHANGELOG.md) |
 | zenoh-c / zenohd / python3-zenoh | 1.9.0 | 1.10.1 | — |
 | neutron | 3.1.1 = SDK 3.1.2 (meta-imx) | 3.2.3 | [Fork](https://github.com/EdgeFirstAI/neutron/tree/v3.2.3) |
@@ -57,7 +46,7 @@ This layer is not tagged. Release versions are owned by torizon-maivin, and the 
 - 3.2.3 ships `LA_OPT_NXP_Software_License` v64.2 May 2026 in place of v63 May 2025, so `LIC_FILES_CHKSUM` carries a new md5. `NeutronDriverBmm.h` is now present for every SoC rather than i.MX 95 alone.
 - `tensorflow-lite-neutron-delegate` needs no change for 3.2.3. The SDK dropped the `sizeInfo` parameter from `matmul()` and gave it a typed `NeutronMatmulHeader *`, but the delegate calls only `neutronInit`, `neutronModelPrepare`, `neutronModelUnprepare`, `neutronDataSetup`, `neutronRunBlocking`, `neutronCustomPrepare` and `neutronCustomExec`, all unchanged from 3.1.2.
 - Driver, firmware and compiler have to come from one SDK version or the firmware reports `Microcode version mismatch!`. The compiler side is in EdgeFirst Studio, which selects a version to match the target. 3.2.x firmware also replies `0xA1` to a mailbox reset where kernels based on 6.18.20 expect `0x0`, so each vendor kernel needs the 6.18.37 mailbox handshake backported; for PHYTEC that lives in `meta-edgefirst-phytec`.
-- `edgefirst-ara2` moved here from meta-kinara and updated to 0.21.0. Since 0.19.0 it probes the loaded `libaraclient` DVAPI generation and finds the proxy socket, so the bindings work with either `imx-nxp-ara2` packaging: NXP's `rt-sdk-ara2` (meta-imx-ml) or the Kinara SDK runtime (meta-kinara). Adds the missing runtime dependency on `python3-numpy`.
+- `edgefirst-ara2` moved here from meta-kinara and updated to 0.23.0. Since 0.19.0 it probes the loaded `libaraclient` DVAPI generation and finds the proxy socket, so the bindings work with either `imx-nxp-ara2` packaging: NXP's `rt-sdk-ara2` (meta-imx-ml) or the Kinara SDK runtime (meta-kinara). Adds the missing runtime dependency on `python3-numpy`.
 - The NNStreamer Ara-2 `tensor_filter` sub-plugin (`nnstreamer-ara2`) is built only when `imx-nxp-ara2` resolves to the Kinara SDK runtime it was written for (meta-kinara's `KINARA_ARA2_RUNTIME = "kinara"`): the walnascar (6.12) BSP, or wrynose with `PREFERRED_VERSION_imx-nxp-ara2 = "1.2.1"`. With NXP's `rt-sdk-ara2` runtime, the default on wrynose, the `ara2` PACKAGECONFIG that meta-imx-ml appends on mx8mp/mx95 is removed. nnstreamer now recommends `nnstreamer-ara2` whenever it is built, so the `packagegroup-imx-ml` append is removed and the plugin depends on `imx-nxp-ara2` instead of `ara2`.
 - `pseudo` on walnascar moves to the pseudo-1.9 tip, 1.9.8. Walnascar's 1.9.0 has no `openat2()` wrapper, which host GNU `tar` 1.35 (Ubuntu 24.04) uses, so `do_package` failed on those hosts.
 - `LAYERSERIES_COMPAT` extended with `whinlatter` (Yocto 5.3) and

@@ -11,7 +11,7 @@ SRC_URI = "\
     https://github.com/EdgeFirstAI/client/releases/download/v${PV}/edgefirst-client-linux-arm64-${PV}.tar.gz;name=binary \
     https://raw.githubusercontent.com/EdgeFirstAI/client/v${PV}/LICENSE;downloadfilename=${BPN}-LICENSE;name=license \
 "
-SRC_URI[binary.sha256sum] = "9e0998b61573600e14a0ba7b41776fb9a45212363a12a21f8c1ccb1ed7168991"
+SRC_URI[binary.sha256sum] = "31ce3b2e1ba3b8614c665cf28763e1dba93b7337703df90e1e86227956c6b0a9"
 SRC_URI[license.sha256sum] = "acbbda305958ff27afe43eeef4a77d48ef9d99364e772ba319d1d38ae759ae43"
 
 S = "${@d.getVar('UNPACKDIR') or d.getVar('WORKDIR')}"

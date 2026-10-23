@@ -5,6 +5,17 @@ All notable changes to the `meta-edgefirst` Yocto layer are documented here.
 Each entry lists package version changes with links to the upstream
 CHANGELOG. For full per-package details, follow the links.
 
+## Unreleased
+
+### Package Updates
+
+| Package | 2026.10.0 | Unreleased | Changelog |
+|---------|-----------|------------|-----------|
+| edgefirst-websrv | 4.4.0 | 4.4.1 | [CHANGELOG](https://github.com/EdgeFirstAI/websrv/blob/v4.4.1/CHANGELOG.md) |
+| edgefirst-webui | 4.8.0 | 4.8.1 | [CHANGELOG](https://github.com/EdgeFirstAI/webui/blob/v4.8.1/CHANGELOG.md) |
+| edgefirst-ara2 | 0.21.0 | 0.23.0 | [CHANGELOG](https://github.com/EdgeFirstAI/ara2-rs/blob/v0.23.0/CHANGELOG.md) |
+| edgefirst-client | 2.17.0 | 2.19.0 | [CHANGELOG](https://github.com/EdgeFirstAI/client/blob/v2.19.0/CHANGELOG.md) |
+
 ## 2026.10.0
 
 This layer is not tagged. Release versions are owned by torizon-maivin, and the layer revision that belongs to a release is the one pinned in the torizon-maivin manifest at that release's tag. This entry is cumulative since v1.2.3, the last layer-tagged release, and includes changes first shipped in 2026.08.0.

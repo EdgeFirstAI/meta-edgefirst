@@ -64,6 +64,7 @@ Standalone Zenoh-native services that publish, record, and replay sensor data. E
 | `edgefirst-websrv` | [EdgeFirstAI/websrv](https://github.com/EdgeFirstAI/websrv) | Web UI backend server for EdgeFirst services |
 | `edgefirst-webui` | [EdgeFirstAI/webui](https://github.com/EdgeFirstAI/webui) | Web dashboard for monitoring and configuring EdgeFirst services |
 | `edgefirst-hal` | [EdgeFirstAI/hal](https://github.com/EdgeFirstAI/hal) | Hardware abstraction layer (C library + Python bindings) |
+| `edgefirst-camera-libcamera` | [EdgeFirstAI/camera](https://github.com/EdgeFirstAI/camera) | libcamera shim the EdgeFirst Camera SDK loads at run time, built against the image's libcamera (0.5 or newer); not pulled in by a shared library dependency, so whatever ships the SDK installs it |
 | `edgefirst-ara2` | [EdgeFirstAI/ara2-rs](https://github.com/EdgeFirstAI/ara2-rs) | Ara-2 NPU Python bindings; work with either `imx-nxp-ara2` runtime packaging (NXP's meta-imx-ml or the Kinara SDK from meta-kinara), which must be in the build |
 | `edgefirst-schemas` | [EdgeFirstAI/schemas](https://github.com/EdgeFirstAI/schemas) | Shared schema library (C + Python) for EdgeFirst message types |
 

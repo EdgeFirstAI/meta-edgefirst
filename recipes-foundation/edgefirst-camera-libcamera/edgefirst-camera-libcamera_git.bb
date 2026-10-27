@@ -1,0 +1,70 @@
+# The EdgeFirst Camera SDK reaches libcamera through this shim: a small C
+# library over libcamera's C++ API with a stable C ABI. The SDK loads it with
+# dlopen as libedgefirst_camera_libcamera.so.1 from the library search path,
+# so nothing links against it and no shlib dependency pulls it into an image;
+# whatever ships the SDK has to install it.
+#
+# It is built here against the image's own libcamera, so it matches that
+# libcamera's minor version and C++ ABI. libcamera 0.5 or newer is required.
+
+SUMMARY = "EdgeFirst Camera SDK libcamera shim"
+DESCRIPTION = "C ABI over libcamera's C++ API, loaded at run time by the \
+EdgeFirst Camera SDK libcamera backend."
+HOMEPAGE = "https://github.com/EdgeFirstAI/camera"
+
+LICENSE = "Apache-2.0"
+LIC_FILES_CHKSUM = "file://${CAMERA_SRC_DIR}/LICENSE;md5=3929fde384c07d35ed0d6f0c925f2a12"
+
+SRC_URI = "git://github.com/EdgeFirstAI/camera.git;protocol=https;branch=${SRCBRANCH};destsuffix=edgefirst-camera"
+SRCBRANCH = "feature/EDGEAI-1498-camera-sdk"
+SRCREV = "40985f05ab8b6fdf354b1912fb981ac7c8e23394"
+
+# Sorts below the 3.0.0 release, so the released package replaces it.
+PV = "3.0.0~dev+git"
+
+CAMERA_SRC_DIR = "${@d.getVar('UNPACKDIR') or d.getVar('WORKDIR')}/edgefirst-camera"
+S = "${CAMERA_SRC_DIR}/crates/libcamera-sys/shim"
+
+DEPENDS = "libcamera"
+
+inherit meson pkgconfig
+
+# The shim only exists where libcamera does. Whichever layer provides libcamera,
+# its recipe is among the files bitbake reads, so look for one that is not
+# masked and is at the minimum version the shim needs, instead of failing in
+# do_configure or for a missing provider. Layer sets without libcamera, such as
+# Torizon, and those that only have an older one skip the recipe. A recipe whose
+# version is not in its file name and cannot be read from a literal PV counts as
+# available, and the version check in meson decides.
+python () {
+    import glob
+    import os
+    import re
+
+    minimum = "0.5"
+    masks = []
+    for mask in (d.getVar("BBMASK") or "").split():
+        try:
+            masks.append(re.compile(mask))
+        except re.error:
+            pass
+
+    def version(path):
+        match = re.match(r"libcamera_(\d[^_]*?)\.bb$", os.path.basename(path))
+        if match:
+            return match.group(1)
+        if os.path.basename(path) not in ("libcamera_git.bb", "libcamera.bb"):
+            return None
+        with open(path) as f:
+            match = re.search(r'^PV\s*=\s*"(\d[^"+~]*)', f.read(), re.M)
+        return match.group(1) if match else minimum
+
+    for pattern in (d.getVar("BBFILES") or "").split():
+        for path in glob.glob(pattern):
+            if any(mask.search(path) for mask in masks):
+                continue
+            found = version(path)
+            if found and bb.utils.vercmp_string(found, minimum) >= 0:
+                return
+    raise bb.parse.SkipRecipe("no libcamera %s or newer is available" % minimum)
+}

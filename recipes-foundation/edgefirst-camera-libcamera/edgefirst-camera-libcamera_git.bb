@@ -28,3 +28,24 @@ S = "${CAMERA_SRC_DIR}/crates/libcamera-sys/shim"
 DEPENDS = "libcamera"
 
 inherit meson pkgconfig
+
+# The shim only exists where libcamera does. Whichever layer provides libcamera,
+# its recipe is among the files bitbake is configured to read, so look for one
+# at the minimum version the shim needs instead of failing in do_configure or
+# for a missing provider. Layer sets without libcamera, such as Torizon, and
+# those that only have an older one skip the recipe.
+python () {
+    import glob
+    import os
+    import re
+
+    minimum = "0.5"
+    versions = []
+    for pattern in (d.getVar("BBFILES") or "").split():
+        for path in glob.glob(pattern):
+            match = re.match(r"libcamera_(\d[^_]*?)\.bb$", os.path.basename(path))
+            if match:
+                versions.append(match.group(1))
+    if not any(bb.utils.vercmp_string(v, minimum) >= 0 for v in versions):
+        raise bb.parse.SkipRecipe("no libcamera %s or newer is available" % minimum)
+}

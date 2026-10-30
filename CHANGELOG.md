@@ -33,9 +33,17 @@ This layer is not tagged. Release versions are owned by torizon-maivin, and the 
 | edgefirst-gstreamer | 0.4.0 + main | 0.4.0 + main (`b93cf60`, overlay expose-timing property + frame-timing signal) | [CHANGELOG](https://github.com/EdgeFirstAI/gstreamer/blob/main/CHANGELOG.md) |
 | zenoh-c / zenohd / python3-zenoh | 1.9.0 | 1.10.1 | — |
 | neutron | 3.1.1 = SDK 3.1.2 (meta-imx) | 3.2.3 | [Fork](https://github.com/EdgeFirstAI/neutron/tree/v3.2.3) |
+| edgefirst-camera-libcamera | — | 3.0.0~dev (new) | [camera](https://github.com/EdgeFirstAI/camera) |
 
 ### Layer Changes
 
+- The layer follows NXP imx-6.18.37-2.1.0. The i.MX GStreamer plugin fork builds from `0a07fd0`, rebased onto NXP's MM_04.11.01, and from `59f9a44` on MM_04.11.00 and older. The recipe picks the revision from the baseline NXP's recipe tracks.
+- The Neutron delegate fork (`tflite-neutron-delegate`) is rebased onto lf-6.18.37-2.1.0. NXP's tag already carries the `hal_dmabuf` API, so the fork keeps only the per-delegate DMA-BUF registry, which lets several interpreter contexts run zero-copy in one process. The recipe builds `0222a8d` from lf-6.18.37 and `dd81103` before.
+- The Neutron mailbox handshake backport applies only to kernels older than 6.18.37, which carry it themselves.
+- ONNX Runtime calls the Neutron `matmul()` through the typed header by rewriting the sources after patching instead of by a patch file. The build fails if an old-style call is left, and it works on the sources of both BSPs.
+- New `edgefirst-camera-libcamera` (3.0.0~dev): the C ABI shim the EdgeFirst Camera SDK's libcamera backend loads with `dlopen`, built against the image's own libcamera. It is not in any packagegroup, and it is skipped where no libcamera 0.5 or newer is available.
+- New `libcamera-edgefirst-config` for i.MX 95 puts the `nxp/neo` pipeline handler ahead of `imx8-isi`, so cameras deliver ISP output and not raw Bayer.
+- `IMAGE_BOOT_FILES` for the i.MX 95 19x19 EVK includes `imx95-19x19-evk-os08a20-isp-adv7535.dtb`.
 - Six capability packagegroups describe what an EdgeFirst image can carry, so the payload no longer has to be written into `local.conf`: `packagegroup-edgefirst-npu` (TFLite plus the machine's delegate — Neutron on i.MX 95, Vivante VX on i.MX 8M Plus), `-graphics` (the GPU userspace plus weston), `-codec` (the V4L2 video encode and decode userspace), `-camera` (libcamera with the machine's ISP IPA), `-studio` (`edgefirst-client` and `edgefirst-profiler`) and `-diagnostics` (`v4l-utils`, `devmem2`). A conf-level `IMAGE_INSTALL:append` is not reproducible for anyone syncing the manifest, which is the point of moving it.
 - The GPU split is gated on the `imxviv` and `imxmali` overrides rather than on SoC names, so the same selection applies to any vendor's board carrying that GPU. The NPU and codec sets are gated on `mx95-nxp-bsp` and `mx8mp-nxp-bsp`, matching the `COMPATIBLE_MACHINE` of the recipes they pull; `imxvpu` would have been the natural override for the codec set but it also covers the i.MX 6 CODA VPU, which the Hantro recipes are not compatible with.
 - These groups describe capabilities; they do not decide which ones a board ships. That composition belongs in the BSP vendor layer, so `-camera` is empty of consumers here. `-diagnostics` is separable because `devmem2` maps arbitrary physical memory from userspace, which a production image may not want.

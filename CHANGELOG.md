@@ -37,6 +37,7 @@ This layer is not tagged. Release versions are owned by torizon-maivin, and the 
 
 ### Layer Changes
 
+- The i.MX 95 images keep libEGL, libGLESv2 and libgbm on the Mali driver after `ldconfig` runs. Mesa and the Mali driver install the same sonames, and `ldconfig` points them at Mesa. `mali-imx.service` now runs a step after NXP's boot script that lists `/usr/lib/mali-imx` in `/etc/ld.so.conf.d/mali-imx.conf` while `arm-ddk` is selected and removes the entry when `mesa` is. It applies only where `meta-imx-bsp` provides the dual-driver `mali-imx` recipe.
 - The layer follows NXP imx-6.18.37-2.1.0. The i.MX GStreamer plugin fork builds from `0a07fd0`, rebased onto NXP's MM_04.11.01, and from `59f9a44` on MM_04.11.00 and older. The recipe picks the revision from the baseline NXP's recipe tracks.
 - The Neutron delegate fork (`tflite-neutron-delegate`) is rebased onto lf-6.18.37-2.1.0. NXP's tag already carries the `hal_dmabuf` API, so the fork keeps only the per-delegate DMA-BUF registry, which lets several interpreter contexts run zero-copy in one process. The recipe builds `0222a8d` from lf-6.18.37 and `dd81103` before.
 - The Neutron mailbox handshake backport applies only to kernels older than 6.18.37, which carry it themselves.

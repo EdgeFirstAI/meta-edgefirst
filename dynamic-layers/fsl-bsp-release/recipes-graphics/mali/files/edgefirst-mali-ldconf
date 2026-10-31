@@ -1,0 +1,30 @@
+#!/bin/sh
+# Make the loader cache follow the GPU driver selected in /etc/mali-imx.
+#
+# Mesa and the Mali DDK ship the same sonames, and the Mali copies live in
+# /usr/lib/mali-imx, which the loader does not search by default. mali-imx-boot
+# points the /usr/lib symlinks at the selected driver, but any later ldconfig
+# run (a package install, for example) rebuilds them for Mesa. Listing the Mali
+# directory ahead of /usr/lib keeps the cache on the DDK whatever the symlinks
+# say; the entry is removed again when Mesa is selected.
+
+CONF=/etc/mali-imx/mali-imx.conf
+LDCONF=/etc/ld.so.conf.d/mali-imx.conf
+
+[ -f "$CONF" ] || exit 0
+. "$CONF"
+
+case "$MALI_IMX_DEFAULT_DRIVER" in
+    arm-ddk)
+        mkdir -p /etc/ld.so.conf.d
+        echo /usr/lib/mali-imx > "$LDCONF"
+        ;;
+    mesa)
+        rm -f "$LDCONF"
+        ;;
+    *)
+        exit 0
+        ;;
+esac
+
+ldconfig

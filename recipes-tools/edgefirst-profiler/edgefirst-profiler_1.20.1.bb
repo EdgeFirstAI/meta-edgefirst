@@ -11,7 +11,7 @@ LIC_FILES_CHKSUM = "file://LICENSE;md5=2c1ec8544499745706bf1a929873e67d"
 COMPATIBLE_HOST = "aarch64.*-linux"
 
 SRC_URI = "https://github.com/EdgeFirstAI/profiler-cli/releases/download/v${PV}/edgefirst-profiler-${PV}-linux-aarch64.tar.gz"
-SRC_URI[sha256sum] = "1933168cc7713065d634a423f0d8e0b7858fd6bfb05661e583c1ca5edd7ecb24"
+SRC_URI[sha256sum] = "53f599dc46e67ca5c5a7909e16c71fd7f6f86012bec02c83ede6d32a67454a63"
 
 S = "${@d.getVar('UNPACKDIR') or d.getVar('WORKDIR')}/edgefirst-profiler-${PV}-linux-aarch64"
 

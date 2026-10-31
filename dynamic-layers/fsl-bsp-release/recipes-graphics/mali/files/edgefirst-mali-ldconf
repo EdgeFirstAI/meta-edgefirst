@@ -7,6 +7,9 @@
 # run (a package install, for example) rebuilds them for Mesa. Listing the Mali
 # directory ahead of /usr/lib keeps the cache on the DDK whatever the symlinks
 # say; the entry is removed again when Mesa is selected.
+#
+# This runs before mali-imx-boot: ldconfig rewrites the /usr/lib symlinks, and
+# mali-imx-boot has to set them last.
 
 CONF=/etc/mali-imx/mali-imx.conf
 LDCONF=/etc/ld.so.conf.d/mali-imx.conf

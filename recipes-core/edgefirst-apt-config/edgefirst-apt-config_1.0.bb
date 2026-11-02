@@ -5,7 +5,9 @@ makes the board match it even where a version string compares lower."
 LICENSE = "MIT"
 LIC_FILES_CHKSUM = "file://${COMMON_LICENSE_DIR}/MIT;md5=0835ade698e0bcf8506ecda2f7b4f302"
 
-SRC_URI = "file://edgefirst-nxp-apt.gpg file://edgefirst-release-upgrade"
+SRC_URI = "file://edgefirst-nxp-apt.gpg file://edgefirst-release-upgrade file://edgefirst-systemctl"
+
+PR = "r1"
 
 # Follows the release so that moving to a new quarterly release installs the
 # configuration of its feed.
@@ -63,7 +65,11 @@ CONF
     install -d ${D}${sysconfdir}/apt/apt.conf.d
     cat > ${D}${sysconfdir}/apt/apt.conf.d/50edgefirst <<APTCONF
 Dpkg::Options { "--force-overwrite"; };
+DPkg::Path "${libdir}/edgefirst/dpkg-path:/usr/sbin:/usr/bin:/sbin:/bin";
 APTCONF
+
+    install -d ${D}${libdir}/edgefirst/dpkg-path
+    install -m 0755 ${S}/edgefirst-systemctl ${D}${libdir}/edgefirst/dpkg-path/systemctl
 
     install -d ${D}${sysconfdir}/apt/preferences.d
     cat > ${D}${sysconfdir}/apt/preferences.d/edgefirst <<PREF
@@ -73,6 +79,6 @@ Pin-Priority: 1001
 PREF
 }
 
-FILES:${PN} = "${datadir}/keyrings ${sysconfdir}/apt ${sysconfdir}/edgefirst ${sbindir}/edgefirst-release-upgrade"
+FILES:${PN} = "${datadir}/keyrings ${sysconfdir}/apt ${sysconfdir}/edgefirst ${sbindir}/edgefirst-release-upgrade ${libdir}/edgefirst"
 
 RDEPENDS:${PN} = "apt gnupg ca-certificates"

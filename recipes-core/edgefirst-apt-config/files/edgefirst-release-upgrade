@@ -105,11 +105,17 @@ if dpkg --audit | grep -q .; then
     die "dpkg reports packages that are not fully installed; run dpkg --configure -a first"
 fi
 
-grep -q ' /boot ' /proc/mounts || die "/boot is not mounted; the kernel could not be installed"
+# Kernel packages unpack into /boot on the root filesystem and copy the kernel
+# and device trees to the partition labelled boot, which U-Boot reads.
+[ -d /boot ] || die "/boot does not exist; the kernel could not be installed"
+blkid -L boot >/dev/null 2>&1 || die "no partition is labelled boot; the kernel could not be installed"
+BOOT_DIR="$(findmnt -rn -o TARGET -S LABEL=boot 2>/dev/null | head -n 1)"
 AVAIL_ROOT="$(df -Pk / | awk 'NR==2 {print $4}')"
-AVAIL_BOOT="$(df -Pk /boot | awk 'NR==2 {print $4}')"
 [ "$AVAIL_ROOT" -ge 1048576 ] || die "less than 1 GiB free on /"
-[ "$AVAIL_BOOT" -ge 81920 ] || die "less than 80 MiB free on /boot; remove a kernel you no longer need with apt remove"
+if [ -n "$BOOT_DIR" ]; then
+    AVAIL_BOOT="$(df -Pk "$BOOT_DIR" | awk 'NR==2 {print $4}')"
+    [ "$AVAIL_BOOT" -ge 81920 ] || die "less than 80 MiB free on $BOOT_DIR; remove a kernel you no longer need with apt remove"
+fi
 
 if [ "$ASSUME_YES" -eq 0 ]; then
     printf 'Upgrade to EdgeFirst Yocto %s on %s? The board must be rebooted afterwards. [y/N] ' "$NEW_RELEASE" "$NEW_BSP"

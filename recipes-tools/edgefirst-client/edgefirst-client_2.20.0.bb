@@ -23,7 +23,7 @@ inherit python3-dir
 
 DEPENDS = "unzip-native"
 PACKAGES = "${PN}-python ${PN}"
-RDEPENDS:${PN}-python = "python3"
+RDEPENDS:${PN}-python = "python3 python3-polars"
 
 do_configure[noexec] = "1"
 do_compile[noexec] = "1"

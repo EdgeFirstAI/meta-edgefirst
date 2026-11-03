@@ -13,6 +13,8 @@ LIC_FILES_CHKSUM = "file://${COMMON_LICENSE_DIR}/MIT;md5=0835ade698e0bcf8506ecda
 # ordering.
 PV = "${@d.getVar('EDGEFIRST_VERSION') or '0'}"
 
+PR = "r1"
+
 PACKAGE_ARCH = "${MACHINE_ARCH}"
 
 python () {
@@ -32,7 +34,13 @@ RPROVIDES:${PN} = "edgefirst-bsp-${EDGEFIRST_FEED_BSP}"
 # Declared here as well so that the image build, which decides what goes into the
 # rootfs from the task graph, knows to build and include it; the kernel packages
 # are added at package time below.
-RDEPENDS:${PN} = "edgefirst-apt-config util-linux-findmnt util-linux-mount util-linux-umount"
+RDEPENDS:${PN} = "edgefirst-apt-config util-linux-findmnt util-linux-mount util-linux-umount ${EDGEFIRST_RELEASE_EXTRA_DEPS}"
+
+# Packages every board of the machine family carries. A board updated with apt
+# gets a package that is new in the release only if something it has installed
+# depends on it, so they are listed here and not only in the image.
+EDGEFIRST_RELEASE_EXTRA_DEPS = ""
+EDGEFIRST_RELEASE_EXTRA_DEPS:mx95-nxp-bsp = "libcamera-edgefirst-config"
 
 # The kernel recipe's package data names the packages of the kernel being
 # built. A dependency on the bare virtual names would be satisfied by the old
@@ -56,7 +64,7 @@ python populate_packages:prepend () {
     image = runtime("kernel-image")
     release = runtime("os-release")
     # The kernel scripts find and mount the boot partition.
-    deps = ["edgefirst-apt-config", "util-linux-findmnt", "util-linux-mount", "util-linux-umount", image["PKG:kernel-image"],
+    deps = ["edgefirst-apt-config", "util-linux-findmnt", "util-linux-mount", "util-linux-umount"] + (d.getVar("EDGEFIRST_RELEASE_EXTRA_DEPS") or "").split() + [image["PKG:kernel-image"],
             "os-release (= %s-%s)" % (release["PKGV"], release["PKGR"])]
     # The image is renamed to carry the kernel version, so it is named without
     # a version constraint; the two constant-name packages need the version to

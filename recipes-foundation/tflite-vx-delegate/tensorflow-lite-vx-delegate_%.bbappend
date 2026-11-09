@@ -19,7 +19,7 @@
 TENSORFLOW_LITE_VX_DELEGATE_SRC = "git://github.com/EdgeFirstAI/tflite-vx-delegate-imx.git;protocol=https"
 python () {
     d.setVar("SRCBRANCH_vx", "edgefirst")
-    d.setVar("SRCREV_vx", "a65d4a23a43194b6c2d329f364c97183f507580d")
+    d.setVar("SRCREV_vx", "41de1617e325858e40a56a809a0473026ebff8eb")
 }
 
 # G2D is needed by the camera_adaptor_test example for hardware-accelerated

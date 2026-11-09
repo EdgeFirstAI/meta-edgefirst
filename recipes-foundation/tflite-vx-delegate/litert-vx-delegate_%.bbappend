@@ -9,6 +9,9 @@ python () {
     d.setVar("SRCREV_vx", "41de1617e325858e40a56a809a0473026ebff8eb")
 }
 
+# Bumped so apt offers the rebuilt package to boards with the same PV.
+PR = "r1"
+
 # The delegate's CMake fetches LiteRT itself and defaults to the wrynose tag.
 # Where the recipe builds against the walnascar LiteRT (6.12) that fetches
 # sources the delegate was not built with, so it is pointed at the tag the

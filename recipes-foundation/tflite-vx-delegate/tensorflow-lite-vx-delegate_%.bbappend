@@ -22,6 +22,9 @@ python () {
     d.setVar("SRCREV_vx", "41de1617e325858e40a56a809a0473026ebff8eb")
 }
 
+# Bumped so apt offers the rebuilt package to boards with the same PV.
+PR = "r1"
+
 # G2D is needed by the camera_adaptor_test example for hardware-accelerated
 # image resize. Provided by imx-gpu-g2d on i.MX8MP via virtual/libg2d.
 DEPENDS:append = " virtual/libg2d"

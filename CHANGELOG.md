@@ -16,7 +16,7 @@ This layer is not tagged. Release versions are owned by torizon-maivin, and the 
 | edgefirst-hal | 0.24.2 | 0.28.3 | [CHANGELOG](https://github.com/EdgeFirstAI/hal/blob/v0.28.3/CHANGELOG.md) |
 | edgefirst-schemas | 3.4.0 | 3.5.0 | [CHANGELOG](https://github.com/EdgeFirstAI/schemas/blob/v3.5.0/CHANGELOG.md) |
 | videostream | 2.5.2 | 2.6.1 | [CHANGELOG](https://github.com/EdgeFirstAI/videostream/blob/v2.6.1/CHANGELOG.md) |
-| edgefirst-tflite | 0.7.0 | 0.10.3 | [CHANGELOG](https://github.com/EdgeFirstAI/tflite-rs/blob/v0.10.3/CHANGELOG.md) |
+| edgefirst-tflite | 0.7.0 | 0.11.1 | [CHANGELOG](https://github.com/EdgeFirstAI/tflite-rs/blob/v0.11.1/CHANGELOG.md) |
 | edgefirst-camera | 2.7.0 | 2.12.0 | [CHANGELOG](https://github.com/EdgeFirstAI/camera/blob/v2.12.0/CHANGELOG.md) |
 | edgefirst-model | 2.9.0 | 2.11.1 | [CHANGELOG](https://github.com/EdgeFirstAI/model/blob/v2.11.1/CHANGELOG.md) |
 | edgefirst-fusion | 1.7.2 | 1.10.0 | [CHANGELOG](https://github.com/EdgeFirstAI/fusion/blob/v1.10.0/CHANGELOG.md) |
@@ -28,6 +28,8 @@ This layer is not tagged. Release versions are owned by torizon-maivin, and the 
 | edgefirst-replay | 2.3.1 | 3.0.0 | [CHANGELOG](https://github.com/EdgeFirstAI/replay/blob/v3.0.0/CHANGELOG.md) |
 | edgefirst-websrv | 4.0.1 | 4.4.1 | [CHANGELOG](https://github.com/EdgeFirstAI/websrv/blob/v4.4.1/CHANGELOG.md) |
 | edgefirst-webui | 4.1.1 | 4.8.1 | [CHANGELOG](https://github.com/EdgeFirstAI/webui/blob/v4.8.1/CHANGELOG.md) |
+| edgefirst-client | — | 2.20.0 (new) | [CHANGELOG](https://github.com/EdgeFirstAI/client/blob/v2.20.0/CHANGELOG.md) |
+| edgefirst-profiler | — | 1.21.0 (new) | [CHANGELOG](https://github.com/EdgeFirstAI/profiler-cli/blob/v1.21.0/CHANGELOG.md) |
 | edgefirst-modelzoo | — | 1.0.0 (new) | [Model Zoo](https://huggingface.co/EdgeFirst) |
 | edgefirst-ara2 | 0.16.0 (meta-kinara) | 0.23.0 | [CHANGELOG](https://github.com/EdgeFirstAI/ara2-rs/blob/v0.23.0/CHANGELOG.md) |
 | edgefirst-gstreamer | 0.4.0 + main | 0.4.0 + main (`b93cf60`, overlay expose-timing property + frame-timing signal) | [CHANGELOG](https://github.com/EdgeFirstAI/gstreamer/blob/main/CHANGELOG.md) |
